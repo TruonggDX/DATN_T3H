@@ -1,0 +1,96 @@
+<!--================ Start Header Menu Area =================-->
+<header class="header_area">
+    <div class="main_menu">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand logo_h" th:href="@{/user}"><img th:src="@{/user/img/logo.png}" alt=""></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
+                        <li class="nav-item active"><a class="nav-link" th:href="@{/user}">Trang chủ</a></li>
+                        <li class="nav-item active"><a class="nav-link" th:href="@{/user/categryshop}">Trang chủ</a></li>
+<!--                        <li class="nav-item submenu dropdown">-->
+<!--                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
+<!--                               aria-expanded="false">Cửa hàng</a>-->
+<!--                            <ul class="dropdown-menu">-->
+<!--                                <li class="nav-item"><a class="nav-link" th:href="@{/user/categryshop}">Danh mục cửa hàng</a></li>-->
+<!--                                <li class="nav-item"><a class="nav-link" href="single-product.html">Thông tin chi tiết sản phẩm</a></li>-->
+<!--                                <li class="nav-item"><a class="nav-link" href="checkout.html">Kiểm tra sản phẩm</a></li>-->
+<!--                                <li class="nav-item"><a class="nav-link" href="confirmation.html">Xác nhận</a></li>-->
+<!--                                <li class="nav-item"><a class="nav-link" href="cart.html">Giỏ hàng</a></li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
+                        <li class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">Blog</a>
+<!--                            <ul class="dropdown-menu">-->
+<!--                                <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>-->
+<!--                                <li class="nav-item"><a class="nav-link" href="single-blog.html">Chi tiết blog</a></li>-->
+<!--                            </ul>-->
+                        </li>
+                        <li class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">Trang</a>
+<!--                            <ul class="dropdown-menu">-->
+<!--                                <li class="nav-item"><a class="nav-link" href="login.html">Đăng nhập</a></li>-->
+<!--                                <li class="nav-item"><a class="nav-link" href="register.html">Đăng ký</a></li>-->
+<!--                                <li class="nav-item"><a class="nav-link" href="tracking-order.html">Theo dõi</a></li>-->
+<!--                            </ul>-->
+                        </li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/user/contact}">Liên hệ</a></li>
+                    </ul>
+
+                    <ul class="nav-shop">
+                        <li class="nav-item"><a data-toggle="modal" data-target="#exampleModal"><i class="ti-search"></i></a></li>
+                        <li class="nav-item"><a th:href="@{/user/cart}"><i class="ti-shopping-cart"></i></a> </li>
+                        <li class="nav-item">
+                            <a class="button button-header" th:href="@{/login}">Đăng nhập</a>
+<!--                            <i class="ti-shopping-cart"></i>-->
+                        </li>
+                        <style>
+                            .button-header:hover{
+                                background: orange;
+                                border: 1px solid orange;
+                            }
+                        </style>
+<!--                        <li class="nav-item submenu dropdown">-->
+<!--                            <a href="#" style="" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
+<!--                               aria-expanded="false"><i class="fa-regular fa-user"></i></a>-->
+<!--                            <ul class="dropdown-menu">-->
+<!--                                <li class="nav-item"><a class="nav-link" href="login.html">Đăng nhập</a></li>-->
+<!--                                <li class="nav-item"><a class="nav-link" href="register.html">Đăng ký</a></li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Modal edit-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tìm kiếm sản phẩm</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+<!--                        <label for="">Tên danh mục</label>-->
+                        <input type="text" class="form-control" id="" aria-describedby="emailHelp" placeholder="Nhập sản phẩm cần tìm">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!--================ End Header Menu Area =================-->
