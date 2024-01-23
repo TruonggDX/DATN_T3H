@@ -18,9 +18,11 @@
                 <div class="col-sm-7 col-lg-6 offset-lg-1 pl-4 pl-md-5 pl-lg-0">
                     <div class="hero-banner__content">
                         <h4>Mua sắm thật vui</h4>
-                        <h1>Browse Our Premium Product</h1>
-                        <p>Us which over of signs divide dominion deep fill bring they're meat beho upon own earth without morning over third. Their male dry. They are great appear whose land fly grass.</p>
-                        <a class="button button-hero" href="#">Mua ngay</a>
+                        <h2>TÌM HIỂU SẢN PHẨM CAO CẤP CỦA CHÚNG TÔI</h2>
+                        <p>Sản phẩm cao cấp của chúng tôi được thiết kế với chất liệu chất lượng cao và công nghệ tiên tiến,
+                            đảm bảo mang đến trải nghiệm tuyệt vời cho khách hàng. Với sự chăm sóc kỹ lưỡng trong từng đường nét và chi tiết,
+                            sản phẩm của chúng tôi thể hiện sự sang trọng và đẳng cấp.</p>
+                        <a class="button button-hero" th:href="@{/user/categroyshop}">Mua ngay</a>
                     </div>
                 </div>
             </div>
@@ -69,7 +71,7 @@
                         <div class="card-product__img">
                             <img class="card-img" th:src="@{/user/img/product/product1.png}" alt="">
                             <ul class="card-product__imgOverlay">
-                                <li><a th:href="@{/user/product_dentails}"><i class="ti-search"></i></a></li>
+                                <li><button class="my-button"><i class="ti-search"></i></button></li>
                                 <li><button><i class="ti-shopping-cart"></i></button></li>
                                 <li><button><i class="ti-heart"></i></button></li>
                             </ul>
@@ -147,7 +149,7 @@
                         <h3>Up To 50% Off</h3>
                         <h4>Winter Sale</h4>
                         <p>Him she'd let them sixth saw light</p>
-                        <a class="button button--active mt-3 mt-xl-4" href="#">Shop Now</a>
+                        <a class="button button--active mt-3 mt-xl-4" th:href="@{/user/categroyshop}">Mua ngay</a>
                     </div>
                 </div>
             </div>
@@ -169,7 +171,7 @@
                     <div class="card-product__img">
                         <img class="img-fluid" th:src="@{/user/img/product/product1.png}" alt="">
                         <ul class="card-product__imgOverlay">
-                            <li><a th:href="@{/user/product_dentails}"><i class="ti-search"></i></a></li>
+                            <li><button class="my-button"><i class="ti-search"></i></button></li>
                             <li><button><i class="ti-shopping-cart"></i></button></li>
                             <li><button><i class="ti-heart"></i></button></li>
                         </ul>
@@ -233,7 +235,7 @@
                     <div class="card-product__img">
                         <img class="img-fluid" th:src="@{/user/img/product/product1.png}" alt="">
                         <ul class="card-product__imgOverlay">
-                            <li><a th:href="@{/user/product_dentails}"><i class="ti-search"></i></a></li>
+                            <li><button class="my-button"><i class="ti-search"></i></button></li>
                             <li><button><i class="ti-shopping-cart"></i></button></li>
                             <li><button><i class="ti-heart"></i></button></li>
                         </ul>
@@ -302,7 +304,12 @@
 
 </main>
 
+<script>
+    document.querySelector('.my-button').addEventListener('click', function() {
+        window.location.href = '/user/product_dentails';
+    });
 
+</script>
 
 <div th:replace="User/fragments/footer :: footer"></div>
 

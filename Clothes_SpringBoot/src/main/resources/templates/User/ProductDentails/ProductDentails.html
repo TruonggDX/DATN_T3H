@@ -47,20 +47,20 @@
                     <h3>Faded SkyBlu Denim Jeans</h3>
                     <h2>$149.99</h2>
                     <ul class="list">
-                        <li><a class="active" href="#"><span>Category</span> : Household</a></li>
-                        <li><a href="#"><span>Availibility</span> : In Stock</a></li>
+                        <li><a class="active" href="#"><span>Loại</span> : Household</a></li>
+                        <li><a href="#"><span>Trạng thái</span> : In Stock</a></li>
                     </ul>
                     <p>Mill Oil is an innovative oil filled radiator with the most modern technology. If you are looking for
                         something that can make your interior look awesome, and at the same time give you the pleasant warm feeling
                         during the winter.</p>
                     <div class="product_count">
-                        <label for="qty">Quantity:</label>
+                        <label for="qty">Số lượng :</label>
                         <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
                                 class="increase items-count" type="button"><i class="ti-angle-left"></i></button>
                         <input type="text" name="qty" id="sst" size="2" maxlength="12" value="1" title="Quantity:" class="input-text qty">
                         <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
                                 class="reduced items-count" type="button"><i class="ti-angle-right"></i></button>
-                        <a class="button primary-btn" href="#">Add to Cart</a>
+                        <a class="button primary-btn" th:href="@{/user/cart}">Thêm vào giỏ hàng</a>
                     </div>
 
                 </div>
@@ -75,19 +75,19 @@
     <div class="container">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Description</a>
+                <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Miêu tả</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-                   aria-selected="false">Specification</a>
+                   aria-selected="false">Thông số</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
-                   aria-selected="false">Comments</a>
+                   aria-selected="false">Bình luận</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
-                   aria-selected="false">Reviews</a>
+                   aria-selected="false">Đánh giá</a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -351,8 +351,8 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="review_box">
-                            <h4>Add a Review</h4>
-                            <p>Your Rating:</p>
+                            <h4>Thêm đánh giá</h4>
+                            <p>Đánh giá của bạn:</p>
                             <ul class="list">
                                 <li><a href="#"><i class="fa fa-star"></i></a></li>
                                 <li><a href="#"><i class="fa fa-star"></i></a></li>
@@ -360,22 +360,22 @@
                                 <li><a href="#"><i class="fa fa-star"></i></a></li>
                                 <li><a href="#"><i class="fa fa-star"></i></a></li>
                             </ul>
-                            <p>Outstanding</p>
+
                             <form action="#/" class="form-contact form-review mt-3">
                                 <div class="form-group">
-                                    <input class="form-control" name="name" type="text" placeholder="Enter your name" required>
+                                    <input class="form-control" name="name" type="text" placeholder="Nhập tên của bạn" required>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" name="email" type="email" placeholder="Enter email address" required>
+                                    <input class="form-control" name="email" type="email" placeholder="Nhập địa chỉ của bạn" required>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" name="subject" type="text" placeholder="Enter Subject">
+                                    <input class="form-control" name="subject" type="text" placeholder="Nhập chủ đề">
                                 </div>
                                 <div class="form-group">
-                                    <textarea class="form-control different-control w-100" name="textarea" id="textarea" cols="30" rows="5" placeholder="Enter Message"></textarea>
+                                    <textarea class="form-control different-control w-100" name="textarea" id="textarea" cols="30" rows="5" placeholder="Nhập tin nhắn"></textarea>
                                 </div>
                                 <div class="form-group text-center text-md-right mt-3">
-                                    <button type="submit" class="button button--active button-review">Submit Now</button>
+                                    <button type="submit" class="button button--active button-review">Xác nhận</button>
                                 </div>
                             </form>
                         </div>
@@ -391,8 +391,8 @@
 <section class="related-product-area section-margin--small mt-0">
     <div class="container">
         <div class="section-intro pb-60px">
-            <p>Popular Item in the market</p>
-            <h2>Top <span class="section-intro__style">Product</span></h2>
+            <p>Mặt hàng phổ biến trên thị trường</p>
+            <h2><span class="section-intro__style">Sản phẩm hàng đầu</span></h2>
         </div>
         <div class="row mt-30">
             <div class="col-sm-6 col-xl-3 mb-4 mb-xl-0">
@@ -504,65 +504,55 @@
 <!--================ end related Product area =================-->
 
 <!--================ Start footer Area  =================-->
-<footer>
-    <div class="footer-area footer-only">
+<footer class="footer">
+    <div class="footer-area">
         <div class="container">
             <div class="row section_gap">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="single-footer-widget tp_widgets ">
-                        <h4 class="footer_title large_title">Our Mission</h4>
-                        <p>
-                            So seed seed green that winged cattle in. Gathering thing made fly you're no
-                            divided deep moved us lan Gathering thing us land years living.
-                        </p>
-                        <p>
-                            So seed seed green that winged cattle in. Gathering thing made fly you're no divided deep moved
-                        </p>
-                    </div>
-                </div>
-                <div class="offset-lg-1 col-lg-2 col-md-6 col-sm-6">
+                <div class="col-lg-4 col-md-6 col-sm-6">
                     <div class="single-footer-widget tp_widgets">
-                        <h4 class="footer_title">Quick Links</h4>
-                        <ul class="list">
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Shop</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Product</a></li>
-                            <li><a href="#">Brand</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
+                        <h4 class="footer_title large_title">Về chúng tôi</h4>
+                        <p>
+                            Chào mừng bạn đến với trang web bán quần áo của chúng tôi!
+                            Chúng tôi tự hào cung cấp những sản phẩm thời trang chất lượng với sự đa dạng và phong phú.
+                            Tại đây, bạn sẽ tìm thấy những bộ trang phục phong cách và phù hợp với mọi dịp, từ công sở đến dạo phố hay dự tiệc.
+                            Chúng tôi cam kết mang đến trải nghiệm mua sắm trực tuyến tuyệt vời và dịch vụ chăm sóc khách hàng tốt nhất.
+                            Hãy khám phá ngay và tìm cho mình những bộ trang phục ưng ý nhất!
+                        </p>
+                        <p>
+
+                        </p>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-6 col-sm-6">
+
+                <div class=" offset-lg-1 col-lg-3  col-md-6 col-sm-6">
                     <div class="single-footer-widget instafeed">
-                        <h4 class="footer_title">Gallery</h4>
+                        <h4 class="footer_title">Hàng trưng bày</h4>
                         <ul class="list instafeed d-flex flex-wrap">
-                            <li><img src="img/gallery/r1.jpg" alt=""></li>
-                            <li><img src="img/gallery/r2.jpg" alt=""></li>
-                            <li><img src="img/gallery/r3.jpg" alt=""></li>
-                            <li><img src="img/gallery/r5.jpg" alt=""></li>
-                            <li><img src="img/gallery/r7.jpg" alt=""></li>
-                            <li><img src="img/gallery/r8.jpg" alt=""></li>
+                            <li><img th:src="@{/user/img/gallery/r1.jpg}" alt=""></li>
+                            <li><img th:src="@{/user/img/gallery/r2.jpg}" alt=""></li>
+                            <li><img th:src="@{/user/img/gallery/r3.jpg}" alt=""></li>
+                            <li><img th:src="@{/user/img/gallery/r5.jpg}" alt=""></li>
+                            <li><img th:src="@{/user/img/gallery/r7.jpg}" alt=""></li>
+                            <li><img th:src="@{/user/img/gallery/r8.jpg}" alt=""></li>
                         </ul>
                     </div>
                 </div>
                 <div class="offset-lg-1 col-lg-3 col-md-6 col-sm-6">
                     <div class="single-footer-widget tp_widgets">
-                        <h4 class="footer_title">Contact Us</h4>
+                        <h4 class="footer_title">Liên hệ chúng tôi</h4>
                         <div class="ml-40">
                             <p class="sm-head">
                                 <span class="fa fa-location-arrow"></span>
-                                Head Office
-                            </p>
-                            <p>123, Main Street, Your City</p>
+                                Địa chỉ
+                            <p>Phúc diễn, Quận Bắc Từ Liêm, thành phố Hà Nội</p>
 
                             <p class="sm-head">
                                 <span class="fa fa-phone"></span>
-                                Phone Number
+                                Số điện thoại
                             </p>
                             <p>
-                                +123 456 7890 <br>
-                                +123 456 7890
+                                +84 339205335 <br>
+
                             </p>
 
                             <p class="sm-head">
@@ -570,8 +560,8 @@
                                 Email
                             </p>
                             <p>
-                                free@infoexample.com <br>
-                                www.infoexample.com
+                                dinhxuantruong2003coi@gmail.com <br>
+
                             </p>
                         </div>
                     </div>
@@ -580,8 +570,11 @@
         </div>
     </div>
 
+    <!--================ End footer Area  =================-->
 
-</footer>
+
+
+    <div th:replace="User/fragments/script :: script"></div>
 <!--================ End footer Area  =================-->
 
 
