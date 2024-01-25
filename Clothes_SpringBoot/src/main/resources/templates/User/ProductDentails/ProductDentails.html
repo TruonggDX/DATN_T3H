@@ -55,12 +55,13 @@
                         during the winter.</p>
                     <div class="product_count">
                         <label for="qty">Số lượng :</label>
-                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                class="increase items-count" type="button"><i class="ti-angle-left"></i></button>
+<!--                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"-->
+<!--                                class="increase items-count" type="button"><i class="ti-angle-left"></i></button>-->
                         <input type="text" name="qty" id="sst" size="2" maxlength="12" value="1" title="Quantity:" class="input-text qty">
-                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                class="reduced items-count" type="button"><i class="ti-angle-right"></i></button>
+<!--                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value&#45;&#45;;return false;"-->
+<!--                                class="reduced items-count" type="button"><i class="ti-angle-right"></i></button>-->
                         <a class="button primary-btn" th:href="@{/user/cart}">Thêm vào giỏ hàng</a>
+                        <a class="button primary-btn" th:href="@{/user/productCheckout}">Mua ngay</a>
                     </div>
 
                 </div>
