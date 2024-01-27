@@ -1,62 +1,13 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="Admin/fragments/head :: head"></head>
-<!--<head>-->
-<!--</head>-->
-<body class="hold-transition skin-blue sidebar-mini">
-<!-- Site wrapper -->
-<div class="wrapper">
-    <header th:replace="Admin/fragments/header :: header"></header>
-    <!-- =============================================== -->
+<body>
+<header th:replace="Admin/fragments/header :: header"></header>
+<aside th:replace="Admin/fragments/sidebar :: sidebar"></aside>
 
-    <!-- Left side column. contains the sidebar -->
 
-    <aside th:replace="Admin/fragments/sidebar :: sidebar"></aside>
-    <!-- =============================================== -->
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1 style="text-align: center">
-                Thêm tài khoản
-            </h1>
-
-        </section>
-        <div class="box-body">
-            <div class="form-group">
-                <label style="font-size: 20px; margin-left: 20px">Tên tài khoản</label>
-                <input type="text" class="form-control" id="" placeholder="Nhập tên tài khoản" data-listener-added_3c82dc17="true">
-            </div>
-            <br>
-            <div class="form-group">
-                <button style="margin-left: 20px" type="submit" class="btn btn-primary">Thêm tài khoản</button>
-            </div>
-
-        </div>
-
-        <!-- Main content -->
-        <section class="content">
-
-            <!-- Default box -->
-
-            <!-- /.box-body -->
-
-            <!-- /.box-footer-->
-    </div>
-    <!-- /.box -->
-
-    </section>
-    <!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
-
-<footer th:replace="Admin/fragments/footer :: footer"></footer>
-
-</div>
-<!-- ./wrapper -->
-
-<!-- jQuery 3 -->
 <div th:replace="Admin/fragments/script :: script"></div>
+<div th:replace="Admin/fragments/footer :: footer"></div>
 </body>
 </html>
