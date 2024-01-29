@@ -34,12 +34,12 @@
                     <div class="single-prd-item">
                         <img class="img-fluid" src="img/category/s-p1.jpg" alt="">
                     </div>
-                    <!-- <div class="single-prd-item">
-                        <img class="img-fluid" src="img/category/s-p1.jpg" alt="">
+                    <div class="single-prd-item">
+                        <img class="img-fluid" src="img/category/c1.jpg" alt="">
                     </div>
                     <div class="single-prd-item">
-                        <img class="img-fluid" src="img/category/s-p1.jpg" alt="">
-                    </div> -->
+                        <img class="img-fluid" src="img/category/c2.jpg" alt="">
+                    </div>
                 </div>
             </div>
             <div class="col-lg-5 offset-lg-1">
@@ -54,17 +54,18 @@
                         something that can make your interior look awesome, and at the same time give you the pleasant warm feeling
                         during the winter.</p>
                     <div class="product_count">
-                        <label for="qty">Số lượng :</label>
+                        <label >Số lượng :</label>
 <!--                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"-->
 <!--                                class="increase items-count" type="button"><i class="ti-angle-left"></i></button>-->
                         <input type="text" name="qty" id="sst" size="2" maxlength="12" value="1" title="Quantity:" class="input-text qty">
 <!--                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value&#45;&#45;;return false;"-->
 <!--                                class="reduced items-count" type="button"><i class="ti-angle-right"></i></button>-->
-                        <a class="button primary-btn" th:href="@{/user/cart}">Thêm vào giỏ hàng</a>
+
                         <a class="button primary-btn" th:href="@{/user/productCheckout}">Mua ngay</a>
                     </div>
 
                 </div>
+                <a class="edit_cart" th:href="@{/user/cart}"><i style="font-size: 20px" class="ti-shopping-cart"></i></a>
             </div>
         </div>
     </div>
@@ -572,7 +573,32 @@
     </div>
 
     <!--================ End footer Area  =================-->
+<style>
+    .edit_cart{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #384aeb;
+        position: relative;
+        margin-left: 10px;
+    }
+    .edit_cart i{
+        position: absolute;
+        left: 30%;
+        bottom: 31%;
+        color: white;
 
+    }
+    .edit_cart:hover{
+        border: 1px solid #384aeb;
+        background: transparent;
+
+    }
+    .edit_cart:hover i {
+        color: black;
+    }
+
+</style>
 
 
     <div th:replace="User/fragments/script :: script"></div>

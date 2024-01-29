@@ -3547,7 +3547,8 @@ a {
 .product_count {
     display:inline-block;
     position:relative;
-    margin-bottom:24px
+    margin-bottom:24px;
+    float: left;
 }
 .product_count label {
     font-size:14px;
