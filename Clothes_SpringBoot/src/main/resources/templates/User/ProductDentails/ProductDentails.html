@@ -271,24 +271,24 @@
                         <div class="row total_rate">
                             <div class="col-6">
                                 <div class="box_total">
-                                    <h5>Overall</h5>
+
                                     <h4>4.0</h4>
-                                    <h6>(03 Reviews)</h6>
+
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="rating_list">
-                                    <h3>Based on 3 Reviews</h3>
+                                    <h3>Đánh giá sản phẩm</h3>
                                     <ul class="list">
-                                        <li><a href="#">5 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                        <li> <span>5 sao </span><a href="#"> <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
                                                 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
-                                        <li><a href="#">4 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                        <li> <span>4 sao </span><a href="#"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
                                                 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
-                                        <li><a href="#">3 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                        <li> <span>3 sao </span><a href="#"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
                                                 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
-                                        <li><a href="#">2 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                        <li> <span>2 sao </span><a href="#"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
                                                 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
-                                        <li><a href="#">1 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                        <li> <span>1 sao </span><a href="#"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
                                                 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
                                     </ul>
                                 </div>
@@ -362,6 +362,7 @@
                                 <li><a href="#"><i class="fa fa-star"></i></a></li>
                                 <li><a href="#"><i class="fa fa-star"></i></a></li>
                             </ul>
+
 
                             <form action="#/" class="form-contact form-review mt-3">
                                 <div class="form-group">
@@ -604,7 +605,26 @@
     <div th:replace="User/fragments/script :: script"></div>
 <!--================ End footer Area  =================-->
 
+    <script>
+        // Lấy tất cả các sao
+        const stars = document.querySelectorAll('.list a');
 
+        // Thêm sự kiện click cho mỗi sao
+        stars.forEach((star, index) => {
+            star.addEventListener('click', function(event) {
+                event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+                // Đặt màu cho các sao trước khi được chọn
+                for (let i = 0; i <= index; i++) {
+                    stars[i].style.color = 'yellow';
+                }
+                // Đặt màu cho các sao sau khi được chọn
+                for (let i = index + 1; i < stars.length; i++) {
+                    stars[i].style.color = 'black';
+                }
+            });
+        });
+
+    </script>
 
 <div th:replace="User/fragments/script :: script"></div>
 </body>

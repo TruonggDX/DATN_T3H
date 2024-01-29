@@ -14,58 +14,55 @@
                     <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
                         <li class="nav-item active"><a id="a_hover" class="nav-link" th:href="@{/user}">Trang chủ</a></li>
                         <li class="nav-item active"><a id="a_hover" class="nav-link" th:href="@{/user/categroyshop}">Cửa hàng</a></li>
-<!--                        <li class="nav-item submenu dropdown">-->
-<!--                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
-<!--                               aria-expanded="false">Cửa hàng</a>-->
-<!--                            <ul class="dropdown-menu">-->
-<!--                                <li class="nav-item"><a class="nav-link" th:href="@{/user/categryshop}">Danh mục cửa hàng</a></li>-->
-<!--                                <li class="nav-item"><a class="nav-link" href="single-product.html">Thông tin chi tiết sản phẩm</a></li>-->
-<!--                                <li class="nav-item"><a class="nav-link" href="checkout.html">Kiểm tra sản phẩm</a></li>-->
-<!--                                <li class="nav-item"><a class="nav-link" href="confirmation.html">Xác nhận</a></li>-->
-<!--                                <li class="nav-item"><a class="nav-link" href="cart.html">Giỏ hàng</a></li>-->
-<!--                            </ul>-->
-<!--                        </li>-->
                         <li class="nav-item submenu dropdown">
                             <a id="a_hover" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                aria-expanded="false">Blog</a>
-<!--                            <ul class="dropdown-menu">-->
-<!--                                <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>-->
-<!--                                <li class="nav-item"><a class="nav-link" href="single-blog.html">Chi tiết blog</a></li>-->
-<!--                            </ul>-->
                         </li>
                         <li class="nav-item submenu dropdown">
                             <a id="a_hover" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                aria-expanded="false">Trang</a>
-<!--                            <ul class="dropdown-menu">-->
-<!--                                <li class="nav-item"><a class="nav-link" href="login.html">Đăng nhập</a></li>-->
-<!--                                <li class="nav-item"><a class="nav-link" href="register.html">Đăng ký</a></li>-->
-<!--                                <li class="nav-item"><a class="nav-link" href="tracking-order.html">Theo dõi</a></li>-->
-<!--                            </ul>-->
                         </li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/user/contact}">Liên hệ</a></li>
                     </ul>
 
                     <ul class="nav-shop">
                         <li class="nav-item"><a data-toggle="modal" data-target="#exampleModal"><i class="ti-search"></i></a></li>
-                        <li class="nav-item"><a th:href="@{/user/cart}"><i class="ti-shopping-cart"></i></a> </li>
+
+
+                        <li class="nav-item"><a class="shoping_cart_count" th:href="@{/user/cart}"><i id="icon_cart" class="fa fa-shopping-cart" aria-hidden="true"></i></a> </li>
+                        <span class="span_count_product">3</span>
                         <li class="nav-item">
                             <a class="button button-header" th:href="@{/login}">Đăng nhập</a>
-<!--                            <i class="ti-shopping-cart"></i>-->
                         </li>
                         <style>
                             .button-header:hover{
                                 background: orange;
                                 border: 1px solid orange;
                             }
+                            .shoping_cart_count{
+                                position: relative;
+                            }
+                            .span_count_product{
+                                position: absolute;
+                                width: 15px;
+                                height: 15px;
+                                border-radius: 50%;
+                                background: orange;
+                                left: 73%;
+                                font-size: 15px;
+                                text-align: center;
+                                line-height: 15px;
+                                bottom: 55%;
+                                font-family: "Times New Roman";
+
+                            }
+                            .nav-item a i{
+                                font-size: 20px;
+                            }
+                            #icon_cart{
+                                opacity: 0.8;
+                            }
                         </style>
-<!--                        <li class="nav-item submenu dropdown">-->
-<!--                            <a href="#" style="" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
-<!--                               aria-expanded="false"><i class="fa-regular fa-user"></i></a>-->
-<!--                            <ul class="dropdown-menu">-->
-<!--                                <li class="nav-item"><a class="nav-link" href="login.html">Đăng nhập</a></li>-->
-<!--                                <li class="nav-item"><a class="nav-link" href="register.html">Đăng ký</a></li>-->
-<!--                            </ul>-->
-<!--                        </li>-->
                     </ul>
                 </div>
             </div>
@@ -73,18 +70,17 @@
     </div>
 
     <!-- Modal edit-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div style="opacity: 0.8 ;" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tìm kiếm sản phẩm</h5>
+                    <h6 >Tìm kiếm sản phẩm</h6>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-<!--                        <label for="">Tên danh mục</label>-->
                         <input type="text" class="form-control" id="" aria-describedby="emailHelp" placeholder="Nhập sản phẩm cần tìm">
 
                     </div>

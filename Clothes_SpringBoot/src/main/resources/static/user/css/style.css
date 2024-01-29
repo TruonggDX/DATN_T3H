@@ -936,7 +936,7 @@ a {
 @media (min-width:1000px) {
     .subscribe-position {
         position:relative;
-        top:100px;
+        top:35px;
         margin-bottom:0
     }
 }.button {
@@ -3639,7 +3639,11 @@ a {
     background:#f1f6f7;
     text-align:center;
     padding-top:20px;
-    padding-bottom:20px
+    padding-bottom:20px;
+    height: 150px;
+}
+.box_total h4{
+    line-height: 100px;
 }
 .product_description_area .tab-content .total_rate .box_total h4 {
     font-size:48px;
@@ -3802,7 +3806,7 @@ a {
 }
 @media (min-width:1000px) {
     .footer-area {
-        padding:170px 0px 70px
+        padding:50px 0px 50px
     }
 }.single-footer-widget p {
      margin-bottom:15px
