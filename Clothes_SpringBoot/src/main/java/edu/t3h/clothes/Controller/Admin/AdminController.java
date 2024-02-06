@@ -16,18 +16,17 @@ public class AdminController {
         return "Admin/Account/add_account";
     }
 
-    @RequestMapping ("admin/list_account")
+    @RequestMapping ("/admin/list_account")
     public String indexs(){
         return "Admin/Account/list_account";
     }
-    @RequestMapping("admin/category")
-    public String categorys(){
-        return "Admin/Category/list_category";
-    }
-    @RequestMapping("admin/add_category")
-    public String add(){
-        return "Admin/Category/add_category";
-    }
+
+
+
+
+
+
+
     @RequestMapping("admin/list_order")
     public String orders(){
         return "/Admin/Order/list_order";

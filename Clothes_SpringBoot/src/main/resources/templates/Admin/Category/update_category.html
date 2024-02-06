@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="Admin/fragments/head :: head"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <nav th:replace="Admin/fragments/navbar :: navbar"></nav>
+    <aside th:replace="Admin/fragments/sidebar :: sidebar"></aside>
+    <!-- Content -->
+    <form  method="post" th:action="@{/admin/update_category}" th:object="${category}">
+        <input type="hidden" class="form-control" th:field="*{id}" >
+        <div class="content-wrapper" style="min-height: 332.4px;">
+            <h3 style="text-align: center">Chỉnh sửa danh mục</h3>
+            <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
+                <div class="form-group">
+                    <label >Mã danh mục</label>
+                    <input th:field="*{code}"  type="text" class="form-control"  >
+                </div>
+                <div class="form-group">
+                    <label >Tên danh mục</label>
+                    <input th:field="*{name}" type="text" class="form-control"  >
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Cập nhập</button>
+            </div>
+        </div>
+    </form>
+    <!-- End Content -->
+    <style>
+        div, label,button,h3{
+            font-family: "Times New Roman";
+        }
+    </style>
+    <aside class="control-sidebar control-sidebar-dark"></aside>
+</div>
+<div th:replace="Admin/fragments/script :: script"></div>
+</body>
+</html>

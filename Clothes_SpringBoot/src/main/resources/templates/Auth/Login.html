@@ -31,7 +31,10 @@
                 <div class="col-md-7">
                     <h2>Login</h2>
 
-                    <form th:action="@{/login}" th:method="post">
+                    <form  method="post"
+                           th:action="@{/authentication}"
+                           class="form-horizontal"
+                           role="form">
                         <div class="form-group first">
                             <label for="username">Username</label>
                             <input type="text" class="form-control" placeholder="Your username" name="username" id="username">
