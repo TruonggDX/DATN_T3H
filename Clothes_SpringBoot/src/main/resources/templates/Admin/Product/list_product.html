@@ -1,214 +1,126 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="Admin/fragments/head :: head"></head>
-
-<!--</head>-->
-<body class="hold-transition skin-blue sidebar-mini">
-<style>
-    table,tr,th,td {
-        border: 1px solid rosybrown !important;
-    }
-    .form-control{
-        margin: 10px 50px 10px 0px;
-
-    }
-    .form-control label{
-        font-size: 18px;
-        font-family: "Times New Roman";
-        margin-left: 20px;
-
-    }
-    label{
-        font-size: 18px;
-        margin-left: -18px;
-        font-family: "Times New Roman";
-    }
-</style>
-<!-- Site wrapper -->
+<body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-    <header th:replace="Admin/fragments/header :: header"></header>
-    <!-- =============================================== -->
-
-    <!-- Left side column. contains the sidebar -->
-
+    <nav th:replace="Admin/fragments/navbar :: navbar"></nav>
     <aside th:replace="Admin/fragments/sidebar :: sidebar"></aside>
-    <!-- =============================================== -->
+    <!-- Content -->
+    <div class="content-wrapper" style="min-height: 332.4px;">
+        <h3 style="text-align: center;padding: 5px 0px 5px 0px">Danh sách sản phẩm</h3>
+        <form action="">
+            <div class="form-group">
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>
-                Danh sách sản phẩm
-            </h1>
+                <input name="keyword" th:value="${keyword}"  type="text" class="form-control"  placeholder="Nhập nhà sản xuất tìm kiếm">
+                <button type="submit" class="btn btn-block btn-outline-primary">Tìm kiếm</button>
 
-        </section>
-        <section class="content">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
+            </div>
+        </form>
+        <style>
+            .form-group {
+                display: flex;
+                align-items: center;
+            }
 
-                        <form method="get" >
-                            <div style="margin-top: 20px;margin-bottom: 20px">
-                                <label style="margin-left: 30px; font-size: 20px" >Tìm kiếm: </label>
-                                <input type="text"  name="" placeholder="Tìm kiếm">
-                                <button type="submit" class="btn btn-danger">Tìm kiếm</button>
-                            </div>
-                        </form>
+            .form-group label {
+                width: 35px;
+                margin: 5px 0 0 20px;
+            }
 
-                        <div class="box-body">
-                            <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-                                <div class="row">
-                                    <div class="col-sm-6"></div>
-                                    <div class="col-sm-6"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+            .form-group input {
+                width: 250px;
+                margin-left: 20px;
+                margin-right: 20px;
+            }
 
-                                            <thead >
-                                            <tr role="row">
+            .form-group button {
+                width: 150px;
+            }
 
-                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Rendering engine: activate to sort column ascending">ID</th>
-                                                <th class="sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" aria-sort="descending">Tên danh mục</th>
-                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Ngày tạo</th>
-                                                <th class="sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" aria-sort="descending">Ngày cập nhập</th>
-                                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">Tùy Chọn</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
+        </style>
+        <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
+            <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6"></div>
+                    <div class="col-sm-12 col-md-6"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table style="width: 100%" id="example2" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
+                            <thead>
+                            <tr role="row">
+                                <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">ID</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Mã NSX</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Tên NSX</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Hành động</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr role="row" class="odd" th:each="producer : ${list}">
+                                <td tabindex="0" class="sorting_1" th:text="${producer.id}"></td>
+                                <td th:text="${producer.code}"></td>
+                                <td th:text="${producer.name}"></td>
 
-                                            <tr role="row" class="odd">
-                                                <td class="">Other browsers</td>
-                                                <td class="sorting_1">All others</td>
-                                                <td class="sorting_1">Firefox 1.0</td>
-                                                <td class="sorting_1">Firefox 1.0</td>
-                                                <td>
-<!--                                                    <a href="" class="btn btn-success">Sửa</a>-->
-                                                    <!-- Button trigger modal -->
-                                                    <a  class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                                        Chỉnh sửa
-                                                    </a>
-                                                    <a type="button" class="btn btn-danger" onclick="hienThiXacNhanXoa()">
-                                                        Xóa
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            </tbody>
+                                <td>
+                                    <a th:href="@{/admin/update_producer/{id}(id=${producer.id})}" type="button" class="btn btn-default">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </a>
 
-                                        </table>
-                                    </div>
-                                </div>
-                                <script>
-                                    function hienThiXacNhanXoa() {
-                                        var xacNhan = confirm("Bạn có chắc chắn muốn xóa không?");
-                                        if (xacNhan) {
-                                            // Thực hiện xóa
-                                        } else {
-                                            // Không thực hiện xóa
-                                        }
-                                    }
-                                </script>
+                                    <a th:href="@{/admin/delete_producer/{id}(id=${producer.id})}" onclick="return confirm('ban chac chan chu')" type="button" class="btn btn-default">
+                                        <i class="far fa-trash-can"></i>
+                                    </a>
 
-                                <div>
-                                    <!-- Modal edit -->
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h3 style="text-align: center" class="modal-title" id="exampleModalLabel">Chỉnh sửa thông tin sản phẩm</h3>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-<!--                                                <div class="modal-body">-->
-                                                    <div class="form-group">
-                                                        <label for="">Name</label>
-                                                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
 
-                                                    </div>
-                                                <br>
-                                                    <div class="form-group">
-                                                        <label for="">Name</label>
-                                                        <input type="text" class="form-control" id="">
-                                                    </div>
-                                                <br>
-                                                    <div class="form-group">
-                                                        <label for="">Name</label>
-                                                        <input type="text" class="form-control" id="" aria-describedby="emailHelp">
+                                </td>
+                            </tr>
+                            </tbody>
 
-                                                    </div>
-                                                <br>
-                                                    <div class="form-group">
-                                                        <label for="">Name</label>
-                                                        <input type="text" class="form-control" id="">
-                                                    </div>
-                                                <br>
-                                                    <div class="form-group">
-                                                        <label for="">Name</label>
-                                                        <input type="text" class="form-control" id="" aria-describedby="emailHelp">
-
-                                                    </div>
-                                                <br>
-                                                    <div class="form-group">
-                                                        <label for="">Name</label>
-                                                        <input type="text" class="form-control" id="">
-                                                    </div>
-<!--                                                </div>-->
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                                    <button type="button" class="btn btn-primary">Lưu</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row"><div class="col-sm-5"></div>
-                                    <div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-                                        <ul class="pagination">
-                                            <li class="paginate_button previous" id="example2_previous">
-                                                <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0">Previous</a>
-                                            </li>
-                                            <li class="paginate_button ">
-                                                <a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0">1</a>
-                                            </li>
-                                            <li class="paginate_button ">
-                                                <a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0">2</a>
-                                            </li>
-                                            <li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0">3</a>
-                                            </li>
-                                            <li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0">4</a>
-                                            </li>
-                                            <li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0">5</a>
-                                            </li>
-                                            <li class="paginate_button active"><a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0">6</a>
-                                            </li>
-                                            <li class="paginate_button next disabled" id="example2_next">
-                                                <a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0">Next</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        </table>
                     </div>
-
                 </div>
 
-        </section>
+                <div class="row">
 
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                            <ul style="margin-left: 62%" class="pagination">
+                                <li class="paginate_button page-item previous disabled" id="example2_previous">
+                                    <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                                </li>
+                                <li class="paginate_button page-item active"><a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
+                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
+                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a></li>
+                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a></li>
+                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a></li>
+                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a></li>
+                                <li class="paginate_button page-item next" id="example2_next"><a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Content -->
+
+        <script>
+            function hienThiXacNhanXoa() {
+                var xacNhan = confirm("Bạn có chắc chắn muốn xóa không?");
+                if (xacNhan) {
+                    // Thực hiện xóa
+                } else {
+                    // Không thực hiện xóa
+                }
+            }
+        </script>
+        <style>
+            table,tr,th,td,h3{
+                text-align: center;
+                font-family: "Times New Roman";
+            }
+
+        </style>
+        <aside class="control-sidebar control-sidebar-dark"></aside>
     </div>
-    <!-- /.content-wrapper -->
-
-    <footer th:replace="Admin/fragments/footer :: footer"></footer>
-
-</div>
-<!-- ./wrapper -->
-
-<!-- jQuery 3 -->
-
-<div th:replace="Admin/fragments/script :: script"></div>
+    <div th:replace="Admin/fragments/script :: script"></div>
 </body>
 </html>
