@@ -1,6 +1,6 @@
-package edu.t3h.clothes.Service;
+package edu.t3h.clothes.service;
 
-import edu.t3h.clothes.Entity.Category;
+import edu.t3h.clothes.entity.Category;
 
 import java.util.List;
 

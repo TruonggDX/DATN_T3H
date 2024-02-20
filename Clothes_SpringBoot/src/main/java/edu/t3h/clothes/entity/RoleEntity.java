@@ -1,4 +1,4 @@
-package edu.t3h.clothes.Entity;
+package edu.t3h.clothes.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

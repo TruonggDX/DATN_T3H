@@ -1,4 +1,4 @@
-package edu.t3h.clothes.Controller.Auth;
+package edu.t3h.clothes.controller.auth;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

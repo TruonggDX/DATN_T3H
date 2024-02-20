@@ -1,4 +1,4 @@
-package edu.t3h.clothes.Config;
+package edu.t3h.clothes.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

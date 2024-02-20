@@ -1,7 +1,7 @@
-package edu.t3h.clothes.Service;
+package edu.t3h.clothes.service;
 
-import edu.t3h.clothes.Entity.Producer;
-import edu.t3h.clothes.Repository.ProducerReponsiroty;
+import edu.t3h.clothes.entity.Producer;
+import edu.t3h.clothes.repository.ProducerReponsiroty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -65,10 +65,14 @@
                                     <a th:href="@{/admin/update_category/{id}(id=${category.id})}" type="button" class="btn btn-default">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>
+<!--                                    <a th:href="@{/admin/update_category/{id}(id=${category.id})}"  id="editButton" type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-lg">-->
+<!--                                        <i class="fa-regular fa-pen-to-square"></i>-->
+<!--                                    </a>-->
 
                                     <a th:href="@{/admin/delete_category/{id}(id=${category.id})}" onclick="return confirm('ban chac chan chu')" type="button" class="btn btn-default">
                                         <i class="far fa-trash-can"></i>
                                     </a>
+
 
 
                                 </td>
@@ -102,16 +106,6 @@
         </div>
         <!-- End Content -->
 
-        <script>
-            function hienThiXacNhanXoa() {
-                var xacNhan = confirm("Bạn có chắc chắn muốn xóa không?");
-                if (xacNhan) {
-                    // Thực hiện xóa
-                } else {
-                    // Không thực hiện xóa
-                }
-            }
-        </script>
         <style>
             table,tr,th,td,h3{
                 text-align: center;
@@ -122,5 +116,30 @@
         <aside class="control-sidebar control-sidebar-dark"></aside>
     </div>
     <div th:replace="Admin/fragments/script :: script"></div>
+
+<!--    <div class="modal fade" id="modal-lg">-->
+<!--        <div class="modal-dialog modal-lg">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h4 class="modal-title">Large Modal</h4>-->
+<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                        <span aria-hidden="true">&times;</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <p>One fine body&hellip;</p>-->
+<!--                </div>-->
+<!--                <div class="modal-footer justify-content-between">-->
+<!--                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+<!--                    <button type="button" class="btn btn-primary">Save changes</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; /.modal-content &ndash;&gt;-->
+<!--        </div>-->
+<!--        &lt;!&ndash; /.modal-dialog &ndash;&gt;-->
+<!--    </div>-->
+
 </body>
 </html>
+
+

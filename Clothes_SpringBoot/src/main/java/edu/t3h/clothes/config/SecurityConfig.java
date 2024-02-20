@@ -1,9 +1,9 @@
 
 
 
-package edu.t3h.clothes.Config;
+package edu.t3h.clothes.config;
 
-import edu.t3h.clothes.Security.CustomUserDetailsService;
+import edu.t3h.clothes.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,21 +39,22 @@ public class SecurityConfig {
         }
     }
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-//                .authorizeHttpRequests((author) -> author.requestMatchers("/","/login").permitAll()
-//                                .requestMatchers("/login").hasAnyRole("ADMIN")
-////                        .requestMatchers("/product/**").hasAnyRole("ADMIN")
-//                ).formLogin(form ->
-//                        form.
-//                                loginPage("/login") // GET
-//                                .loginProcessingUrl("/authentication") // POST
-//                                .defaultSuccessUrl("/admin")
-//                                .failureUrl("/login").permitAll()
-//                ).logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll());
-//        return http.build();
-//    }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .authorizeHttpRequests((author) -> author.requestMatchers("/","/login").permitAll()
+                                .requestMatchers("/admin").hasAnyRole("ADMIN")
+//                        .requestMatchers("/add_category/**").hasAnyRole("ADMIN")
+                ).formLogin(form ->
+                        form.
+                                loginPage("/login") // GET
+                                .loginProcessingUrl("/authentication") // POST
+                                .defaultSuccessUrl("/admin")
+                                .failureUrl("/login").permitAll()
+                )
+                .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/admin-logout")).logoutSuccessUrl("/login"));
+        return http.build();
+    }
 
     @Bean
     WebSecurityCustomizer webSecurityCustomizer(){

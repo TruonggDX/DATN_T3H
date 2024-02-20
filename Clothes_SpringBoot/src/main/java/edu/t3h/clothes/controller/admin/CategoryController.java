@@ -1,7 +1,7 @@
-package edu.t3h.clothes.Controller.Admin;
+package edu.t3h.clothes.controller.admin;
 
-import edu.t3h.clothes.Entity.Category;
-import edu.t3h.clothes.Service.CategoryService;
+import edu.t3h.clothes.entity.Category;
+import edu.t3h.clothes.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;

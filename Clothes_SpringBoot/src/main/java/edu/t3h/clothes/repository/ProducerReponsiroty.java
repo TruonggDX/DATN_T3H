@@ -1,7 +1,6 @@
-package edu.t3h.clothes.Repository;
+package edu.t3h.clothes.repository;
 
-import edu.t3h.clothes.Entity.Category;
-import edu.t3h.clothes.Entity.Producer;
+import edu.t3h.clothes.entity.Producer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

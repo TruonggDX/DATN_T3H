@@ -1,9 +1,6 @@
-package edu.t3h.clothes.Service;
+package edu.t3h.clothes.service;
 
-import edu.t3h.clothes.Entity.Category;
-import edu.t3h.clothes.Entity.Producer;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
+import edu.t3h.clothes.entity.Producer;
 
 import java.util.List;
 

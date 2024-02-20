@@ -1,8 +1,8 @@
-package edu.t3h.clothes.Security;
+package edu.t3h.clothes.security;
 
-import edu.t3h.clothes.Entity.RoleEntity;
-import edu.t3h.clothes.Entity.UserEntity;
-import edu.t3h.clothes.Repository.UserEntityRepository;
+import edu.t3h.clothes.entity.RoleEntity;
+import edu.t3h.clothes.entity.UserEntity;
+import edu.t3h.clothes.repository.UserEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
