@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "producer")
-public class Producer {
+public class ProducerEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,10 +17,10 @@ public class Producer {
     @Column(name = "name")
     private String name;
 
-    public Producer() {
+    public ProducerEntity() {
     }
 
-    public Producer(Integer id, String code, String name) {
+    public ProducerEntity(Integer id, String code, String name) {
         this.id = id;
         this.code = code;
         this.name = name;

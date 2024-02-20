@@ -1,6 +1,6 @@
 package edu.t3h.clothes.service;
 
-import edu.t3h.clothes.entity.Producer;
+import edu.t3h.clothes.entity.ProducerEntity;
 import edu.t3h.clothes.repository.ProducerReponsiroty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,12 +12,12 @@ public class ProducerImpl implements ProducerService{
     @Autowired
     private ProducerReponsiroty producerReponsiroty;
     @Override
-    public List<Producer> getAll() {
+    public List<ProducerEntity> getAll() {
         return this.producerReponsiroty.findAll();
     }
 
     @Override
-    public Boolean creatProducer(Producer producer) {
+    public Boolean creatProducer(ProducerEntity producer) {
         try {
             this.producerReponsiroty.save(producer);
             return true;
@@ -28,12 +28,12 @@ public class ProducerImpl implements ProducerService{
     }
 
     @Override
-    public Producer findProducerById(Integer id) {
+    public ProducerEntity findProducerById(Integer id) {
         return this.producerReponsiroty.findById(id).get();
     }
 
     @Override
-    public Boolean updateProducer(Producer producer) {
+    public Boolean updateProducer(ProducerEntity producer) {
         try {
             this.producerReponsiroty.save(producer);
             return true;
@@ -55,7 +55,7 @@ public class ProducerImpl implements ProducerService{
     }
 
     @Override
-    public List<Producer> searchProducer(String keyword) {
+    public List<ProducerEntity> searchProducer(String keyword) {
         return this.producerReponsiroty.searchProducer(keyword);
     }
 

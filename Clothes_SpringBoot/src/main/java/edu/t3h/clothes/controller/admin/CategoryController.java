@@ -1,6 +1,6 @@
 package edu.t3h.clothes.controller.admin;
 
-import edu.t3h.clothes.entity.Category;
+import edu.t3h.clothes.entity.CategoryEntity;
 import edu.t3h.clothes.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +17,7 @@ public class CategoryController {
     private CategoryService categoryService;
     @GetMapping("/category")
     public String categorys(Model model, @Param("keyword") String keyword){
-        List<Category> list = this.categoryService.getAll();
+        List<CategoryEntity> list = this.categoryService.getAll();
         if (keyword!=null){
             list = this.categoryService.searchCategory(keyword);
             model.addAttribute("keyword", keyword);
@@ -37,12 +37,12 @@ public class CategoryController {
 
     @GetMapping("/add_category")
     public String add(Model model){
-        Category category = new Category();
+        CategoryEntity category = new CategoryEntity();
         model.addAttribute("category",category);
         return "Admin/Category/add_category";
     }
     @PostMapping("/add_category")
-    public String save(@ModelAttribute("category") Category category){
+    public String save(@ModelAttribute("category") CategoryEntity category){
         if (this.categoryService.creatCategory(category)){
             return "redirect:/admin/category";
         }else {
@@ -51,12 +51,12 @@ public class CategoryController {
     }
     @GetMapping("/update_category/{id}")
     public String update(Model model, @PathVariable("id") Integer id){
-        Category category = this.categoryService.findCategoryById(id);
+        CategoryEntity category = this.categoryService.findCategoryById(id);
         model.addAttribute("category", category);
         return "Admin/Category/update_category";
     }
     @PostMapping("/update_category")
-    public String update(@ModelAttribute("category") Category category){
+    public String update(@ModelAttribute("category") CategoryEntity category){
         if (this.categoryService.creatCategory(category)){
             return "redirect:/admin/category";
         }else {

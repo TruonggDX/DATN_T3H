@@ -42,10 +42,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
+
                 .authorizeHttpRequests((author) -> author.requestMatchers("/","/login").permitAll()
-                                .requestMatchers("/admin").hasAnyRole("ADMIN")
-//                        .requestMatchers("/add_category/**").hasAnyRole("ADMIN")
-                ).formLogin(form ->
+                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/add_category/**").hasAnyRole("ADMIN")
+                )
+                .formLogin(form ->
                         form.
                                 loginPage("/login") // GET
                                 .loginProcessingUrl("/authentication") // POST
@@ -58,7 +60,9 @@ public class SecurityConfig {
 
     @Bean
     WebSecurityCustomizer webSecurityCustomizer(){
-        return (web -> web.ignoring().requestMatchers("/static/**","/admin/**","/user/**","/auth/**"));
+        return (web -> web.ignoring()
+                .requestMatchers("/static/**","/user/**","/auth/**")
+        );
     }
 
 

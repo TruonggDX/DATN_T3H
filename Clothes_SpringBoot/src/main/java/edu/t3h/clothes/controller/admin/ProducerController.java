@@ -1,6 +1,6 @@
 package edu.t3h.clothes.controller.admin;
 
-import edu.t3h.clothes.entity.Producer;
+import edu.t3h.clothes.entity.ProducerEntity;
 import edu.t3h.clothes.service.ProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +19,7 @@ public class ProducerController {
 
     @GetMapping("/list_producer")
     public String index(Model model, @Param("keyword") String keyword){
-        List<Producer> list = this.producerService.getAll();
+        List<ProducerEntity> list = this.producerService.getAll();
         if (keyword!=null){
             list = this.producerService.searchProducer(keyword);
             model.addAttribute("keyword", keyword);
@@ -36,13 +36,13 @@ public class ProducerController {
 
     @GetMapping("/add_producer")
     public String insert(Model model){
-        Producer producer = new Producer();
+        ProducerEntity producer = new ProducerEntity();
         model.addAttribute("producer",producer);
         return "Admin/Producer/add_producer";
     }
 
     @PostMapping("/add_producer")
-    public String save(@ModelAttribute("producer") Producer producer){
+    public String save(@ModelAttribute("producer") ProducerEntity producer){
         if (this.producerService.creatProducer(producer)){
             return "redirect:/admin/list_producer";
         }else {
@@ -60,12 +60,12 @@ public class ProducerController {
 
     @GetMapping("/update_producer/{id}")
     public String update(Model model, @PathVariable("id") Integer id){
-        Producer producer = this.producerService.findProducerById(id);
+        ProducerEntity producer = this.producerService.findProducerById(id);
         model.addAttribute("producer", producer);
         return "Admin/Producer/update_producer";
     }
     @PostMapping("/update_producer")
-    public String update(@ModelAttribute("producer") Producer producer){
+    public String update(@ModelAttribute("producer") ProducerEntity producer){
         if (this.producerService.updateProducer(producer)){
             return "redirect:/admin/list_producer";
         }else {

@@ -6,23 +6,11 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "category")
-public class Category {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class CategoryEntity extends AbstractEntity {
     @Column(name = "code")
     private String code;
     @Column(name = "name")
     private String name;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getCode() {
         return code;
@@ -40,11 +28,10 @@ public class Category {
         this.name = name;
     }
 
-    public Category() {
+    public CategoryEntity() {
     }
 
-    public Category(Integer id, String code, String name) {
-        this.id = id;
+    public CategoryEntity(String code, String name) {
         this.code = code;
         this.name = name;
     }
