@@ -3,6 +3,9 @@ package edu.t3h.clothes.service;
 import edu.t3h.clothes.entity.CategoryEntity;
 import edu.t3h.clothes.repository.CategoryReponsitory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,5 +59,11 @@ public class CategoryImpl implements CategoryService{
     @Override
     public List<CategoryEntity> searchCategory(String keyword) {
         return this.categoryReponsitory.searchCategory(keyword);
+    }
+
+    @Override
+    public Page<CategoryEntity> getAll(Integer pageNo) {
+        Pageable pageable = PageRequest.of(pageNo-1,5);
+        return this.categoryReponsitory.findAll(pageable);
     }
 }

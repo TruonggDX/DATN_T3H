@@ -3,6 +3,7 @@ package edu.t3h.clothes.controller.admin;
 import edu.t3h.clothes.entity.CategoryEntity;
 import edu.t3h.clothes.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,12 +17,15 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
     @GetMapping("/category")
-    public String categorys(Model model, @Param("keyword") String keyword){
-        List<CategoryEntity> list = this.categoryService.getAll();
-        if (keyword!=null){
-            list = this.categoryService.searchCategory(keyword);
-            model.addAttribute("keyword", keyword);
-        }
+    public String categorys(Model model, @Param("keyword") String keyword, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo){
+        Page<CategoryEntity> list = this.categoryService.getAll(pageNo);
+//       if (keyword!=null){
+//            list = this.categoryService.searchCategory(keyword);
+//            model.addAttribute("keyword", keyword);
+//        }
+        model.addAttribute("totalPage", list.getTotalPages());
+        model.addAttribute("currentPage", pageNo);
+
         model.addAttribute("list", list);
 
         return "Admin/Category/list_category";
