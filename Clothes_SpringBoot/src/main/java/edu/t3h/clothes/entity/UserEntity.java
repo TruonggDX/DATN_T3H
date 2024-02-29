@@ -29,6 +29,8 @@ public class UserEntity extends AbstractEntity{
     private int loyalCustomers;
 
 
+
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_tg",
             joinColumns = {@JoinColumn(name = "user_id")},

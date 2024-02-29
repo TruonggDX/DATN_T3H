@@ -1,0 +1,131 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="Admin/fragments/head :: head"></head>
+<body>
+<nav th:replace="Admin/fragments/navbar :: navbar "></nav>
+<aside th:replace="Admin/fragments/sidebar :: sidebar"></aside>
+<div class="contents">
+    <div class="cols">
+        <img style="height: 226.771px; width: 161.181px; object-fit: cover" src="{{ url('/images/' . $url) }}"
+             alt="Vui lòng thêm ảnh đại diện">
+    </div>
+    <div class="main_content">
+        <h5>Thông tin cá nhân:</h5>
+        <form action="" method="post" class="form_edit" >
+            <div>
+                <div><span >Tên đăng nhập:</span></div>
+                <div><input type="text"  name="newName"></div>
+            </div>
+            <div >
+                <div><span >Họ tên:</span></div>
+                <div><input type="text"  name="hoTen"></div>
+            </div>
+
+            <div >
+                <div><span for="email-input">Email:</span></div>
+                <div><input type="email" id="email-input" name="email"></div>
+            </div>
+            <div >
+                <div><span >Điện thoại:</span></div>
+                <div><input type="number" name="sDT"></div>
+            </div>
+            <div >
+                <div><span >Ngày sinh:</span></div>
+                <div><input type="date"  name="ngaySinh"></div>
+            </div>
+            <div >
+                <div><span >Ảnh đại diện:</span></div>
+                <div><input type="file"  name="img"></div>
+            </div>
+            <div >
+                <button type="submit">Cập nhật</button>
+            </div>
+        </form>
+        <button style="width: 150px; float: left;margin-left: 20px" data-toggle="modal" data-target="#modal-lg" type="button" class="btn btn-block btn-outline-info">Đổi mật khẩu</button>
+            <div style="margin-left:200px ; margin-top: 50px" class="modal fade" id="modal-lg">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content" style="width: 500px">
+                        <form  method="post">
+                            <div style="text-align: center; margin-top: 30px">
+                                <h4 class="modal-title">Đổi mật khẩu</h4>
+                            </div>
+                            <div class="modal-body">
+                                <label style="width: 200px;margin-left: 32px">Mật khẩu hiện tại : </label>
+                                <div style="text-align: center" class="form-group">
+                                    <input type="password" id="password-input current_password" name="current_password" placeholder="Nhập mật khẩu cũ">
+                                </div>
+                                <label style="width: 200px;margin-left: 32px">Mật khẩu mới : </label>
+                                <div style="text-align: center"  class="form-group">
+                                    <input type="password" id="password-input password" name="password" placeholder="Nhập mật khẩu mới">
+                                </div>
+                                <label style="width: 200px;margin-left: 32px">Xác nhận mật khẩu mới : </label>
+                                <div style="text-align: center"  class="form-group">
+                                    <input type="password" id="password-input password_confirmation" name="password_confirmation" placeholder="Nhập lại mật khẩu cũ">
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+    </div>
+</div>
+<div th:replace="Admin/fragments/script :: script"></div>
+</body>
+<style>
+    /* Thiết lập kiểu cho input */
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="password"],
+    input[type="date"],
+    input[type="file"] {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+    }
+    input{
+        width: 400px;
+    }
+    /* Thiết lập kiểu cho button */
+    button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+    .cols{
+        float: left;
+        width: 400px;
+    }
+    .contents{
+        margin-left: 300px;
+        margin-top: 30px;
+    }
+    .main_content{
+        margin-left: 400px;
+    }
+    button {
+        display: inline-block;
+        margin-right: 20px; /* Để cách giữa nút "Cập nhật" và nút "Đổi mật khẩu" */
+    }
+
+    .btn-outline-info {
+        display: inline-block;
+    }
+
+</style>
+</html>

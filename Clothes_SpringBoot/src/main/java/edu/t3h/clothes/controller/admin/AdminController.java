@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class AdminController {
+
     @RequestMapping("/admin")
     public String admin(){
         return "Admin/index";
@@ -41,6 +42,11 @@ public class AdminController {
     @RequestMapping("admin/add_product")
     public String addProduct(){
         return "Admin/Product/add_product";
+    }
+
+    @RequestMapping("admin/profile")
+    public String profile (){
+        return "Admin/profileAdmin";
     }
 
 }

@@ -45,13 +45,15 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests((author) -> author.requestMatchers("/","/login").permitAll()
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                        .requestMatchers("/add_category/**").hasAnyRole("ADMIN")
+//                        .requestMatchers("/add_category/**").hasAnyRole("ADMIN")
+//                        .requestMatchers("/user/**").hasAnyRole("USER")
                 )
                 .formLogin(form ->
                         form.
                                 loginPage("/login") // GET
                                 .loginProcessingUrl("/authentication") // POST
-                                .defaultSuccessUrl("/admin")
+                                .defaultSuccessUrl("/admin ")
+//                                .defaultSuccessUrl("/user")
                                 .failureUrl("/login").permitAll()
                 )
                 .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/admin-logout")).logoutSuccessUrl("/login"));
