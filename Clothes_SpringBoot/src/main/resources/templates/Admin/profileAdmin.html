@@ -6,7 +6,7 @@
 <aside th:replace="Admin/fragments/sidebar :: sidebar"></aside>
 <div class="contents">
     <div class="cols">
-        <img style="height: 226.771px; width: 161.181px; object-fit: cover" src="{{ url('/images/' . $url) }}"
+        <img style="height: 360px; width: 288px; margin-top: 57px; margin-left: 23px; object-fit: cover" th:src="@{/admin/dist/img/admin.jpg}"
              alt="Vui lòng thêm ảnh đại diện">
     </div>
     <div class="main_content">
@@ -38,16 +38,16 @@
                 <div><input type="file"  name="img"></div>
             </div>
             <div >
-                <button type="submit">Cập nhật</button>
+                <button type="submit" style="margin-left: 149px">Cập nhật</button>
             </div>
         </form>
-        <button style="width: 150px; float: left;margin-left: 20px" data-toggle="modal" data-target="#modal-lg" type="button" class="btn btn-block btn-outline-info">Đổi mật khẩu</button>
+        <a style="width: 150px; float: left;margin-left: 156px; margin-top: 15px; cursor: pointer" data-toggle="modal" data-target="#modal-lg" >Đổi mật khẩu</a>
             <div style="margin-left:200px ; margin-top: 50px" class="modal fade" id="modal-lg">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content" style="width: 500px">
                         <form  method="post">
                             <div style="text-align: center; margin-top: 30px">
-                                <h4 class="modal-title">Đổi mật khẩu</h4>
+                                <h4 class="modal-title" >Đổi mật khẩu</h4>
                             </div>
                             <div class="modal-body">
                                 <label style="width: 200px;margin-left: 32px">Mật khẩu hiện tại : </label>
@@ -112,8 +112,8 @@
         width: 400px;
     }
     .contents{
-        margin-left: 300px;
-        margin-top: 30px;
+        margin-left: 450px;
+        margin-top: 60px;
     }
     .main_content{
         margin-left: 400px;
@@ -125,6 +125,13 @@
 
     .btn-outline-info {
         display: inline-block;
+    }
+    a[data-toggle="modal"]:hover {
+        color: blue; /* Màu chữ sẽ thay đổi khi di chuột vào */
+        text-decoration: underline; /* Gạch chân chữ khi di chuột vào */
+    }
+    label, a{
+        font-size: 17px;
     }
 
 </style>
