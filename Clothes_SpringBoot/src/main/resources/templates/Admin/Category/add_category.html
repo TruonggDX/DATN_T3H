@@ -6,17 +6,17 @@
   <nav th:replace="Admin/fragments/navbar :: navbar"></nav>
   <aside th:replace="Admin/fragments/sidebar :: sidebar"></aside>
   <!-- Content -->
-  <form  method="post" th:action="@{/admin/add_category}">
+  <form  method="post" th:action="@{/admin/add_category}" th:object="${category}">
     <div class="content-wrapper" style="min-height: 332.4px;">
       <h3 style="text-align: center">Thêm danh mục</h3>
       <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
         <div class="form-group">
           <label >Mã danh mục</label>
-          <input  type="text" class="form-control"  placeholder="Nhập mã danh mục">
+          <input th:field="*{code}"  type="text" class="form-control"  placeholder="Nhập mã danh mục">
         </div>
         <div class="form-group">
           <label >Tên danh mục</label>
-          <input type="text" class="form-control"  placeholder="Nhập tên danh mục">
+          <input th:field="*{name}" type="text" class="form-control"  placeholder="Nhập tên danh mục">
         </div>
       </div>
       <div class="card-footer">

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface CategoryReponsitory extends JpaRepository<CategoryEntity, Integer> {
+public interface CategoryReponsitory extends JpaRepository<CategoryEntity, Long> {
     @Query("SELECT c FROM CategoryEntity c WHERE c.name LIKE %?1%")
     List<CategoryEntity> searchCategory(String keyword);
 }

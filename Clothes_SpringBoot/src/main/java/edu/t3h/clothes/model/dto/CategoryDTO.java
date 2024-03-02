@@ -1,15 +1,25 @@
-package edu.t3h.clothes.model.DTO;
+package edu.t3h.clothes.model.dto;
 
+import lombok.Data;
+
+@Data
 public class CategoryDTO {
+    private Long id;
     private String code;
     private String name;
 
     public CategoryDTO() {
     }
 
-    public CategoryDTO(String code, String name) {
+    public CategoryDTO(Long id,String code, String name) {
+        this.id = id;
         this.code = code;
         this.name = name;
+    }
+    public Long getId(){return id;}
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCode() {

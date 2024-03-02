@@ -1,14 +1,15 @@
-package edu.t3h.clothes.service;
+package edu.t3h.clothes.service.impl;
 
 import edu.t3h.clothes.entity.ProducerEntity;
 import edu.t3h.clothes.repository.ProducerReponsiroty;
+import edu.t3h.clothes.service.ProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ProducerImpl implements ProducerService{
+public class ProducerImpl implements ProducerService {
     @Autowired
     private ProducerReponsiroty producerReponsiroty;
     @Override
