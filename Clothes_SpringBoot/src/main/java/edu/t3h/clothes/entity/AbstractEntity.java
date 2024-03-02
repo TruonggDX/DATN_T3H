@@ -24,6 +24,7 @@ public abstract class AbstractEntity {
     @Column(name = "modified_by")
     private String modifiedBy;
 
+    // thêm thuộc tính deleted kiểu dữ liệu boolean với giá trị mặc định là false, để xóa mềm bản ghi trong database
     public Long getId() {
         return id;
     }
