@@ -13,12 +13,4 @@ public interface ICategoryService {
     BaseResponse<?> deleteCategory(Long id);
     CategoryDTO findCategoryById(Long id);
     BaseResponse<?> updateCategory(Long id, CategoryDTO categoryDTO);
-//    Boolean creatCategory(CategoryEntity category);
-//    CategoryEntity findCategoryById(Integer id);
-//    Boolean updateCategory(CategoryEntity category);
-//    Boolean deleteCategory(Long id);
-//    List<CategoryEntity> searchCategory(String keyword);
-//
-//    Page<CategoryEntity> getAll(Integer pageNo);
-
 }
