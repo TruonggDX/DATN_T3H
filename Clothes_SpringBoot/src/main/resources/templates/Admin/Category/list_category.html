@@ -16,9 +16,9 @@
             </div>
         </form>
         <style>
-           .form_search{
-               margin-left: 808px;
-           }
+            .form_search{
+                margin-left: 808px;
+            }
 
             .form-group {
                 display: flex;
@@ -40,9 +40,9 @@
                 width: 150px;
             }
         </style>
-<!--        <a href="#" class="btn btn-default" data-toggle="modal" data-target="#editModal">-->
-<!--            <i class="fa-regular fa-pen-to-square"></i> Chỉnh sửa-->
-<!--        </a>-->
+        <!--        <a href="#" class="btn btn-default" data-toggle="modal" data-target="#editModal">-->
+        <!--            <i class="fa-regular fa-pen-to-square"></i> Chỉnh sửa-->
+        <!--        </a>-->
 
         <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
             <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -62,7 +62,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr role="row" class="odd" th:each="category : ${list}">
+                            <tr role="row" class="odd" th:each="category : ${categories.data}">
                                 <td tabindex="0" class="sorting_1" th:text="${category.id}"></td>
                                 <td th:text="${category.code}"></td>
                                 <td th:text="${category.name}"></td>
@@ -72,9 +72,11 @@
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>
 
-                                    <a th:href="@{/admin/delete_category/{id}(id=${category.id})}" onclick="return confirm('Bạn chắc chắn xóa ? ')" type="button" class="btn btn-default">
+                                    <a th:href="@{/admin/delete/{id}(id=${category.id})}" onclick="return confirm('Bạn chắc chắn muốn xóa?')" class="btn btn-default">
                                         <i class="far fa-trash-can"></i>
                                     </a>
+
+
                                 </td>
                             </tr>
                             </tbody>
@@ -82,74 +84,57 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Content -->
 
+    <style>
+        table,tr,th,td,h3{
+            text-align: center;
+            font-family: "Times New Roman";
+        }
 
-                <div class="row">
-                    <div class="col-sm-12 col-md-7">
-                        <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-                            <ul style="margin-left: 62%" class="pagination">
-                                <li class="paginate_button page-item previous disabled" id="example2_previous">
-                                    <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-                                </li>
-                               <li th:if="${currentPage > 1}"><a th:href="@{'?pageNo='+${currentPage - 1}}"></a></li>
-                                <li th:each="i:${#numbers.sequence(1,totalPage)}" th:classappend="${currentPage == i ? 'active' : ''}" class="paginate_button page-item "><a th:href="@{'?pageNo='+${i}}" th:text="${i}" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">1</a></li>
-                                <li th:if="${currentPage < totalPage}"><a th:href="@{'?pageNo='+${currentPage+1}}"></a></li>
-                            <li class="paginate_button page-item next" id="example2_next"><a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li>
-                            </ul>
-                        </div>
+    </style>
+    <aside class="control-sidebar control-sidebar-dark"></aside>
+</div>
+<div th:replace="Admin/fragments/script :: script"></div>
+
+<div style="margin-left:200px ; margin-top: 50px" class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="width: 500px">
+            <form method="post" th:action="@{/admin/add_category}" th:object="${categoryDTO}">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Category</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label style="width: 135px">Mã danh mục</label>
+                        <input th:name="code" type="text" class="form-control" placeholder="Nhập mã danh mục">
+                    </div>
+                    <div class="form-group">
+                        <label style="width: 135px">Tên danh mục</label>
+                        <input th:name="name" type="text" class="form-control" placeholder="Nhập tên danh mục">
                     </div>
                 </div>
-            </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+
         </div>
-        <!-- End Content -->
-
-        <style>
-            table,tr,th,td,h3{
-                text-align: center;
-                font-family: "Times New Roman";
-            }
-
-        </style>
-        <aside class="control-sidebar control-sidebar-dark"></aside>
+        <!-- /.modal-content -->
     </div>
-    <div th:replace="Admin/fragments/script :: script"></div>
-
-    <div style="margin-left:200px ; margin-top: 50px" class="modal fade" id="modal-lg">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content" style="width: 500px">
-                <form  method="post" th:action="@{/admin/add_category}">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Add Category</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label style="width: 135px">Mã danh mục</label>
-                            <input th:name="code"  type="text" class="form-control"  placeholder="Nhập mã danh mục">
-                        </div>
-                        <div class="form-group">
-                            <label style="width: 135px">Tên danh mục</label>
-                            <input th:name="name"  type="text" class="form-control"  placeholder="Nhập tên danh mục">
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
+    <!-- /.modal-dialog -->
+</div>
 
 
 
-
+</div>
 
 </body>
 </html>
-
-

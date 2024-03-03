@@ -6,7 +6,7 @@
     <nav th:replace="Admin/fragments/navbar :: navbar"></nav>
     <aside th:replace="Admin/fragments/sidebar :: sidebar"></aside>
     <!-- Content -->
-    <form  method="post" th:action="@{/admin/update_category}" th:object="${category}">
+    <form  method="post" th:action="@{/admin/update_category}" th:object="${categoryDTO}">
         <input type="hidden" class="form-control" th:field="*{id}" >
         <div class="content-wrapper" style="min-height: 332.4px;">
             <h3 style="text-align: center">Chỉnh sửa danh mục</h3>
