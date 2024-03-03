@@ -6,18 +6,18 @@
     <nav th:replace="Admin/fragments/navbar :: navbar"></nav>
     <aside th:replace="Admin/fragments/sidebar :: sidebar"></aside>
     <!-- Content -->
-    <form  method="post" th:action="@{/admin/update_category}" th:object="${category}">
-        <input type="hidden" class="form-control" th:value="${id}" >
+    <form  method="post" th:action="@{/admin/update_category}" th:object="${categoryDTO}">
+        <input type="hidden" class="form-control" th:field="*{id}" >
         <div class="content-wrapper" style="min-height: 332.4px;">
             <h3 style="text-align: center">Chỉnh sửa danh mục</h3>
             <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
                 <div class="form-group">
                     <label >Mã danh mục</label>
-                    <input th:value="${code}"  type="text" class="form-control"  >
+                    <input th:field="*{code}"  type="text" class="form-control"  >
                 </div>
                 <div class="form-group">
                     <label >Tên danh mục</label>
-                    <input th:value="${name}" type="text" class="form-control"  >
+                    <input th:field="*{name}" type="text" class="form-control"  >
                 </div>
             </div>
             <div class="card-footer">
