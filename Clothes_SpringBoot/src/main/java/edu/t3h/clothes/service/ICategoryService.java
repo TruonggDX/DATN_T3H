@@ -12,7 +12,7 @@ public interface ICategoryService {
     BaseResponse<?> creatCategory(CategoryDTO categoryDTO);
     BaseResponse<?> deleteCategory(Long id);
     CategoryDTO findCategoryById(Long id);
-    BaseResponse<?> updateCategory(Long categoryId, CategoryDTO categoryDTO);
+    BaseResponse<?> updateCategory(Long id, CategoryDTO categoryDTO);
 //    Boolean creatCategory(CategoryEntity category);
 //    CategoryEntity findCategoryById(Integer id);
 //    Boolean updateCategory(CategoryEntity category);

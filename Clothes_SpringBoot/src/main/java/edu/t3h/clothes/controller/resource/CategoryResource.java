@@ -3,6 +3,7 @@ package edu.t3h.clothes.controller.resource;
 import edu.t3h.clothes.model.dto.CategoryDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.service.ICategoryService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,15 @@ public class CategoryResource {
         BaseResponse<?> response = categoryService.updateCategory(id, categoryDTO);
         return response;
     }
+//    @GetMapping("search/{id}")
+//    public ResponseEntity<?> getId(@PathVariable Long id) {
+//        CategoryDTO categoryDTO = categoryService.findCategoryById(id);
+//        if (categoryDTO != null) {
+//            return ResponseEntity.ok(categoryDTO);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
 
 }
