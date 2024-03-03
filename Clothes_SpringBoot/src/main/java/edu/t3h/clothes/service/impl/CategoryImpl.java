@@ -23,7 +23,6 @@ public class CategoryImpl implements ICategoryService {
     private CategoryReponsitory categoryReponsitory;
     private Logger logger = LoggerFactory.getLogger(CategoryImpl.class);
 
-
     private final ModelMapper modelMapper;
     public CategoryImpl(CategoryReponsitory categoryReponsitory, ModelMapper modelMapper){
         this.categoryReponsitory =categoryReponsitory;
@@ -31,22 +30,22 @@ public class CategoryImpl implements ICategoryService {
     }
     @Override
     public BaseResponse<List<CategoryDTO>> getAll() {
-            List<CategoryEntity> categoryEntities = categoryReponsitory.listCategory();
-            logger.info("Data  {} ", categoryEntities.size());
+        List<CategoryEntity> categoryEntities = categoryReponsitory.listCategory();
+        logger.info("Data  {} ", categoryEntities.size());
 
-            List<CategoryDTO> categoryDTOs = categoryEntities.stream()
-                    .map(categoryEntity -> modelMapper.map(categoryEntity, CategoryDTO.class))
-                    .collect(Collectors.toList());
+        List<CategoryDTO> categoryDTOs = categoryEntities.stream()
+                .map(categoryEntity -> modelMapper.map(categoryEntity, CategoryDTO.class))
+                .collect(Collectors.toList());
 
-            BaseResponse<List<CategoryDTO>> response = new BaseResponse<>();
-            response.setCode(HttpStatus.OK.value());
-            response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-            response.setData(categoryDTOs);
+        BaseResponse<List<CategoryDTO>> response = new BaseResponse<>();
+        response.setCode(HttpStatus.OK.value());
+        response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+        response.setData(categoryDTOs);
 
-            logger.info("Return size  {}", categoryDTOs.size());
-            logger.info("Finishing......");
+        logger.info("Return size  {}", categoryDTOs.size());
+        logger.info("Finishing......");
 
-            return response;
+        return response;
     }
     @Override
     public BaseResponse<?> creatCategory(CategoryDTO categoryDTO) {
@@ -96,7 +95,7 @@ public class CategoryImpl implements ICategoryService {
     public BaseResponse<?> updateCategory(Long id, CategoryDTO categoryDTO) {
         Optional<CategoryEntity> categoryEntityOptional = categoryReponsitory.findById(id);
         if (categoryEntityOptional.isEmpty()) {
-           return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
+            return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
         }
         CategoryEntity categorys = categoryEntityOptional.get();
         categorys.setName(categoryDTO.getName());

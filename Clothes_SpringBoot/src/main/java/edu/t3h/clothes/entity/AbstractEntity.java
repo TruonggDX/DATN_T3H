@@ -27,6 +27,7 @@ public abstract class AbstractEntity {
     @Column(name = "deleted",columnDefinition="tinyint(1) default 0")
     private Boolean deleted;
 
+
     public Long getId() {
         return id;
     }

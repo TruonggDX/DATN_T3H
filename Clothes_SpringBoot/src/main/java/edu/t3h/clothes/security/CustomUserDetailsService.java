@@ -39,7 +39,7 @@ public class CustomUserDetailsService {
 //
 //    private Collection<? extends GrantedAuthority> convertStrToAuthor(Collection<RoleEntity> roles){
 ////        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-//        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+//        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN")); // thay vì fix cứng ROLE_ADMIN thì lên lấy ra danh sách ROLE của user để add vào
 //    }
 
 }
