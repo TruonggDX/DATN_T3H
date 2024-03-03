@@ -62,7 +62,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr role="row" class="odd" th:each="category : ${list}">
+                            <tr role="row" class="odd" th:each="category : ${categories.data}">
                                 <td tabindex="0" class="sorting_1" th:text="${category.id}"></td>
                                 <td th:text="${category.code}"></td>
                                 <td th:text="${category.name}"></td>
@@ -72,9 +72,11 @@
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>
 
-                                    <a th:href="@{/admin/delete_category/{id}(id=${category.id})}" onclick="return confirm('Bạn chắc chắn xóa ? ')" type="button" class="btn btn-default">
+                                    <a th:href="@{/admin/delete/{id}(id=${category.id})}" onclick="return confirm('Bạn chắc chắn muốn xóa?')" class="btn btn-default">
                                         <i class="far fa-trash-can"></i>
                                     </a>
+
+
                                 </td>
                             </tr>
                             </tbody>
@@ -82,22 +84,6 @@
                         </table>
                     </div>
                 </div>
-
-
-                <div class="row">
-                    <div class="col-sm-12 col-md-7">
-                        <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-                            <ul style="margin-left: 62%" class="pagination">
-                                <li class="paginate_button page-item previous disabled" id="example2_previous">
-                                    <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-                                </li>
-                               <li th:if="${currentPage > 1}"><a th:href="@{'?pageNo='+${currentPage - 1}}"></a></li>
-                                <li th:each="i:${#numbers.sequence(1,totalPage)}" th:classappend="${currentPage == i ? 'active' : ''}" class="paginate_button page-item "><a th:href="@{'?pageNo='+${i}}" th:text="${i}" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">1</a></li>
-                                <li th:if="${currentPage < totalPage}"><a th:href="@{'?pageNo='+${currentPage+1}}"></a></li>
-                            <li class="paginate_button page-item next" id="example2_next"><a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -147,9 +133,7 @@
 
 
 
-
+</div>
 
 </body>
 </html>
-
-
