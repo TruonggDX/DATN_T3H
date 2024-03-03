@@ -102,7 +102,7 @@ public class CategoryImpl implements ICategoryService {
         categorys.setCode(categoryDTO.getCode());
 
         categoryReponsitory.save(categorys);
-        CategoryDTO categoryDTOs = modelMapper.map(categorys,CategoryDTO.class);
-        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, categoryDTOs);
+//        CategoryDTO categoryDTOs = modelMapper.map(categorys,CategoryDTO.class);
+        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, categorys);
     }
 }
