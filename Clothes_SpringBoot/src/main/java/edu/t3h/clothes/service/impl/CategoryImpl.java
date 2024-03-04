@@ -83,14 +83,23 @@ public class CategoryImpl implements ICategoryService {
     @Override
     public CategoryDTO findCategoryById(Long id) {
         Optional<CategoryEntity> categoryEntityOptional = categoryReponsitory.findById(id);
-        BaseResponse<List<CategoryDTO>> response;
+        CategoryEntity categoryEntity = null;
+        BaseResponse<CategoryDTO> response;
+
         if (categoryEntityOptional.isEmpty()) {
             response = new BaseResponse<>(HttpStatus.BAD_GATEWAY.value(), Constant.HTTP_MESSAGE.FAILED, null);
             return modelMapper.map(response, CategoryDTO.class);
+        } else {
+            categoryEntity = categoryEntityOptional.get();
+            if (categoryEntity.getDeleted()) {
+                response = new BaseResponse<>(HttpStatus.BAD_GATEWAY.value(), Constant.HTTP_MESSAGE.FAILED, null);
+                return modelMapper.map(response, CategoryDTO.class);
+            }
         }
-        CategoryEntity categoryEntity = categoryEntityOptional.get();
+
         return modelMapper.map(categoryEntity, CategoryDTO.class);
     }
+
     @Override
     public BaseResponse<?> updateCategory(Long id, CategoryDTO categoryDTO) {
         Optional<CategoryEntity> categoryEntityOptional = categoryReponsitory.findById(id);
@@ -102,7 +111,20 @@ public class CategoryImpl implements ICategoryService {
         categorys.setCode(categoryDTO.getCode());
 
         categoryReponsitory.save(categorys);
-//        CategoryDTO categoryDTOs = modelMapper.map(categorys,CategoryDTO.class);
-        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, categorys);
+        CategoryDTO categoryDTOs = modelMapper.map(categorys,CategoryDTO.class);
+        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, categoryDTOs);
     }
+
+//    @Override
+//    public BaseResponse<CategoryDTO> searchCategory(Long id) {
+//        Optional<CategoryEntity> categoryEntity = categoryReponsitory.findById(id);
+//
+//        if (categoryEntity.isEmpty()) {
+//            return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
+//        }
+//        CategoryEntity category = categoryEntity.get();
+//        CategoryDTO categoryDTO = modelMapper.map(category,CategoryDTO.class);
+//        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.FAILED,categoryDTO);
+//
+//    }
 }
