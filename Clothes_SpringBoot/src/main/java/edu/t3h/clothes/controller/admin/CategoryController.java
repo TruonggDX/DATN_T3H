@@ -25,7 +25,7 @@ public class CategoryController {
     public String show(Model model) {
         BaseResponse<List<CategoryDTO>> categories = categoryService.getAll();
         model.addAttribute("categories", categories);
-        return "Admin/Category/list_category";
+        return "admin/category/list_category";
     }
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id){
@@ -41,14 +41,14 @@ public class CategoryController {
         if (categoryResponse.getCode() == HttpStatus.OK.value()) {
             return "redirect:/admin/category";
         } else {
-            return "Admin/Category/add_category";
+            return "admin/category/add_category";
         }
     }
     @GetMapping("/update_category/{id}")
     public String updates(@PathVariable Long id, Model model) {
         CategoryDTO categoryDTO = categoryService.findCategoryById(id);
         model.addAttribute("categoryDTO", categoryDTO);
-        return "Admin/Category/update_category";
+        return "admin/category/update_category";
     }
 
     @PostMapping("/update_category")
@@ -61,9 +61,9 @@ public class CategoryController {
         BaseResponse<?> categories = categoryResource.getId(id);
         if (categories.getCode() == HttpStatus.OK.value()){
             model.addAttribute("categories", categories);
-            return "Admin/Category/list_category";
+            return "admin/category/list_category";
         }
-        return "Admin/Category/update_category";
+        return "admin/category/update_category";
     }
 
 

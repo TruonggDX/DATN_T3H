@@ -18,7 +18,7 @@ public class CategoryResource {
     public  CategoryResource(ICategoryService categoryService){
         this.categoryService = categoryService;
     }
-    @GetMapping("/list_category")
+    @GetMapping("/list")
     public BaseResponse<List<CategoryDTO>> getAllCategories() {
         BaseResponse<List<CategoryDTO>> response = categoryService.getAll();
         return response;

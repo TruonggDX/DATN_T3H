@@ -89,13 +89,13 @@ public class CategoryImpl implements ICategoryService {
         if (categoryEntityOptional.isEmpty()) {
             response = new BaseResponse<>(HttpStatus.BAD_GATEWAY.value(), Constant.HTTP_MESSAGE.FAILED, null);
             return modelMapper.map(response, CategoryDTO.class);
-        } else {
-            categoryEntity = categoryEntityOptional.get();
+        }
+
+        categoryEntity = categoryEntityOptional.get();
             if (categoryEntity.getDeleted()) {
                 response = new BaseResponse<>(HttpStatus.BAD_GATEWAY.value(), Constant.HTTP_MESSAGE.FAILED, null);
                 return modelMapper.map(response, CategoryDTO.class);
             }
-        }
 
         return modelMapper.map(categoryEntity, CategoryDTO.class);
     }

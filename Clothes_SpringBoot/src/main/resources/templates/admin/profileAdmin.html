@@ -1,9 +1,9 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="Admin/fragments/head :: head"></head>
+<head th:replace="admin/fragments/head :: head"></head>
 <body>
-<nav th:replace="Admin/fragments/navbar :: navbar "></nav>
-<aside th:replace="Admin/fragments/sidebar :: sidebar"></aside>
+<nav th:replace="admin/fragments/navbar :: navbar "></nav>
+<aside th:replace="admin/fragments/sidebar :: sidebar"></aside>
 <div class="contents">
     <div class="cols">
         <img style="height: 360px; width: 288px; margin-top: 57px; margin-left: 23px; object-fit: cover" th:src="@{/admin/dist/img/admin.jpg}"
@@ -75,7 +75,7 @@
             </div>
     </div>
 </div>
-<div th:replace="Admin/fragments/script :: script"></div>
+<div th:replace="admin/fragments/script :: script"></div>
 </body>
 <style>
     /* Thiết lập kiểu cho input */
