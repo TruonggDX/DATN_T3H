@@ -1,24 +1,28 @@
-package edu.t3h.clothes.entity;
+package edu.t3h.clothes.model.dto;
 
-import jakarta.persistence.*;
 import lombok.Data;
 
-
 @Data
-@Entity
-@Table(name = "producer")
-public class ProducerEntity extends AbstractEntity{
-    @Column(name = "code")
+public class ProducerDTO {
+    private Long id;
     private String code;
-    @Column(name = "name")
     private String name;
 
-    public ProducerEntity() {
-    }
-
-    public ProducerEntity(String code, String name) {
+    public ProducerDTO(Long id, String code, String name) {
+        this.id = id;
         this.code = code;
         this.name = name;
+    }
+
+    public ProducerDTO() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCode() {

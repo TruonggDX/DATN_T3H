@@ -9,4 +9,7 @@ import java.util.List;
 public interface IUserService {
     BaseResponse<List<UserDTO>> getAll();
     BaseResponse<?> creatUser(UserDTO userDTO);
+    UserDTO findById(Long id);
+    BaseResponse<?> deleteUser(Long id);
+    BaseResponse<?> updateUser( Long id, UserDTO userDTO);
 }
