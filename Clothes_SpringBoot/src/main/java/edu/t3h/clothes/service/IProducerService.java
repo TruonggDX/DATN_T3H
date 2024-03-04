@@ -12,10 +12,4 @@ public interface IProducerService {
     ProducerDTO findByProducerById(Long id);
     BaseResponse<?> deleteProducer(Long id);
     BaseResponse<?> updateProducer(Long id, ProducerDTO producerDTO);
-//    List<ProducerEntity> getAll();
-//    Boolean creatProducer(ProducerEntity producer);
-//    ProducerEntity findProducerById(Integer id);
-//    Boolean updateProducer(ProducerEntity producer);
-//    Boolean deleteProducer(Integer id);
-//    List<ProducerEntity> searchProducer(String keyword);
 }

@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ProducerReponsiroty extends JpaRepository<ProducerEntity,Long> {
-    @Query("SELECT c FROM ProducerEntity c WHERE c.name LIKE %?1%")
-    List<ProducerEntity> searchProducer(String keyword);
+    @Query("SELECT c FROM ProducerEntity c WHERE c.deleted = false ")
+    List<ProducerEntity> listProducer();
 }
