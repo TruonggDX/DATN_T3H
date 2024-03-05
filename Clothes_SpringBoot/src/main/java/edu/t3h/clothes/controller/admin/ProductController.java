@@ -1,14 +1,17 @@
 package edu.t3h.clothes.controller.admin;
 
-//@Controller
-//@RequestMapping("")
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/admin/product")
 public class ProductController {
-//    @RequestMapping("/admin/list_product")
-//    public String products(){
-//        return "Admin/Product/list_product";
-//    }
-//    @RequestMapping("/admin/add_product")
-//    public String addProduct(){
-//        return "Admin/Product/add_product";
-//    }
+    @RequestMapping("/list_product")
+    public String products(){
+        return "admin/product/list_product";
+    }
+    @RequestMapping("/add_product")
+    public String addProduct(){
+        return "admin/product/add_product";
+    }
 }
