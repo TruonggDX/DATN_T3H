@@ -1,16 +1,10 @@
 package edu.t3h.clothes.service.impl;
 
-import edu.t3h.clothes.entity.CategoryEntity;
-import edu.t3h.clothes.entity.ColorEntity;
-import edu.t3h.clothes.entity.ProductEntity;
-import edu.t3h.clothes.entity.SizeEntity;
+import edu.t3h.clothes.entity.*;
 import edu.t3h.clothes.model.dto.ProductDTO;
 import edu.t3h.clothes.model.request.ProductFilterRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
-import edu.t3h.clothes.repository.CategoryReponsitory;
-import edu.t3h.clothes.repository.ColorRepository;
-import edu.t3h.clothes.repository.ProductRepository;
-import edu.t3h.clothes.repository.SizeRepository;
+import edu.t3h.clothes.repository.*;
 import edu.t3h.clothes.service.IProductService;
 import org.apache.poi.ss.usermodel.*;
 import org.modelmapper.ModelMapper;
@@ -19,16 +13,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductImpl implements IProductService {
@@ -36,6 +31,7 @@ public class ProductImpl implements IProductService {
     private Logger logger = LoggerFactory.getLogger(ProductImpl.class);
     private final ProductRepository productRepository;
     private final CategoryReponsitory categoryReponsitory;
+
     @Autowired
     private ColorRepository colorRepository;
     @Autowired
@@ -50,30 +46,28 @@ public class ProductImpl implements IProductService {
     }
 
     @Override
-    public BaseResponse<Page<ProductDTO>> getAll(ProductFilterRequest filterRequest, int page, int size){
+    public BaseResponse<Page<ProductDTO>> getAll(ProductFilterRequest filterRequest, int page, int size) {
 
-//        Pageable pageable = Pageable.of(page, size);
-//        Page<ProductEntity> productEntities = productRepository.findAllByFilter(filterRequest, pageable);
-//
-//        List<ProductDTO> productDTOS= productEntities.getContent().stream().map(productEntity -> {
-//            ProductDTO productDTO = modelMapper.map(productEntity, ProductDTO.class);
-//            productDTO.setCategory(productDTO.getCategory().getName());
-//            String sizeP = productEntity.getSizeEntities().stream().map(SizeEntity::getName).collect(Collectors.joining(","));
-//            List<String> imagesColor = productEntity.getColorEntities().stream().map(ColorEntity::getImage).collect(Collectors.toList());
-//            productDTO.setSize(sizeP);
-//            productDTO.setImagesColor(imagesColor);
-//            return productDTO;
-//        }).collect(Collectors.toList());
-//
-//        Page<ProductDTO> pageData = new PageImpl(productDTOS,pageable,productEntities.getTotalElements());
-//        BaseResponse<Page<ProductDTO>> response = new BaseResponse<>();
-//        response.setCode(200);
-//        response.setMessage("success");
-//        response.setData(pageData);
-//        return response;
-        return null;
+        Pageable pageable = PageRequest.of(page,size);
+        Page<ProductEntity> productEntities = productRepository.findAllByFilter(filterRequest,pageable);
+
+        List<ProductDTO> productDTOS = productEntities.getContent().stream().map(productEntity -> {
+            ProductDTO productDTO = modelMapper.map(productEntity,ProductDTO.class);
+            productDTO.setCategory(productEntity.getCategoryEntity().getName());
+            String sizeP = productEntity.getSizeEntities().stream().map(SizeEntity::getName).collect(Collectors.joining(","));
+            List<String> imagesColor = productEntity.getColorEntities().stream().map(ColorEntity::getImage).collect(Collectors.toList());
+            productDTO.setSize(sizeP);
+            productDTO.setImagesColor(imagesColor);
+            return productDTO;
+        }).collect(Collectors.toList());
+
+        Page<ProductDTO> pageData = new PageImpl(productDTOS,pageable,productEntities.getTotalElements());
+        BaseResponse<Page<ProductDTO>> response = new BaseResponse<>();
+        response.setCode(200);
+        response.setMessage("success");
+        response.setData(pageData);
+        return response;
     }
-
     @Override
     public BaseResponse<?> createProduct(ProductDTO productDTO) {
         logger.info("start create product: {}", productDTO.toString());
@@ -103,6 +97,7 @@ public class ProductImpl implements IProductService {
         productEntity.setCategoryEntity(category.get());
         productEntity.setColorEntities(colorEntities);
         productEntity.setSizeEntities(sizeEntities);
+//        productEntity.setProducerEntities();
         LocalDateTime now = LocalDateTime.now();
         productEntity.setCreatedDate(now);
         productEntity.setDeleted(false);

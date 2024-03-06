@@ -18,7 +18,7 @@ public class ProducerResource {
     private  final IProducerService producerService;
     public ProducerResource(IProducerService producerService){this.producerService = producerService;}
 
-    @GetMapping("/list_producer")
+    @GetMapping("/list")
     public BaseResponse<List<ProducerDTO>> getAllProduceres(){
         BaseResponse<List<ProducerDTO>> response = producerService.getAll();
         return  response;

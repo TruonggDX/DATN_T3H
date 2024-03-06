@@ -11,6 +11,6 @@ import java.util.Set;
 @Repository
 public interface SizeRepository extends JpaRepository<SizeEntity, Long>{
 
-    @Query(value = "SELECT s FROM SizeEntity s WHERE s.id IN  :ids AND s.deleted= 0")
+    @Query(value = "SELECT s FROM SizeEntity s WHERE s.id IN  :ids AND s.deleted= false ")
     Set<SizeEntity> findByIds(List<Long> ids);
 }

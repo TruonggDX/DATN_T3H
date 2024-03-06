@@ -7,18 +7,13 @@ import java.util.Set;
 
 @Data
 @Getter
-@Setter
 @Table(name = "color")
 @Entity
-public class ColorEntity {
-    @Id
-    @Column(name = "id")
-    private Long id;
+public class ColorEntity extends AbstractEntity{
 
     private String name;
     private String  image;
 
-    private Integer deleted;
 
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude

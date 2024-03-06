@@ -6,17 +6,10 @@ import lombok.*;
 import java.util.Set;
 
 @Data
-@Getter
-@Setter
 @Entity
 @Table(name = "size")
-public class SizeEntity {
-    @Id
-    @Column(name = "id")
-    private Long id;
+public class SizeEntity extends AbstractEntity{
     private String name;
-    private Integer deleted;
-
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

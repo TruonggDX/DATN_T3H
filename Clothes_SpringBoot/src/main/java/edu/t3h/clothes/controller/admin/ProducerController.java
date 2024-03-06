@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+//@Controller
 @RequestMapping("/admin")
 public class ProducerController {
-    @Autowired
-    private IProducerService producerService;
+//    @Autowired
+//    private IProducerService producerService;
 
 
 //    @GetMapping("/list_producer")

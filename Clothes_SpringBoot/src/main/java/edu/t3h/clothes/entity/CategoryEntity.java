@@ -2,6 +2,10 @@ package edu.t3h.clothes.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -35,4 +39,8 @@ public class CategoryEntity extends AbstractEntity {
         this.code = code;
         this.name = name;
     }
+    @OneToMany(mappedBy = "categoryEntity", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<ProductEntity> productEntities;
 }
