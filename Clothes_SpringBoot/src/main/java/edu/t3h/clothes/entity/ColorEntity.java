@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
-
-@Data
-@Getter
-@Table(name = "color")
 @Entity
+@Data
+@Table(name = "color")
+
 public class ColorEntity extends AbstractEntity{
 
     private String name;
