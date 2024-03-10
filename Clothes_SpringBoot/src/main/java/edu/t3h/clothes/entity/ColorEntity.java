@@ -3,6 +3,7 @@ package edu.t3h.clothes.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 @Entity
 @Data

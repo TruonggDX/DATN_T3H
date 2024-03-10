@@ -3,15 +3,13 @@ package edu.t3h.clothes.service.impl;
 import edu.t3h.clothes.entity.ProducerEntity;
 import edu.t3h.clothes.model.dto.ProducerDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
-import edu.t3h.clothes.repository.ProducerReponsiroty;
+import edu.t3h.clothes.repository.ProducerReposiroty;
 import edu.t3h.clothes.service.IProducerService;
 import edu.t3h.clothes.utils.Constant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class ProducerImpl implements IProducerService {
 @Autowired
-    private ProducerReponsiroty producerReponsiroty;
+    private ProducerReposiroty producerReponsiroty;
 @Autowired
     private  ModelMapper modelMapper;
 
@@ -111,6 +109,16 @@ public class ProducerImpl implements IProducerService {
         ProducerDTO producerDTO1 = modelMapper.map(producers, ProducerDTO.class);
 
         return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, producerDTO1);
+    }
+
+    @Override
+    public BaseResponse<List<ProducerDTO>> searchProducerByCondition(String condition) {
+        List<ProducerEntity> producerEntities = producerReponsiroty.searchProducer(condition);
+        List<ProducerDTO> producerDTOS = producerEntities.stream()
+                .map(producerEntity -> modelMapper.map(producerEntity,ProducerDTO.class))
+                .collect(Collectors.toList());
+
+        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS,producerDTOS);
     }
 
 

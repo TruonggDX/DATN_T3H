@@ -30,7 +30,7 @@ public class ProductImpl implements IProductService {
 
     private Logger logger = LoggerFactory.getLogger(ProductImpl.class);
     private final ProductRepository productRepository;
-    private final CategoryReponsitory categoryReponsitory;
+    private final CategoryRepository categoryReponsitory;
 
     @Autowired
     private ColorRepository colorRepository;
@@ -39,7 +39,7 @@ public class ProductImpl implements IProductService {
 
     private final ModelMapper modelMapper;
 
-    public ProductImpl(ProductRepository productRepository, CategoryReponsitory categoryReponsitory, ModelMapper modelMapper) {
+    public ProductImpl(ProductRepository productRepository, CategoryRepository categoryReponsitory, ModelMapper modelMapper) {
         this.productRepository = productRepository;
         this.categoryReponsitory = categoryReponsitory;
         this.modelMapper = modelMapper;

@@ -1,75 +1,17 @@
 package edu.t3h.clothes.controller.admin;
-
-import edu.t3h.clothes.entity.ProducerEntity;
-import edu.t3h.clothes.service.IProducerService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-//@Controller
+@Controller
 @RequestMapping("/admin")
 public class ProducerController {
-//    @Autowired
-//    private IProducerService producerService;
 
-
-//    @GetMapping("/list_producer")
-//    public String index(Model model, @Param("keyword") String keyword){
-//        List<ProducerEntity> list = this.producerService.getAll();
-//        if (keyword!=null){
-//            list = this.producerService.searchProducer(keyword);
-//            model.addAttribute("keyword", keyword);
-//        }
-//        model.addAttribute("list", list);
-//
-//        return "Admin/Producer/list_producer";
-//    }
-////    public String index(Model model){
-////        List<Producer> list = this.producerService.getAll();
-////        model.addAttribute("list", list);
-////        return "Admin/Producer/list_producer";
-////    }
-//
-//    @GetMapping("/add_producer")
-//    public String insert(Model model){
-//        ProducerEntity producer = new ProducerEntity();
-//        model.addAttribute("producer",producer);
-//        return "Admin/Producer/add_producer";
-//    }
-//
-//    @PostMapping("/add_producer")
-//    public String save(@ModelAttribute("producer") ProducerEntity producer){
-//        if (this.producerService.creatProducer(producer)){
-//            return "redirect:/admin/list_producer";
-//        }else {
-//            return "Admin/Producer/add_producer";
-//        }
-//    }
-//    @GetMapping("/delete_producer/{id}")
-//    public String delete(@PathVariable("id") Integer id){
-//        if (this.producerService.deleteProducer(id)){
-//            return "redirect:/admin/list_producer";
-//        }else {
-//            return "Admin/Category/add_category";
-//        }
-//    }
-//
-//    @GetMapping("/update_producer/{id}")
-//    public String update(Model model, @PathVariable("id") Integer id){
-//        ProducerEntity producer = this.producerService.findProducerById(id);
-//        model.addAttribute("producer", producer);
-//        return "Admin/Producer/update_producer";
-//    }
-//    @PostMapping("/update_producer")
-//    public String update(@ModelAttribute("producer") ProducerEntity producer){
-//        if (this.producerService.updateProducer(producer)){
-//            return "redirect:/admin/list_producer";
-//        }else {
-//            return "Admin/Producer/add_producer";
-//        }
-//    }
+    @GetMapping("/producer")
+    public String showData(){
+        return "admin/producer/list_producer";
+    }
+    @GetMapping("/update_producer")
+    public String updateProducer(){
+        return "admin/producer/update_producer";
+    }
 }

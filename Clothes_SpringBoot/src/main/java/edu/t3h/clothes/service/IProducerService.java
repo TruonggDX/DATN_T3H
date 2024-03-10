@@ -12,4 +12,6 @@ public interface IProducerService {
     ProducerDTO findByProducerById(Long id);
     BaseResponse<?> deleteProducer(Long id);
     BaseResponse<?> updateProducer(Long id, ProducerDTO producerDTO);
+
+    BaseResponse<List<ProducerDTO>> searchProducerByCondition(String condition);
 }

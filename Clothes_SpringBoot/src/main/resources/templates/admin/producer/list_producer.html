@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="admin/fragments/head :: head"></head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
   <nav th:replace="admin/fragments/navbar :: navbar"></nav>
@@ -8,119 +10,272 @@
   <!-- Content -->
   <div class="content-wrapper" style="min-height: 332.4px;">
     <h3 style="text-align: center;padding: 5px 0px 5px 0px">Danh sách nhà sản xuất</h3>
-    <form action="">
+    <button style="width: 100px; float: left;margin-left: 20px" data-toggle="modal" data-target="#modal-lg" type="button" class="btn btn-block btn-outline-info"><i class="fa-solid fa-plus"></i> Thêm</button>
+    <form class="form_search" id="searchForm">
       <div class="form-group">
-
-        <input name="keyword" th:value="${keyword}"  type="text" class="form-control"  placeholder="Nhập nhà sản xuất tìm kiếm">
-        <button type="submit" class="btn btn-block btn-outline-primary">Tìm kiếm</button>
-
+        <input name="condition" id="searchCondition" type="text" class="form-control" placeholder="Nhập điều kiện tìm kiếm">
+        <button type="button" id="searchBtn" class="btn btn-block btn-outline-primary">Tìm kiếm</button>
       </div>
     </form>
-    <style>
-      .form-group {
-        display: flex;
-        align-items: center;
-      }
 
-      .form-group label {
-        width: 35px;
-        margin: 5px 0 0 20px;
-      }
-
-      .form-group input {
-        width: 250px;
-        margin-left: 20px;
-        margin-right: 20px;
-      }
-
-      .form-group button {
-        width: 150px;
-      }
-
-    </style>
     <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
-      <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
-        <div class="row">
-          <div class="col-sm-12 col-md-6"></div>
-          <div class="col-sm-12 col-md-6"></div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <table style="width: 100%" id="example2" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
-              <thead>
-              <tr role="row">
-                <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">ID</th>
-                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Mã NSX</th>
-                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Tên NSX</th>
-                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Hành động</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr role="row" class="odd" th:each="producer : ${list}">
-                <td tabindex="0" class="sorting_1" th:text="${producer.id}"></td>
-                <td th:text="${producer.code}"></td>
-                <td th:text="${producer.name}"></td>
+      <table style="width: 100%" id="tableProducer" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
+        <thead>
+        <tr role="row">
+          <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">ID</th>
+          <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Mã NSX</th>
+          <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Tên NSX</th>
+          <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Hành động</th>
+        </tr>
+        </thead>
+        <tbody id="producer-list">
 
-                <td>
-                  <a th:href="@{/admin/update_producer/{id}(id=${producer.id})}" type="button" class="btn btn-default">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                  </a>
+        </tbody>
 
-                  <a th:href="@{/admin/delete_producer/{id}(id=${producer.id})}" onclick="return confirm('ban chac chan chu')" type="button" class="btn btn-default">
-                    <i class="far fa-trash-can"></i>
-                  </a>
-
-
-                </td>
-              </tr>
-              </tbody>
-
-            </table>
-          </div>
-        </div>
-
-        <div class="row">
-
-          <div class="col-sm-12 col-md-7">
-            <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-              <ul style="margin-left: 62%" class="pagination">
-                <li class="paginate_button page-item previous disabled" id="example2_previous">
-                  <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-                </li>
-                <li class="paginate_button page-item active"><a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
-                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
-                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a></li>
-                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a></li>
-                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a></li>
-                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a></li>
-                <li class="paginate_button page-item next" id="example2_next"><a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+      </table>
     </div>
-    <!-- End Content -->
-
-    <script>
-      function hienThiXacNhanXoa() {
-        var xacNhan = confirm("Bạn có chắc chắn muốn xóa không?");
-        if (xacNhan) {
-          // Thực hiện xóa
-        } else {
-          // Không thực hiện xóa
-        }
-      }
-    </script>
-    <style>
-      table,tr,th,td,h3{
-        text-align: center;
-        font-family: "Times New Roman";
-      }
-
-    </style>
-    <aside class="control-sidebar control-sidebar-dark"></aside>
   </div>
-  <div th:replace="admin/fragments/script :: script"></div>
+  <!-- End Content -->
+  <aside class="control-sidebar control-sidebar-dark"></aside>
+
+
+</div>
+<div th:replace="admin/fragments/script :: script"></div>
+
+<!-- Modal -->
+
+<div style="margin-left:200px ; margin-top: 50px" class="modal fade" id="modal-lg">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="width: 500px">
+      <form method="post">
+        <div class="modal-header">
+          <h4 class="modal-title">Thêm Nhà Sản Xuất</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label style="width: 135px">Mã NSX</label>
+            <input th:name="code" type="text" class="form-control" placeholder="Nhập mã nhà sản xuất">
+          </div>
+          <div class="form-group">
+            <label style="width: 135px">Tên NSX</label>
+            <input th:name="name" type="text" class="form-control" placeholder="Nhập tên nhà sản xuất">
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<style>
+  .form_search {
+    margin-left: 808px;
+  }
+
+  .form-group {
+    display: flex;
+    align-items: center;
+  }
+
+  .form-group label {
+    width: 35px;
+    margin: 5px 0 0 20px;
+  }
+
+  .form-group input {
+    width: 250px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .form-group button {
+    width: 150px;
+  }
+  table,tr,th,td,h3{
+    text-align: center;
+    font-family: "Times New Roman";
+  }
+</style>
+<script>
+  $(document).ready(function () {
+    initData();
+  });
+  function initData() {
+    getProducers();
+  }
+  function getProducers() {
+    let bodyTable = $('#tableProducer > tbody');
+    bodyTable.empty();
+    $.ajax({
+      type: "GET",
+      url: "http://localhost:8080/producer/list",
+      dataType: "json",
+      success: function (response) {
+        console.log(response);
+        let producers = response?.data;
+        producers.forEach(function (data) {
+          let row = '<tr role="row" class="odd" >' +
+                  '<td tabindex="0" class="sorting_1" >' + data.id + '</td>' +
+                  '<td style="width: 15%;">' + data.code + '</td>' +
+                  '<td>' + data.name + '</td>' +
+                  '<td> <a  class="btn btn-default edit-producer-btn" data-id="' + data.id + '"><i class="fa-regular fa-pen-to-square"></i></a> ' +
+                  '<a class="btn btn-default delete-producer-btn" data-id="' + data.id + '"> <i class="far fa-trash-can"></i></a></td>' +
+                  '</tr>';
+          bodyTable.append(row);
+        });
+
+
+        $('.delete-producer-btn').click(function(event) {
+          event.preventDefault();
+          var producerId = $(this).data('id');
+          if (confirm('Bạn chắc chắn muốn xóa?')) {
+            $.ajax({
+              type: "POST",
+              url: "http://localhost:8080/producer/delete/" + producerId,
+              success: function(response){
+                console.log(response);
+
+                $('#deleteBtn' + producerId).closest('tr').remove();
+                window.location.reload();
+              },
+              error: function (error){
+                console.log(error);
+              }
+            });
+          }
+        });
+
+
+        $('.edit-producer-btn').click(function(event) {
+          event.preventDefault();
+          var producerId = $(this).data('id');
+
+          $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/producer/search/" + producerId,
+            success: function(response) {
+              var producer = response.data;
+              window.location.href = '/admin/update_producer?id=' + producer.id;
+            },
+            error: function(error) {
+              console.log(error);
+            }
+          });
+        });
+
+
+      },
+      error: function (error){
+        console.log(error);
+      }
+    });
+  }
+  $('#modal-lg form').submit(function (event) {
+    event.preventDefault();
+
+    var formData = {
+      code: $('input[name="code"]').val(),
+      name: $('input[name="name"]').val()
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8080/producer/create",
+      contentType: "application/json",
+      data: JSON.stringify(formData),
+      dataType: "json",
+      success: function (response) {
+        console.log(response);
+        $('#modal-lg').modal('hide');
+        window.location.reload();
+      },
+      error: function (error){
+        console.log(error);
+      }
+    });
+  });
+
+
+
+  var check = false;
+
+  function search() {
+    event.preventDefault();
+    var searchCondition = $("#searchCondition").val();
+
+    if (check) {
+      $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/producer/searchByCondition/" + searchCondition,
+        success: function(response) {
+          $("#producer-list").empty();
+          response.data.forEach(function(data) {
+            var row = '<tr role="row" class="odd" >' +
+                    '<td tabindex="0" class="sorting_1" >' + data.id + '</td>' +
+                    '<td style="width: 15%;">' + data.code + '</td>' +
+                    '<td>' + data.name + '</td>' +
+                    '<td> <a  class="btn btn-default edit-producer-btn" data-id="' + data.id + '"><i class="fa-regular fa-pen-to-square"></i></a> ' +
+                    '<a class="btn btn-default delete-producer-btn" data-id="' + data.id + '"> <i class="far fa-trash-can"></i></a></td>' +
+                    '</tr>';
+            $("#producer-list").append(row);
+          });
+          $('.delete-producer-btn').click(function(event) {
+            event.preventDefault();
+            var producerId = $(this).data('id');
+            if (confirm('Bạn chắc chắn muốn xóa?')) {
+              $.ajax({
+                type: "POST",
+                url: "http://localhost:8080/producer/delete/" + producerId,
+                success: function(response){
+                  console.log(response);
+
+                  $('#deleteBtn' + producerId).closest('tr').remove();
+                  window.location.reload();
+                },
+                error: function (error){
+                  console.log(error);
+                }
+              });
+            }
+          });
+
+
+          $('.edit-producer-btn').click(function(event) {
+            event.preventDefault();
+            var producerId = $(this).data('id');
+
+            $.ajax({
+              type: "GET",
+              url: "http://localhost:8080/producer/search/" + producerId,
+              success: function(response) {
+                var producer = response.data;
+                window.location.href = '/admin/update_producer?id=' + producer.id;
+              },
+              error: function(error) {
+                console.log(error);
+              }
+            });
+          });
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
+    } else {
+     getProducers();
+    }
+  }
+
+  $("#searchBtn").click(function() {
+    check = !check;
+    search();
+  });
+
+</script>
 </body>
 </html>

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="admin/fragments/head :: head"></head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <nav th:replace="admin/fragments/navbar :: navbar"></nav>
@@ -9,97 +11,43 @@
     <div class="content-wrapper" style="min-height: 332.4px;">
         <h3 style="text-align: center;padding: 5px 0px 5px 0px">Danh sách danh mục</h3>
         <button style="width: 100px; float: left;margin-left: 20px" data-toggle="modal" data-target="#modal-lg" type="button" class="btn btn-block btn-outline-info"><i class="fa-solid fa-plus"></i> Thêm</button>
-        <form class="form_search" method="get" onsubmit="search()">
+        <form class="form_search" id="searchForm">
             <div class="form-group">
-                <input name="id" id="cateUid" type="number" class="form-control" placeholder="Nhập ID danh mục cần tìm kiếm">
-                <button type="submit" class="btn btn-block btn-outline-primary" >Tìm kiếm</button>
+                <input name="condition" id="searchCondition" type="text" class="form-control" placeholder="Nhập điều kiện tìm kiếm">
+                <button type="button" id="searchBtn" class="btn btn-block btn-outline-primary">Tìm kiếm</button>
             </div>
         </form>
-        <style>
-            .form_search{
-                margin-left: 808px;
-            }
 
-            .form-group {
-                display: flex;
-                align-items: center;
-            }
-
-            .form-group label {
-                width: 35px;
-                margin: 5px 0 0 20px;
-            }
-
-            .form-group input {
-                width: 250px;
-                margin-left: 20px;
-                margin-right: 20px;
-            }
-
-            .form-group button {
-                width: 150px;
-            }
-        </style>
         <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
-            <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                <div class="row">
-                    <div class="col-sm-12 col-md-6"></div>
-                    <div class="col-sm-12 col-md-6"></div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <table style="width: 100%" id="example2" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
-                            <thead>
-                            <tr role="row">
-                                <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">ID</th>
-                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Mã danh mục</th>
-                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Tên danh mục</th>
-                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Hành động</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr role="row" class="odd" th:each="category : ${categories.data}">
-                                <td tabindex="0" class="sorting_1" th:text="${category.id}"></td>
-                                <td th:text="${category.code}"></td>
-                                <td th:text="${category.name}"></td>
+            <table style="width: 100%" id="tableDate" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
+                <thead>
+                <tr role="row">
+                    <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">ID</th>
+                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Mã danh mục</th>
+                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Tên danh mục</th>
+                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Hành động</th>
+                </tr>
+                </thead>
+                <tbody id="category-list">
 
-                                <td>
-                                    <a th:href="@{/admin/update_category/{id}(id=${category.id})}" type="button" class="btn btn-default">
-                                        <i class="fa-regular fa-pen-to-square"></i>
-                                    </a>
+                </tbody>
 
-                                    <a th:href="@{/admin/delete/{id}(id=${category.id})}" onclick="return confirm('Bạn chắc chắn muốn xóa?')" class="btn btn-default">
-                                        <i class="far fa-trash-can"></i>
-                                    </a>
-
-
-                                </td>
-                            </tr>
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
+            </table>
         </div>
     </div>
     <!-- End Content -->
-
-    <style>
-        table,tr,th,td,h3{
-            text-align: center;
-            font-family: "Times New Roman";
-        }
-
-    </style>
     <aside class="control-sidebar control-sidebar-dark"></aside>
+
+
 </div>
 <div th:replace="admin/fragments/script :: script"></div>
+
+<!-- Modal -->
 
 <div style="margin-left:200px ; margin-top: 50px" class="modal fade" id="modal-lg">
     <div class="modal-dialog modal-lg">
         <div class="modal-content" style="width: 500px">
-            <form method="post" th:action="@{/admin/add_category}" th:object="${categoryDTO}">
+            <form method="post">
                 <div class="modal-header">
                     <h4 class="modal-title">Add Category</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -121,19 +69,210 @@
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
-
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
-<script >
-    function search(){
-        event.preventDefault();
-        let id = document.getElementById("cateUid").value
-        window.location.href="/admin/search/"+id
+<style>
+    .form_search {
+        margin-left: 808px;
     }
+
+    .form-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .form-group label {
+        width: 35px;
+        margin: 5px 0 0 20px;
+    }
+
+    .form-group input {
+        width: 250px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .form-group button {
+        width: 150px;
+    }
+    table,tr,th,td,h3{
+        text-align: center;
+        font-family: "Times New Roman";
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        initData();
+    });
+    function initData() {
+        getCategories();
+    }
+    function getCategories() {
+        let bodyTable = $('#tableDate > tbody');
+        bodyTable.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/category/list",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                let categories = response?.data;
+                categories.forEach(function (data) {
+                    let row = '<tr role="row" class="odd" >' +
+                        '<td tabindex="0" class="sorting_1" >' + data.id + '</td>' +
+                        '<td style="width: 15%;">' + data.code + '</td>' +
+                        '<td>' + data.name + '</td>' +
+                        '<td> <a  class="btn btn-default edit-category-btn" data-id="' + data.id + '"><i class="fa-regular fa-pen-to-square"></i></a> ' +
+                        '<a class="btn btn-default delete-category-btn" data-id="' + data.id + '"> <i class="far fa-trash-can"></i></a></td>' +
+                        '</tr>';
+                    bodyTable.append(row);
+                });
+
+
+                $('.delete-category-btn').click(function(event) {
+                    event.preventDefault();
+                    var categoryId = $(this).data('id');
+                    if (confirm('Bạn chắc chắn muốn xóa?')) {
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:8080/category/delete/" + categoryId,
+                            success: function(response){
+                                console.log(response);
+
+                                $('#deleteBtn' + categoryId).closest('tr').remove();
+                                window.location.reload();
+                            },
+                            error: function (error){
+                                console.log(error);
+                            }
+                        });
+                    }
+                });
+
+
+                $('.edit-category-btn').click(function(event) {
+                    event.preventDefault();
+                    var categoryId = $(this).data('id');
+
+                    $.ajax({
+                        type: "GET",
+                        url: "http://localhost:8080/category/search/" + categoryId,
+                        success: function(response) {
+                            var category = response.data;
+                            window.location.href = '/admin/update_category?id=' + category.id;
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                });
+
+
+            },
+            error: function (error){
+                console.log(error);
+            }
+        });
+    }
+    $('#modal-lg form').submit(function (event) {
+        event.preventDefault();
+
+        var formData = {
+            code: $('input[name="code"]').val(),
+            name: $('input[name="name"]').val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/category/create",
+            contentType: "application/json",
+            data: JSON.stringify(formData),
+            dataType: "json",
+            success: function (response) {
+                    console.log(response);
+                $('#modal-lg').modal('hide');
+                window.location.reload();
+            },
+            error: function (error){
+                console.log(error);
+            }
+        });
+    });
+    var check = false;
+    function search() {
+        event.preventDefault();
+        var searchCondition = $("#searchCondition").val();
+
+        if (check) {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/category/searchByCondition/" + searchCondition,
+                success: function(response) {
+                    $("#category-list").empty();
+                    response.data.forEach(function(data) {
+                        var row = '<tr role="row" class="odd" >' +
+                            '<td tabindex="0" class="sorting_1" >' + data.id + '</td>' +
+                            '<td style="width: 15%;">' + data.code + '</td>' +
+                            '<td>' + data.name + '</td>' +
+                            '<td> <a  class="btn btn-default edit-category-btn" data-id="' + data.id + '"><i class="fa-regular fa-pen-to-square"></i></a> ' +
+                            '<a class="btn btn-default delete-category-btn" data-id="' + data.id + '"> <i class="far fa-trash-can"></i></a></td>' +
+                            '</tr>';
+                        $("#category-list").append(row);
+                    });
+                    $('.delete-category-btn').click(function(event) {
+                        event.preventDefault();
+                        var categoryId = $(this).data('id');
+                        if (confirm('Bạn chắc chắn muốn xóa?')) {
+                            $.ajax({
+                                type: "POST",
+                                url: "http://localhost:8080/category/delete/" + categoryId,
+                                success: function(response){
+                                    console.log(response);
+
+                                    $('#deleteBtn' + categoryId).closest('tr').remove();
+                                    window.location.reload();
+                                },
+                                error: function (error){
+                                    console.log(error);
+                                }
+                            });
+                        }
+                    });
+
+
+                    $('.edit-category-btn').click(function(event) {
+                        event.preventDefault();
+                        var categoryId = $(this).data('id');
+
+                        $.ajax({
+                            type: "GET",
+                            url: "http://localhost:8080/category/search/" + categoryId,
+                            success: function(response) {
+                                var category = response.data;
+                                window.location.href = '/admin/update_category?id=' + category.id;
+                            },
+                            error: function(error) {
+                                console.log(error);
+                            }
+                        });
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        } else {
+           getCategories();
+        }
+    }
+
+
+    $("#searchBtn").click(function() {
+        check = !check;
+        search();
+    });
+
 </script>
-</div>
 </body>
 </html>

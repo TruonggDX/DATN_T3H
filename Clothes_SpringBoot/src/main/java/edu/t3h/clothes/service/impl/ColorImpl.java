@@ -9,11 +9,17 @@ import edu.t3h.clothes.utils.Constant;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 public class ColorImpl implements IColorService {
@@ -40,10 +46,12 @@ public class ColorImpl implements IColorService {
 
     @Override
     public BaseResponse<?> createColor(ColorDTO colorDTO) {
+
         ColorEntity colorEntity = modelMapper.map(colorDTO, ColorEntity.class);
         colorEntity.setDeleted(false);
         colorEntity.setCreatedDate(LocalDateTime.now());
         colorEntity = colorRepository.save(colorEntity);
+
         colorDTO.setId(colorEntity.getId());
         BaseResponse<ColorDTO> response = new BaseResponse<>();
         response.setCode((HttpStatus.OK.value()));
@@ -104,4 +112,5 @@ public class ColorImpl implements IColorService {
         return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, colorDTO1);
 
     }
+
 }

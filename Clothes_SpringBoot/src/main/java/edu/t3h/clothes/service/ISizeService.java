@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface ISizeService {
     BaseResponse<List<SizeDTO>> getAll();
     BaseResponse<?> creatSize(SizeDTO sizeDTO);

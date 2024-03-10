@@ -1,9 +1,13 @@
 package edu.t3h.clothes.controller.resource;
 
 import edu.t3h.clothes.model.dto.ColorDTO;
+import edu.t3h.clothes.model.dto.SizeDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.service.IColorService;
+import edu.t3h.clothes.utils.Constant;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,7 +28,7 @@ public class ColorResource {
     }
 
     @PostMapping("/create")
-    public BaseResponse<?> createColor(@RequestBody ColorDTO colorDTO){
+    public BaseResponse<?> createColor(@RequestBody ColorDTO colorDTO ){
         BaseResponse<?>response = colorService.createColor(colorDTO);
         return  response;
     }
@@ -39,6 +43,15 @@ public class ColorResource {
     public BaseResponse<?> updateColor(@PathVariable Long id, @RequestBody ColorDTO colorDTO){
         BaseResponse<?> response = colorService.updateColor(id, colorDTO);
         return response;
+    }
+    @GetMapping("search/{id}")
+    public BaseResponse<?> getId(@PathVariable Long id) {
+        ColorDTO colorDto = colorService.findColorDTOById(id);
+        if (colorDto != null) {
+            return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, colorDto);
+        } else {
+            return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
+        }
     }
 
 }

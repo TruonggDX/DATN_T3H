@@ -3,12 +3,14 @@ package edu.t3h.clothes.service.impl;
 import edu.t3h.clothes.entity.CategoryEntity;
 import edu.t3h.clothes.model.dto.CategoryDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
-import edu.t3h.clothes.repository.CategoryReponsitory;
+import edu.t3h.clothes.repository.CategoryRepository;
 import edu.t3h.clothes.service.ICategoryService;
 import edu.t3h.clothes.utils.Constant;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +22,11 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryImpl implements ICategoryService {
 
-    private CategoryReponsitory categoryReponsitory;
+    private CategoryRepository categoryReponsitory;
     private Logger logger = LoggerFactory.getLogger(CategoryImpl.class);
 
     private final ModelMapper modelMapper;
-    public CategoryImpl(CategoryReponsitory categoryReponsitory, ModelMapper modelMapper){
+    public CategoryImpl(CategoryRepository categoryReponsitory, ModelMapper modelMapper){
         this.categoryReponsitory =categoryReponsitory;
         this.modelMapper = modelMapper;
     }
@@ -87,13 +89,13 @@ public class CategoryImpl implements ICategoryService {
         BaseResponse<CategoryDTO> response;
 
         if (categoryEntityOptional.isEmpty()) {
-            response = new BaseResponse<>(HttpStatus.BAD_GATEWAY.value(), Constant.HTTP_MESSAGE.FAILED, null);
+            response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
             return modelMapper.map(response, CategoryDTO.class);
         }
 
         categoryEntity = categoryEntityOptional.get();
             if (categoryEntity.getDeleted()) {
-                response = new BaseResponse<>(HttpStatus.BAD_GATEWAY.value(), Constant.HTTP_MESSAGE.FAILED, null);
+                response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
                 return modelMapper.map(response, CategoryDTO.class);
             }
 
@@ -115,16 +117,13 @@ public class CategoryImpl implements ICategoryService {
         return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, categoryDTOs);
     }
 
-//    @Override
-//    public BaseResponse<CategoryDTO> searchCategory(Long id) {
-//        Optional<CategoryEntity> categoryEntity = categoryReponsitory.findById(id);
-//
-//        if (categoryEntity.isEmpty()) {
-//            return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
-//        }
-//        CategoryEntity category = categoryEntity.get();
-//        CategoryDTO categoryDTO = modelMapper.map(category,CategoryDTO.class);
-//        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.FAILED,categoryDTO);
-//
-//    }
+    @Override
+    public BaseResponse<List<CategoryDTO>> searchCategoriesCondition(String condition) {
+        List<CategoryEntity> categoryEntities = categoryReponsitory.searchCategories(condition);
+        List<CategoryDTO> categoryDTOs = categoryEntities.stream()
+                .map(categoryEntity -> modelMapper.map(categoryEntity, CategoryDTO.class))
+                .collect(Collectors.toList());
+        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, categoryDTOs);
+    }
+
 }

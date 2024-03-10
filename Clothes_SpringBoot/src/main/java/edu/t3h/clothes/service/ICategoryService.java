@@ -5,6 +5,7 @@ import edu.t3h.clothes.model.dto.CategoryDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import org.springframework.data.domain.Page;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ICategoryService {
@@ -13,4 +14,8 @@ public interface ICategoryService {
     BaseResponse<?> deleteCategory(Long id);
     CategoryDTO findCategoryById(Long id);
     BaseResponse<?> updateCategory(Long id, CategoryDTO categoryDTO);
+
+    BaseResponse<List<CategoryDTO>> searchCategoriesCondition(String condition);
+
+
 }

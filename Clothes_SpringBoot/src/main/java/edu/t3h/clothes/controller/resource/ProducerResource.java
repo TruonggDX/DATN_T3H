@@ -1,6 +1,7 @@
 package edu.t3h.clothes.controller.resource;
 
 
+import edu.t3h.clothes.model.dto.CategoryDTO;
 import edu.t3h.clothes.model.dto.ProducerDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.service.IProducerService;
@@ -41,17 +42,23 @@ public class ProducerResource {
         BaseResponse<?> response = producerService.updateProducer(id, producerDTO);
         return response;
     }
-
     @GetMapping("search/{id}")
-    public BaseResponse<?> getId(@PathVariable Long id){
+    public BaseResponse<?> getId(@PathVariable Long id) {
         ProducerDTO producerDTO = producerService.findByProducerById(id);
-        if (producerDTO != null){
-            List<ProducerDTO> producerDTOS = new ArrayList<>();
-            producerDTOS.add(producerDTO);
+        if (producerDTO != null) {
+            return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS,producerDTO);
+        } else {
+            return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
+        }
+    }
+    @GetMapping("/searchByCondition/{condition}")
+    public BaseResponse<?> searchProducerByCondition(@PathVariable String condition){
+        BaseResponse<List<ProducerDTO>> producerDTO = producerService.searchProducerByCondition(condition);
+        if (producerDTO.getData() != null && !producerDTO.getData().isEmpty()){
             BaseResponse<List<ProducerDTO>> response = new BaseResponse<>();
             response.setCode(HttpStatus.OK.value());
             response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-            response.setData(producerDTOS);
+            response.setData(producerDTO.getData());
             return response;
         }else {
             return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);

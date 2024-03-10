@@ -1,8 +1,10 @@
 package edu.t3h.clothes.repository;
 
+import edu.t3h.clothes.entity.ProducerEntity;
 import edu.t3h.clothes.entity.SizeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +17,5 @@ public interface SizeRepository extends JpaRepository<SizeEntity, Long>{
     Set<SizeEntity> findByIds(List<Long> ids);
     @Query("SELECT s FROM SizeEntity s WHERE s.deleted = false ")
     List<SizeEntity> listSize();
+
 }

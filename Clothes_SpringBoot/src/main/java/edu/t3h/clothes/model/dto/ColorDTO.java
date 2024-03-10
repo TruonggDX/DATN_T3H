@@ -1,6 +1,9 @@
 package edu.t3h.clothes.model.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Data
 public class ColorDTO {
@@ -24,11 +27,11 @@ public class ColorDTO {
         this.name = name;
     }
 
-    public String getImage() {
+    public String getImages() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImages(String image) {
         this.image = image;
     }
 

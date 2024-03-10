@@ -7,28 +7,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
     @RequestMapping("/user")
     public String index(){
-        return "User/index";
+        return "user/index";
     }
 
     @RequestMapping("user/contact")
     public String contact(){
-        return "User/Contact/Contacts";
+        return "user/Contact/Contacts";
     }
 
     @RequestMapping("user/categroyshop")
     public String category(){
-        return "User/CategoryShop/Category";
+        return "user/CategoryShop/Category";
     }
     @RequestMapping("user/productCheckout")
     public String productCheckout(){
-        return "User/ProductCheckout/ProductCheckout";
+        return "user/ProductCheckout/ProductCheckout";
     }
     @RequestMapping("user/product_dentails")
     public String productDentails(){
-        return "User/ProductDentails/ProductDentails";
+        return "user/ProductDentails/ProductDentails";
     }
     @RequestMapping("user/cart")
     public String cart(){
-        return "User/ShoppingCart/Cart";
+        return "user/ShoppingCart/Cart";
     }
 }

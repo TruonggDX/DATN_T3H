@@ -6,19 +6,15 @@
     <nav th:replace="admin/fragments/navbar :: navbar"></nav>
     <aside th:replace="admin/fragments/sidebar :: sidebar"></aside>
     <!-- Content -->
-    <form id="updateCategoryForm" method="post">
+    <form id="updateFrom" method="post">
 
         <div class="content-wrapper" style="min-height: 332.4px;">
-            <h3 style="text-align: center">Chỉnh sửa danh mục</h3>
+            <h3 style="text-align: center">Chỉnh sửa size</h3>
             <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
-                <input type="hidden" id="ids" name="categoryId" class="form-control">
+                <input type="hidden" id="ids" class="form-control">
                 <div class="form-group">
-                    <label>Mã danh mục</label>
-                    <input id="code" name="categoryCode" type="text" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>Tên danh mục</label>
-                    <input id="name" name="categoryName" type="text" class="form-control">
+                    <label>Tên size</label>
+                    <input id="name" type="text" class="form-control">
                 </div>
             </div>
             <div class="card-footer">
@@ -37,10 +33,9 @@
 <div th:replace="admin/fragments/script :: script"></div>
 <script>
 
-    function getInfoDataCategories(category) {
-        $('#ids').val(category.id);
-        $('#code').val(category.code);
-        $('#name').val(category.name);
+    function getInfoDataCategories(size) {
+        $('#ids').val(size.id);
+        $('#name').val(size.name);
     }
     $(document).ready(function () {
 
@@ -48,7 +43,7 @@
         if (categoryId) {
             $.ajax({
                 type: "GET",
-                url: "/category/search/" + categoryId,
+                url: "/size/search/" + categoryId,
                 success: function(response) {
                     getInfoDataCategories(response.data);
                 },
@@ -58,22 +53,21 @@
             });
         }
 
-        $('#updateCategoryForm').submit(function(event) {
+        $('#updateFrom').submit(function(event) {
             event.preventDefault();
             var formData = {
                 id: $('#ids').val(),
-                code: $('#code').val(),
                 name: $('#name').val()
             };
             $.ajax({
                 type: "POST",
-                url: "/category/update/" + formData.id,
+                url: "/size/update/" + formData.id,
                 contentType: "application/json",
                 data: JSON.stringify(formData),
                 dataType: "json",
                 success: function (response) {
                     console.log(response);
-                    window.location.href = "/admin/category";
+                    window.location.href = "/admin/size";
                 },
                 error: function (error){
                     console.log(error);
