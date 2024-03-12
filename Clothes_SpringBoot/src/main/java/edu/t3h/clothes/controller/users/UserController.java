@@ -17,7 +17,7 @@ public class UserController {
 
     @RequestMapping("user/categroyshop")
     public String category(){
-        return "user/CategoryShop/Category";
+        return "user/categoryshop/Category";
     }
     @RequestMapping("user/productCheckout")
     public String productCheckout(){

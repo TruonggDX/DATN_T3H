@@ -7,9 +7,7 @@ import edu.t3h.clothes.model.response.BaseResponse;
 import java.util.List;
 
 public interface IUserService {
+    UserDTO findUserByUsername(String username);
     BaseResponse<List<UserDTO>> getAll();
-    BaseResponse<?> creatUser(UserDTO userDTO);
-    UserDTO findById(Long id);
-    BaseResponse<?> deleteUser(Long id);
-    BaseResponse<?> updateUser( Long id, UserDTO userDTO);
+    UserDTO findUserById(Long id);
 }

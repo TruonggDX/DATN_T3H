@@ -8,7 +8,7 @@ public class AdminController {
 
     @RequestMapping("/admin")
     public String admin(){
-        return "Admin/index";
+        return "admin/index";
     }
 
     @RequestMapping ("/admin/add_account")

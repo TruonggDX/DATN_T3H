@@ -3,6 +3,7 @@ package edu.t3h.clothes.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -25,15 +26,15 @@ public class UserEntity extends AbstractEntity{
     private String address;
     @Column (name = "birthday")
     private String birthday;
-    @Column (name = "loyalCustomers")
+    @Column (name = "loyal_customers")
     private int loyalCustomers;
 
 
-
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "role_tg",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    private Set<RoleEntity> roleEntities;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "role_tg",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<RoleEntity> roles = new HashSet<>();
 }

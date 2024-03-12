@@ -27,11 +27,11 @@ public class ColorDTO {
         this.name = name;
     }
 
-    public String getImages() {
+    public String getImage() {
         return image;
     }
 
-    public void setImages(String image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

@@ -6,6 +6,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Table(name = "role")
@@ -16,6 +17,6 @@ public class RoleEntity extends AbstractEntity{
     private String name;
 
 
-    @ManyToMany(mappedBy = "roleEntities")
-    private Set<UserEntity> userEntities;
+    @ManyToMany(mappedBy = "roles")
+    private Set<UserEntity> users = new HashSet<>();
 }

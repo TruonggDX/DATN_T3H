@@ -1,11 +1,19 @@
 package edu.t3h.clothes.service.impl;
 
+import edu.t3h.clothes.entity.RoleEntity;
 import edu.t3h.clothes.entity.UserEntity;
+import edu.t3h.clothes.model.dto.RoleDTO;
 import edu.t3h.clothes.model.dto.UserDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
+import edu.t3h.clothes.repository.RoleRepository;
 import edu.t3h.clothes.repository.UserEntityRepository;
 import edu.t3h.clothes.service.IUserService;
+import edu.t3h.clothes.utils.Constant;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,72 +21,62 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class UserImpl implements IUserService {
-
+    private Logger logger = LoggerFactory.getLogger(UserImpl.class);
+    @Autowired
     private UserEntityRepository userEntityRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
-    public UserImpl(UserEntityRepository userEntityRepository, ModelMapper modelMapper) {
-        this.userEntityRepository = userEntityRepository;
-        this.modelMapper = modelMapper;
+    public UserImpl() {
+        logger.info("Tạo ra bean: {}",UserImpl.class);
+    }
+
+
+    @Override
+    public UserDTO findUserByUsername(String username) {
+        UserEntity userEntity = userEntityRepository.findByUsername(username);
+        UserDTO userDTO = modelMapper.map(userEntity,UserDTO.class);
+        List<RoleDTO> roleDTOS = roleRepository.getRoleByUsername(username).stream().map(roleEntity -> modelMapper.map(roleEntity,RoleDTO.class)).toList();
+        userDTO.setRoleDtos(roleDTOS);
+        return userDTO;
     }
 
     @Override
     public BaseResponse<List<UserDTO>> getAll() {
-        List<UserEntity> userEntities = userEntityRepository.findAll();
-
-        List<UserDTO> userDTOS = userEntities.stream()
-                .map(userEntity -> modelMapper.map(userEntity, UserDTO.class))
-                .collect(Collectors.toList());
-        BaseResponse<List<UserDTO>> response = new BaseResponse<>();
-        response.setCode(200);
-        response.setMessage("List user");
-        response.setData(userDTOS);
-        return response;
-    }
-
-    @Override
-    public BaseResponse<?> creatUser(UserDTO userDTO) {
-        UserEntity user = modelMapper.map(userDTO,UserEntity.class);
-        userEntityRepository.save(user);
-
-        BaseResponse<UserDTO> userDTOBaseResponse = new BaseResponse<>();
-        userDTOBaseResponse.setCode(200);
-        userDTOBaseResponse.setMessage("add user sucessful");
-        userDTOBaseResponse.setData(modelMapper.map(user,UserDTO.class));
-        return userDTOBaseResponse;
-    }
-
-    @Override
-    public UserDTO findById(Long id) {
-        Optional<UserEntity> userEntity = userEntityRepository.findById(id);
-        if (userEntity.isPresent()){
-            UserEntity users = userEntity.get();
-            return modelMapper.map(users, UserDTO.class);
-        }else {
-            return  null;
-        }
-    }
-
-    @Override
-    public BaseResponse<?> deleteUser(Long id) {
-        Optional<UserEntity> userEntity = userEntityRepository.findById(id);
-        BaseResponse<List<UserDTO>> baseResponse;
-
-        if (userEntity.isPresent()){
-            userEntityRepository.delete(userEntity.get());
-            List<UserEntity> userEntities = userEntityRepository.findAll();
-            List<UserDTO> userDTOS = userEntities.stream()
-                    .map(user -> modelMapper.map(user, UserDTO.class))
-                    .collect(Collectors.toList());
-            baseResponse = new BaseResponse<>(200,"delete successful",userDTOS);
-        }else {
-            baseResponse = new BaseResponse<>(404,"delete failed",null);
-        }
-        return baseResponse;
-    }
-
-    @Override
-    public BaseResponse<?> updateUser(Long id, UserDTO userDTO) {
+//        List<UserEntity> userEntities = userEntityRepository.listUser();
+//        List<UserDTO> userDTOS = userEntities.stream().map(userEntity -> {
+//            UserDTO productDTO = modelMapper.map(userEntity, UserDTO.class);
+//            String roles = userEntity.getRoles().stream().map(RoleEntity::getName).collect(Collectors.joining(" "));
+//
+//            return productDTO;
+//        }).collect(Collectors.toList());
+//        BaseResponse<List<UserDTO>> response = new BaseResponse<>();
+//        response.setCode(HttpStatus.OK.value());
+//        response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+//        response.setData(userDTOS);
+//        return response;
         return null;
+    }
+
+
+
+    @Override
+    public UserDTO findUserById(Long id) {
+        Optional<UserEntity> userEntities = userEntityRepository.findById(id);
+        UserEntity userEntity = null;
+        BaseResponse<UserDTO> response;
+        if (userEntities.isEmpty()){
+            response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
+            return modelMapper.map(response,UserDTO.class);
+        }
+        userEntity = userEntities.get();
+        if (userEntity.getDeleted()){
+            response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
+            return modelMapper.map(response,UserDTO.class);
+        }
+        return modelMapper.map(userEntity,UserDTO.class);
     }
 }
