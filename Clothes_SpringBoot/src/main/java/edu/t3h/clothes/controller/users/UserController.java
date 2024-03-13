@@ -10,6 +10,11 @@ public class UserController {
         return "user/index";
     }
 
+    @RequestMapping("/user/profile")
+    public String profile(){
+        return "user/profileUser";
+    }
+
     @RequestMapping("user/contact")
     public String contact(){
         return "user/Contact/Contacts";

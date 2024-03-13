@@ -48,6 +48,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/user/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/role/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/user/**").hasAnyRole("USER")
+                                .requestMatchers("/user/categroyshop/**").hasAnyRole("USER")
                                 .requestMatchers("/process-after-login").hasAnyRole(new String[]{"ADMIN", "USER"})
                         .requestMatchers("/category/**").hasAnyRole("ADMIN")
 //                        .requestMatchers("/user/**").hasAnyRole("USER")

@@ -1,9 +1,7 @@
 package edu.t3h.clothes.service.impl;
 
-import edu.t3h.clothes.entity.CategoryEntity;
 import edu.t3h.clothes.entity.RoleEntity;
 import edu.t3h.clothes.entity.UserEntity;
-import edu.t3h.clothes.model.dto.CategoryDTO;
 import edu.t3h.clothes.model.dto.RoleDTO;
 import edu.t3h.clothes.model.dto.UserDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
@@ -18,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 @Service
 public class UserImpl implements IUserService {
@@ -47,29 +42,29 @@ public class UserImpl implements IUserService {
         userDTO.setRoleDtos(roleDTOS);
         return userDTO;
     }
+
     @Override
     public BaseResponse<List<UserDTO>> getAll() {
         List<UserEntity> userEntities = userEntityRepository.listUser();
+        List<UserDTO> userDTOS = userEntities.stream().map(userEntity -> {
+            UserDTO userDTO = modelMapper.map(userEntity, UserDTO.class);
 
-        List<UserDTO> userDTOs = userEntities.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+            List<RoleDTO> roleDtos = userEntity.getRoles().stream()
+                    .map(roleEntity -> {
+                        RoleDTO roleDTO = modelMapper.map(roleEntity, RoleDTO.class);
+                        return roleDTO;
+                    })
+                    .collect(Collectors.toList());
+            userDTO.setRoleDtos(roleDtos);
+            return userDTO;
+        }).collect(Collectors.toList());
 
         BaseResponse<List<UserDTO>> response = new BaseResponse<>();
         response.setCode(HttpStatus.OK.value());
         response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-        response.setData(userDTOs);
+        response.setData(userDTOS);
 
         return response;
-    }
-
-    private UserDTO convertToDTO(UserEntity userEntity) {
-        UserDTO userDTO = modelMapper.map(userEntity, UserDTO.class);
-        List<RoleDTO> roleDTOs = userEntity.getRoles().stream()
-                .map(roleEntity -> modelMapper.map(roleEntity, RoleDTO.class))
-                .collect(Collectors.toList());
-        userDTO.setRoleDtos(roleDTOs);
-        return userDTO;
     }
 
 

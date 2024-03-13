@@ -32,8 +32,52 @@
                         <li class="nav-item"><a class="shoping_cart_count" th:href="@{/user/cart}"><i id="icon_cart" class="fa fa-shopping-cart" aria-hidden="true"></i></a> </li>
                         <span class="span_count_product">3</span>
                         <li class="nav-item">
-                            <a style="margin-left: 50px" th:href="@{/login}"><i class="fa-solid fa-user"></i></a>
-<!--                            <a th:href="@{/admin-logout}" class="btn btn-default btn-flat" onclick="return confirm('Ban chac chan dang xuat chu')">Đăng xuất</a>-->
+                            <div class="dropdown" style="margin-left: 50px">
+                                <button class="dropbtn"><i style="font-size: 20px" class="fa-solid fa-user"></i></button>
+                                <div class="dropdown-content">
+                                    <a th:href="@{/user/profile}" class="btn btn-default btn-flat">Thông tin cá nhân</a>
+                                    <a th:href="@{/logout}" class="btn btn-default btn-flat" onclick="return confirm('Ban chac chan dang xuat chu')">Đăng xuất</a>
+                                </div>
+                            </div>
+                            <style>
+                                .dropbtn {
+                                    background-color: #4CAF50;
+                                    color: white;
+                                    padding: 16px;
+                                    font-size: 16px;
+                                    border: none;
+                                    cursor: pointer;
+                                }
+
+                                .dropdown {
+                                    position: relative;
+                                    display: inline-block;
+                                }
+
+                                .dropdown-content {
+                                    display: none;
+                                    position: absolute;
+                                    background-color: #f9f9f9;
+                                    min-width: 160px;
+                                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                                    z-index: 1;
+                                }
+
+                                .dropdown-content a {
+                                    color: black;
+                                    padding: 12px 16px;
+                                    text-decoration: none;
+                                    display: block;
+                                }
+
+                                .dropdown-content a:hover {background-color: #f1f1f1}
+
+                                .dropdown:hover .dropdown-content {
+                                    display: block;
+                                }
+
+
+                            </style>
                         </li>
                         <style>
                             .button-header:hover{

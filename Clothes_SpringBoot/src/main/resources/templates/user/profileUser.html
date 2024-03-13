@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="user/fragments/head :: head"></head>
+<head>
+  <meta charset="UTF-8">
+  <header th:replace="user/fragments/header :: header"></header>
+  <title>Title</title>
+</head>
+<body>
+<div class="container rounded bg-white mt-5 mb-5">
+  <div class="row">
+    <div class="col-md-3 border-right">
+      <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://tse2.mm.bing.net/th?id=OIP.QhjGIVoUjtEjOyqbiMN92AHaGL&pid=Api&P=0&h=220"><span class="font-weight-bold">Đinh Xuân Trường</span><span> </span></div>
+    </div>
+    <div class="col-md-5 border-right">
+      <div class="p-3 py-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-12"><label class="labels">Họ và tên</label>
+            <input type="text" class="form-control"></div>
+          <div class="col-md-12"><label class="labels">Tên đăng nhập</label>
+            <input type="text" class="form-control" ></div>
+          <div class="col-md-12"><label class="labels">Ngày sinh</label>
+            <input type="text" class="form-control" ></div>
+          <div class="col-md-12"><label class="labels">Điện thoại</label>
+            <input type="text" class="form-control" ></div>
+          <div class="col-md-12"><label class="labels">Địa chỉ</label>
+            <input type="text" class="form-control" ></div>
+          <div class="col-md-12"><label class="labels">Email</label>
+            <input type="text" class="form-control" ></div>
+        </div>
+        <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Lưu thay đổi</button></div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-3 py-5">
+        <div class="col-md-12"><span style="font-size: 20px">Đổi mật khẩu</span></div><br>
+        <div class="col-md-12"><label class="labels"> Mật khẩu hiện tại</label><input type="text" class="form-control" placeholder="Mật khẩu cũ" value=""></div> <br>
+        <div class="col-md-12"><label class="labels"> Mật khẩu mới</label><input type="text" class="form-control" placeholder="Mật khẩu mới" value=""></div> <br>
+        <div class="col-md-12"><label class="labels"> Nhập lại mật khẩu</label><input type="text" class="form-control" placeholder="Nhập lại mật khẩu" value=""></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+<div th:replace="user/fragments/footer :: footer"></div>
+
+<div th:replace="user/fragments/script :: script"></div>
+</body>
+</html>
