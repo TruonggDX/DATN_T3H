@@ -98,9 +98,9 @@
         initData();
     });
     function initData() {
-        getSize();
+        getRole();
     }
-    function getSize() {
+    function getRole() {
         let bodyTable = $('#tableDate > tbody');
         bodyTable.empty();
         $.ajax({
@@ -127,7 +127,7 @@
                     if (confirm('Bạn chắc chắn muốn xóa?')) {
                         $.ajax({
                             type: "POST",
-                            url: "/role/delete/" + categoryId,
+                            url: "http://localhost:8080/role/delete/" + categoryId,
                             success: function(response){
                                 console.log(response);
 
@@ -148,7 +148,7 @@
 
                     $.ajax({
                         type: "GET",
-                        url: "/role/search/" + idSize,
+                        url: "http://localhost:8080/role/search/" + idSize,
                         success: function(response) {
                             var size = response.data;
                             window.location.href = '/admin/update_role?id=' + size.id;
@@ -175,7 +175,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/role/create",
+            url: "http://localhost:8080/role/create",
             contentType: "application/json",
             data: JSON.stringify(formData),
             dataType: "json",

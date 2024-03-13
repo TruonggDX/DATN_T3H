@@ -37,7 +37,7 @@
 <div th:replace="admin/fragments/script :: script"></div>
 <script>
 
-    function getInfoDataCategories(category) {
+    function getInfoData(category) {
         $('#ids').val(category.id);
         $('#name').val(category.name);
         $('#image').val(category.image);
@@ -48,9 +48,9 @@
         if (colorId) {
             $.ajax({
                 type: "GET",
-                url: "/color/search/" + colorId,
+                url: "http://localhost:8080/color/search/" + colorId,
                 success: function(response) {
-                    getInfoDataCategories(response.data);
+                    getInfoData(response.data);
                 },
                 error: function(error) {
                     console.log(error);
@@ -67,7 +67,7 @@
             };
             $.ajax({
                 type: "POST",
-                url: "/color/update/" + formData.id,
+                url: "http://localhost:8080/color/update/" + formData.id,
                 contentType: "application/json",
                 data: JSON.stringify(formData),
                 dataType: "json",

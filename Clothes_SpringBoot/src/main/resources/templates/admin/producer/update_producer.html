@@ -46,7 +46,7 @@
        if (idProducer){
            $.ajax({
               type:"GET",
-              url:"/producer/search/" + idProducer,
+              url:"http://localhost:8080/producer/search/" + idProducer,
               success: function (response){
                   getInfoData(response.data);
               } ,
@@ -65,7 +65,7 @@
             };
             $.ajax({
                 type: "POST",
-                url: "/producer/update/" + datas.id,
+                url: "http://localhost:8080/producer/update/" + datas.id,
                 contentType: "application/json",
                 data: JSON.stringify(datas),
                 dataType: "json",

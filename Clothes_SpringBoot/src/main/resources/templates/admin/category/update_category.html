@@ -48,7 +48,7 @@
         if (categoryId) {
             $.ajax({
                 type: "GET",
-                url: "/category/search/" + categoryId,
+                url: "http://localhost:8080/category/search/" + categoryId,
                 success: function(response) {
                     getInfoDataCategories(response.data);
                 },
@@ -67,7 +67,7 @@
             };
             $.ajax({
                 type: "POST",
-                url: "/category/update/" + formData.id,
+                url: "http://localhost:8080/category/update/" + formData.id,
                 contentType: "application/json",
                 data: JSON.stringify(formData),
                 dataType: "json",

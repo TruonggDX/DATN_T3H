@@ -123,15 +123,15 @@
 
                 $('.delete-size-btn').click(function(event) {
                     event.preventDefault();
-                    var categoryId = $(this).data('id');
+                    var sizeId = $(this).data('id');
                     if (confirm('Bạn chắc chắn muốn xóa?')) {
                         $.ajax({
                             type: "POST",
-                            url: "/size/delete/" + categoryId,
+                            url: "http://localhost:8080/size/delete/" + sizeId,
                             success: function(response){
                                 console.log(response);
 
-                                $('#deleteBtn' + categoryId).closest('tr').remove();
+                                $('#deleteBtn' + sizeId).closest('tr').remove();
                                 window.location.reload();
                             },
                             error: function (error){
@@ -148,7 +148,7 @@
 
                     $.ajax({
                         type: "GET",
-                        url: "/size/search/" + idSize,
+                        url: "http://localhost:8080/size/search/" + idSize,
                         success: function(response) {
                             var size = response.data;
                             window.location.href = '/admin/update_size?id=' + size.id;
@@ -175,7 +175,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/size/create",
+            url: "http://localhost:8080/size/create",
             contentType: "application/json",
             data: JSON.stringify(formData),
             dataType: "json",
