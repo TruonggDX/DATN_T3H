@@ -13,6 +13,7 @@ import java.util.List;
 public interface RoleRepository  extends JpaRepository<RoleEntity,Long>{
     @Query(value = "select r from RoleEntity r join r.users u where u.username=:username")
     List<RoleEntity> getRoleByUsername(@Param("username") String username);
-//    @Query(value = "SELECT r FROM RoleEntity r JOIN r.users u WHERE u.username=:username")
-//    List<RoleEntity> getRoleByUserName(@Param("username") String username);
+
+    @Query("SELECT r FROM RoleEntity r WHERE r.deleted = false ")
+    List<RoleEntity> listRole();
 }

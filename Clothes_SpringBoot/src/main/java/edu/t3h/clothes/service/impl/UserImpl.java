@@ -1,7 +1,9 @@
 package edu.t3h.clothes.service.impl;
 
+import edu.t3h.clothes.entity.CategoryEntity;
 import edu.t3h.clothes.entity.RoleEntity;
 import edu.t3h.clothes.entity.UserEntity;
+import edu.t3h.clothes.model.dto.CategoryDTO;
 import edu.t3h.clothes.model.dto.RoleDTO;
 import edu.t3h.clothes.model.dto.UserDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
@@ -16,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 @Service
 public class UserImpl implements IUserService {
@@ -43,40 +47,31 @@ public class UserImpl implements IUserService {
         userDTO.setRoleDtos(roleDTOS);
         return userDTO;
     }
-
     @Override
     public BaseResponse<List<UserDTO>> getAll() {
-//        List<UserEntity> userEntities = userEntityRepository.listUser();
-//        List<UserDTO> userDTOS = userEntities.stream().map(userEntity -> {
-//            UserDTO productDTO = modelMapper.map(userEntity, UserDTO.class);
-//            String roles = userEntity.getRoles().stream().map(RoleEntity::getName).collect(Collectors.joining(" "));
-//
-//            return productDTO;
-//        }).collect(Collectors.toList());
-//        BaseResponse<List<UserDTO>> response = new BaseResponse<>();
-//        response.setCode(HttpStatus.OK.value());
-//        response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-//        response.setData(userDTOS);
-//        return response;
-        return null;
+        List<UserEntity> userEntities = userEntityRepository.listUser();
+
+        List<UserDTO> userDTOs = userEntities.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        BaseResponse<List<UserDTO>> response = new BaseResponse<>();
+        response.setCode(HttpStatus.OK.value());
+        response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+        response.setData(userDTOs);
+
+        return response;
+    }
+
+    private UserDTO convertToDTO(UserEntity userEntity) {
+        UserDTO userDTO = modelMapper.map(userEntity, UserDTO.class);
+        List<RoleDTO> roleDTOs = userEntity.getRoles().stream()
+                .map(roleEntity -> modelMapper.map(roleEntity, RoleDTO.class))
+                .collect(Collectors.toList());
+        userDTO.setRoleDtos(roleDTOs);
+        return userDTO;
     }
 
 
 
-    @Override
-    public UserDTO findUserById(Long id) {
-        Optional<UserEntity> userEntities = userEntityRepository.findById(id);
-        UserEntity userEntity = null;
-        BaseResponse<UserDTO> response;
-        if (userEntities.isEmpty()){
-            response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
-            return modelMapper.map(response,UserDTO.class);
-        }
-        userEntity = userEntities.get();
-        if (userEntity.getDeleted()){
-            response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
-            return modelMapper.map(response,UserDTO.class);
-        }
-        return modelMapper.map(userEntity,UserDTO.class);
-    }
 }

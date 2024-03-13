@@ -9,5 +9,4 @@ import java.util.List;
 public interface IUserService {
     UserDTO findUserByUsername(String username);
     BaseResponse<List<UserDTO>> getAll();
-    UserDTO findUserById(Long id);
 }

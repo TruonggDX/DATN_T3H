@@ -11,7 +11,10 @@ import java.util.List;
 
 public interface UserEntityRepository  extends JpaRepository<UserEntity,Long>{
     UserEntity findByUsername(String username);
-
-    @Query("SELECT u FROM UserEntity u WHERE u.deleted = false ")
+    @Query("SELECT u FROM UserEntity u WHERE u.deleted = false")
     List<UserEntity> listUser();
+
+
+
+
 }

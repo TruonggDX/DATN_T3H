@@ -18,7 +18,7 @@ public class AdminController {
 
     @RequestMapping ("/admin/list_account")
     public String indexs(){
-        return "Admin/Account/list_account";
+        return "admin/account/list_account";
     }
 
 
