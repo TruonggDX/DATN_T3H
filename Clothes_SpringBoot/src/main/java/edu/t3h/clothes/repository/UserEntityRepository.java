@@ -16,7 +16,4 @@ public interface UserEntityRepository  extends JpaRepository<UserEntity,Long>{
     List<UserEntity> listUser();
 
 
-
-
-
 }

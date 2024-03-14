@@ -1,7 +1,6 @@
 package edu.t3h.clothes.service.impl;
 
-import edu.t3h.clothes.entity.RoleEntity;
-import edu.t3h.clothes.entity.UserEntity;
+import edu.t3h.clothes.entity.*;
 import edu.t3h.clothes.model.dto.RoleDTO;
 import edu.t3h.clothes.model.dto.UserDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
@@ -17,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
 @Service
 public class UserImpl implements IUserService {
     private Logger logger = LoggerFactory.getLogger(UserImpl.class);
@@ -43,19 +44,24 @@ public class UserImpl implements IUserService {
         return userDTO;
     }
 
+
     @Override
     public BaseResponse<List<UserDTO>> getAll() {
         List<UserEntity> userEntities = userEntityRepository.listUser();
         List<UserDTO> userDTOS = userEntities.stream().map(userEntity -> {
             UserDTO userDTO = modelMapper.map(userEntity, UserDTO.class);
+            Set<RoleEntity> roleEntities = userEntity.getRoles();
 
-            List<RoleDTO> roleDtos = userEntity.getRoles().stream()
+            List<RoleDTO> roleDTOs = roleEntities.stream()
                     .map(roleEntity -> {
                         RoleDTO roleDTO = modelMapper.map(roleEntity, RoleDTO.class);
+                        roleDTO.setId(roleEntity.getId());
+                        roleDTO.setName(roleEntity.getName());
                         return roleDTO;
                     })
                     .collect(Collectors.toList());
-            userDTO.setRoleDtos(roleDtos);
+
+            userDTO.setRoleDtos(roleDTOs);
             return userDTO;
         }).collect(Collectors.toList());
 
@@ -66,7 +72,6 @@ public class UserImpl implements IUserService {
 
         return response;
     }
-
 
 
 }

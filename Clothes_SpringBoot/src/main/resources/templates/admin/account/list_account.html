@@ -108,7 +108,7 @@
         bodyTable.empty();
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/api/user/list",
+            url: "http://localhost:8080/api/user/list", // Đảm bảo URL chính xác để gửi yêu cầu lấy dữ liệu người dùng
             dataType: "json",
             success: function (response) {
                 console.log(response);
@@ -146,6 +146,8 @@
             }
         });
     }
+
+
 </script>
 
 </body>

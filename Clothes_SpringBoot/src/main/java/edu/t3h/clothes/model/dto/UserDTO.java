@@ -16,6 +16,7 @@ public class UserDTO {
     private String address;
     private String birthday;
     private int loyalCustomers;
-//    private String role;
+
     List<RoleDTO> roleDtos;
+
 }

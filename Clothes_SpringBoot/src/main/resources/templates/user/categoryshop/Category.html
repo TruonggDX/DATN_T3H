@@ -260,9 +260,10 @@
     function getCategories() {
         let listCategory = $('#list_category');
         listCategory.empty();
+        console.log("hi");
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/category/list",
+            url: "http://localhost:8080/home/shop",
             dataType: "json",
             success: function (response) {
                 let categories = response?.data;
