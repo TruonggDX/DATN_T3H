@@ -1,0 +1,64 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Register Form</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="card card-info">-->
+<!--    <div class="card-header">-->
+<!--        <h3 class="card-title">Register Form</h3>-->
+<!--    </div>-->
+
+<!--    <form id="registerForm" class="form-horizontal">-->
+<!--        <div class="card-body">-->
+<!--            <div class="form-group row">-->
+<!--                <label for="username" class="col-sm-2 col-form-label">Username</label>-->
+<!--                <div class="col-sm-10">-->
+<!--                    <input type="text" class="form-control" name="username" id="username" placeholder="Username">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="form-group row">-->
+<!--                <label for="password" class="col-sm-2 col-form-label">Password</label>-->
+<!--                <div class="col-sm-10">-->
+<!--                    <input type="password" class="form-control" name="password" id="password" placeholder="Password">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="card-footer">-->
+<!--            <button type="button" onclick="registerUser()" class="btn btn-info">Register</button>-->
+<!--            <button type="reset" class="btn btn-default float-right">Reset</button>-->
+<!--        </div>-->
+
+<!--    </form>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    function registerUser() {-->
+<!--        var formData = {-->
+<!--            code: $('input[name="username"]').val(),-->
+<!--            name: $('input[name="password"]').val()-->
+<!--        };-->
+
+<!--        $.ajax({-->
+<!--            type: "POST",-->
+<!--            url: "http://localhost:8080/api/user/register",-->
+<!--            contentType: "application/json",-->
+<!--            data: JSON.stringify(formData),-->
+<!--            dataType: "json",-->
+<!--            success: function (response) {-->
+<!--                console.log(response);-->
+<!--          //      window.location.href = "/login.html";-->
+<!--            },-->
+<!--            error: function (error){-->
+<!--                console.log(error);-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+<!--</script>-->
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+<!--</body>-->
+<!--</html>-->

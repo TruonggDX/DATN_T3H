@@ -41,15 +41,19 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
 
-                .authorizeHttpRequests((author) -> author.requestMatchers("/","/login").permitAll()
+                .authorizeHttpRequests((author) -> author.requestMatchers("/","/login","/registers").permitAll()
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/producer/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/color/**").hasAnyRole("ADMIN")
-                                .requestMatchers("/api/user/**").hasAnyRole("ADMIN")
+//                                .requestMatchers("/api/user/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/api/user/**").permitAll()
                                 .requestMatchers("/role/**").hasAnyRole("ADMIN")
-                                .requestMatchers("/user/**").hasAnyRole("USER")
+                                .requestMatchers("/size/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/color/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/category/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/home/shop/**").hasAnyRole("USER")
+                                .requestMatchers("/user/**").hasAnyRole("USER")
+
 //                                .requestMatchers("/categoryshop/**").hasAnyRole("USER")
                                 .requestMatchers("/process-after-login").hasAnyRole(new String[]{"ADMIN", "USER"})
                 )
