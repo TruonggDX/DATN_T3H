@@ -13,8 +13,8 @@ import java.util.List;
 public class ImageEntity extends AbstractEntity{
     private String url;
 
-    @OneToMany(mappedBy = "imageuser", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private List<UserEntity> userEntities;
+//    @OneToMany(mappedBy = "imageuser", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+//    @EqualsAndHashCode.Exclude
+//    @ToString.Exclude
+//    private List<UserEntity> userEntities;
 }

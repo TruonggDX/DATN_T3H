@@ -1,25 +1,18 @@
 package edu.t3h.clothes.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "producer")
 public class ProducerEntity extends AbstractEntity{
-    @Column(name = "code")
     private String code;
-    @Column(name = "name")
     private String name;
-
-    public ProducerEntity() {
-    }
-
-    public ProducerEntity(String code, String name) {
-        this.code = code;
-        this.name = name;
-    }
 
     public String getCode() {
         return code;
@@ -36,4 +29,21 @@ public class ProducerEntity extends AbstractEntity{
     public void setName(String name) {
         this.name = name;
     }
+
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "producerEntities")
+    private Set<ProductEntity>productEntities;
+
+    public ProducerEntity() {
+        this.productEntities = new HashSet<>();
+    }
+
+    public Set<ProductEntity> getProductEntities() {
+        return productEntities;
+    }
+
+    public void setProductEntities(Set<ProductEntity> productEntities) {
+        this.productEntities = productEntities;
+    }
+
 }

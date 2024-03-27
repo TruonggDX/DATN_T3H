@@ -9,7 +9,6 @@ import edu.t3h.clothes.service.IProductService;
 import org.apache.poi.ss.usermodel.*;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -24,6 +23,7 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class ProductImpl implements IProductService {
@@ -36,6 +36,8 @@ public class ProductImpl implements IProductService {
     private ColorRepository colorRepository;
     @Autowired
     private SizeRepository sizeRepository;
+    @Autowired
+    private ProducerReposiroty producerReposiroty;
 
     private final ModelMapper modelMapper;
 
@@ -45,29 +47,45 @@ public class ProductImpl implements IProductService {
         this.modelMapper = modelMapper;
     }
 
+
+
     @Override
     public BaseResponse<Page<ProductDTO>> getAll(ProductFilterRequest filterRequest, int page, int size) {
-
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
+//    Page<ProductEntity> productEntities = productRepository.findAllByFilter(filterRequest, pageable);
         Page<ProductEntity> productEntities = productRepository.findAllByFilter(filterRequest,pageable);
 
-        List<ProductDTO> productDTOS = productEntities.getContent().stream().map(productEntity -> {
-            ProductDTO productDTO = modelMapper.map(productEntity,ProductDTO.class);
-            productDTO.setCategory(productEntity.getCategoryEntity().getName());
-            String sizeP = productEntity.getSizeEntities().stream().map(SizeEntity::getName).collect(Collectors.joining(","));
-            List<String> imagesColor = productEntity.getColorEntities().stream().map(ColorEntity::getImage).collect(Collectors.toList());
-            productDTO.setSize(sizeP);
-            productDTO.setImagesColor(imagesColor);
-            return productDTO;
-        }).collect(Collectors.toList());
+        if (productEntities != null && !productEntities.isEmpty()) {
+            List<ProductDTO> productDTOS = productEntities.getContent().stream().map(productEntity -> {
+                ProductDTO productDTO = modelMapper.map(productEntity, ProductDTO.class);
+                productDTO.setCategory(productEntity.getCategoryEntity().getName());
+                List<String> producerNames = productEntity.getProducerEntities().stream().map(ProducerEntity::getName).collect(Collectors.toList());
+                String sizeNames = productEntity.getSizeEntities().stream().map(SizeEntity::getName).collect(Collectors.joining(" ,"));
+                List<String> imagesColor = productEntity.getColorEntities().stream().map(ColorEntity::getImage).collect(Collectors.toList());
+                productDTO.setSize(sizeNames);
+                productDTO.setProducer(producerNames.toString());
+                productDTO.setImagesColor(imagesColor);
+                return productDTO;
+            }).collect(Collectors.toList());
 
-        Page<ProductDTO> pageData = new PageImpl(productDTOS,pageable,productEntities.getTotalElements());
-        BaseResponse<Page<ProductDTO>> response = new BaseResponse<>();
-        response.setCode(200);
-        response.setMessage("success");
-        response.setData(pageData);
-        return response;
+            Page<ProductDTO> pageData = new PageImpl<>(productDTOS, pageable, productEntities.getTotalElements());
+            BaseResponse<Page<ProductDTO>> response = new BaseResponse<>();
+            response.setCode(200);
+            response.setMessage("success");
+            response.setData(pageData);
+            return response;
+        } else {
+            BaseResponse<Page<ProductDTO>> response = new BaseResponse<>();
+            response.setCode(HttpStatus.NOT_FOUND.value());
+            response.setMessage("No products found");
+            response.setData(new PageImpl<>(Collections.emptyList()));
+            return response;
+        }
     }
+
+
+
+
     @Override
     public BaseResponse<?> createProduct(ProductDTO productDTO) {
         logger.info("start create product: {}", productDTO.toString());
@@ -76,40 +94,139 @@ public class ProductImpl implements IProductService {
 
         if (category.isEmpty()) {
             baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
-            baseResponse.setMessage("category not exits in system");
+            baseResponse.setMessage("category not exists in system");
+            return baseResponse;
+        }
+
+        // Tìm ProducerEntity từ producerIds trong productDTO
+        Set<ProducerEntity> producerEntities = producerReposiroty.findByProducerByIds(productDTO.getProducerIds());
+
+        if (CollectionUtils.isEmpty(producerEntities)) {
+            baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage("producer not exists in system");
+            return baseResponse;
+        }
+
+        Set<SizeEntity> sizeEntities = sizeRepository.findByIds(productDTO.getSizeIds());
+
+        if (CollectionUtils.isEmpty(sizeEntities)) {
+            baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage("size not exits in system");
             return baseResponse;
         }
 
         Set<ColorEntity> colorEntities = colorRepository.findByIdIsInAndDeletedIsFalse(productDTO.getColorIds());
+
         if (CollectionUtils.isEmpty(colorEntities)) {
             baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
             baseResponse.setMessage("color not exits in system");
             return baseResponse;
         }
 
-        Set<SizeEntity> sizeEntities = sizeRepository.findByIds(productDTO.getSizeIds());
-        if (CollectionUtils.isEmpty(colorEntities)) {
-            baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
-            baseResponse.setMessage("size not exits in system");
-            return baseResponse;
-        }
+        // Tạo mới ProductEntity và thiết lập liên kết với CategoryEntity và ProducerEntities
         ProductEntity productEntity = modelMapper.map(productDTO, ProductEntity.class);
         productEntity.setCategoryEntity(category.get());
-        productEntity.setColorEntities(colorEntities);
+        productEntity.setProducerEntities(producerEntities);
         productEntity.setSizeEntities(sizeEntities);
-//        productEntity.setProducerEntities();
+        productEntity.setColorEntities(colorEntities);
+
         LocalDateTime now = LocalDateTime.now();
         productEntity.setCreatedDate(now);
         productEntity.setDeleted(false);
 
         productRepository.save(productEntity);
+
         logger.info("save product success");
         baseResponse.setMessage("save product success");
         baseResponse.setCode(HttpStatus.OK.value());
+        baseResponse.setData(productDTO);
         return baseResponse;
     }
 
-    public Resource export() {
+
+
+    @Override
+    public BaseResponse<?> deleteProduct(Long productId) {
+        BaseResponse<?> response = new BaseResponse<>();
+        Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
+        if (optionalProductEntity.isPresent()) {
+            ProductEntity productEntity = optionalProductEntity.get();
+
+
+            // Thay đổi trạng thái deleted của sản phẩm
+            productEntity.setDeleted(true);
+            productRepository.save(productEntity); // Lưu thay đổi vào database
+
+            response.setCode(HttpStatus.OK.value());
+            response.setMessage("Product with id " + productId + " marked as deleted");
+        } else {
+            response.setCode(HttpStatus.NOT_FOUND.value());
+            response.setMessage("Product with id " + productId + " not found");
+        }
+        return response;
+    }
+
+
+    @Override
+    public BaseResponse<?> updateProduct(Long productId, ProductDTO productDTO) {
+        BaseResponse<?> response = new BaseResponse<>();
+        Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
+        if (optionalProductEntity.isPresent()) {
+            ProductEntity productEntity = optionalProductEntity.get();
+            // Cập nhật thông tin sản phẩm
+            modelMapper.map(productDTO, productEntity);
+
+            // Cập nhật các thông tin trong các bảng trung gian
+            Optional<CategoryEntity> categoryEntityOptional = categoryReponsitory.findById(productDTO.getCategoryId());
+            if (categoryEntityOptional.isPresent()) {
+                productEntity.setCategoryEntity(categoryEntityOptional.get());
+            } else {
+                response.setCode(HttpStatus.BAD_REQUEST.value());
+                response.setMessage("Category not found with id " + productDTO.getCategoryId());
+                return response;
+            }
+
+            Set<ProducerEntity> producerEntities = producerReposiroty.findByProducerByIds(productDTO.getProducerIds());
+
+            if (!CollectionUtils.isEmpty(producerEntities)) {
+                productEntity.setProducerEntities(producerEntities);
+            } else {
+                response.setCode(HttpStatus.BAD_REQUEST.value());
+                response.setMessage("Producer not found");
+                return response;
+            }
+
+            Set<SizeEntity> sizeEntities = sizeRepository.findByIds(productDTO.getSizeIds());
+            if (!CollectionUtils.isEmpty(sizeEntities)) {
+                productEntity.setSizeEntities(sizeEntities);
+            } else {
+                response.setCode(HttpStatus.BAD_REQUEST.value());
+                response.setMessage("Size not found");
+                return response;
+            }
+
+            Set<ColorEntity> colorEntities = colorRepository.findByIdIsInAndDeletedIsFalse(productDTO.getColorIds());
+            if (!CollectionUtils.isEmpty(colorEntities)) {
+                productEntity.setColorEntities(colorEntities);
+            } else {
+                response.setCode(HttpStatus.BAD_REQUEST.value());
+                response.setMessage("Color not found");
+                return response;
+            }
+
+            productRepository.save(productEntity); // Lưu thay đổi vào database
+
+            response.setCode(HttpStatus.OK.value());
+            response.setMessage("Update product with id " + productId + " successful");
+        } else {
+            response.setCode(HttpStatus.NOT_FOUND.value());
+            response.setMessage("Product with id " + productId + " not found");
+        }
+        return response;
+    }
+
+
+    public Resource export () {
         ClassLoader classLoader = getClass().getClassLoader();
 
         Map<String, Integer> mapKeyIndexCell = new HashMap<>();
@@ -125,14 +242,9 @@ public class ProductImpl implements IProductService {
                     mapKeyIndexCell.put(valueCell.substring(1, valueCell.length() - 1), i);
                 }
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return null;
     }
 }
-
-

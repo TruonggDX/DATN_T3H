@@ -18,19 +18,13 @@ public class ProductDTO {
 
     private String name;
 
-    private String size;
-
     private String material;
-
-    private String producer;
 
     private String  description;
 
     private Integer quantity;
 
     private Float price;
-
-    private String category;
 
     private Float import_price;
 
@@ -42,18 +36,30 @@ public class ProductDTO {
 
     private String modified_by;
 
+
+    private String category;
+
+    private String size;
+
+    private String producer;
+
+    private String color;
+
+
+
     private Long categoryId;
     private List<Long> colorIds;
     private List<Long> sizeIds;
+    private Long producerIds;
 
     private List<String> imagesColor = new ArrayList<>();
 
-    public ProductDTO(Long id, String code, String name) {
+    public ProductDTO(Long id, String code, String name){
         this.id = id;
         this.code = code;
         this.name = name;
     }
 
-    public ProductDTO() {
-    }
+    public ProductDTO(){}
+
 }
