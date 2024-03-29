@@ -6,6 +6,7 @@ import edu.t3h.clothes.model.request.ProductFilterRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.repository.*;
 import edu.t3h.clothes.service.IProductService;
+import edu.t3h.clothes.utils.Constant;
 import org.apache.poi.ss.usermodel.*;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -52,7 +53,6 @@ public class ProductImpl implements IProductService {
     @Override
     public BaseResponse<Page<ProductDTO>> getAll(ProductFilterRequest filterRequest, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-//    Page<ProductEntity> productEntities = productRepository.findAllByFilter(filterRequest, pageable);
         Page<ProductEntity> productEntities = productRepository.findAllByFilter(filterRequest,pageable);
 
         if (productEntities != null && !productEntities.isEmpty()) {
@@ -145,6 +145,7 @@ public class ProductImpl implements IProductService {
 
 
 
+
     @Override
     public BaseResponse<?> deleteProduct(Long productId) {
         BaseResponse<?> response = new BaseResponse<>();
@@ -152,19 +153,50 @@ public class ProductImpl implements IProductService {
         if (optionalProductEntity.isPresent()) {
             ProductEntity productEntity = optionalProductEntity.get();
 
+            // Xóa các liên kết trong bảng trung gian product_size
+            productEntity.getSizeEntities().clear();
 
-            // Thay đổi trạng thái deleted của sản phẩm
+
+            // Xóa các liên kết trong bảng trung gian product_color
+            productEntity.getColorEntities().clear();
+
+            // Xóa các liên kết trong bảng trung gian Producer_Product
+            productEntity.getProducerEntities().clear();
+            // Thay đổi trạng thái deleted của sản phẩm và lưu thay đổi vào database
             productEntity.setDeleted(true);
-            productRepository.save(productEntity); // Lưu thay đổi vào database
+            productRepository.save(productEntity);
+
 
             response.setCode(HttpStatus.OK.value());
-            response.setMessage("Product with id " + productId + " marked as deleted");
+            response.setMessage("Product with id " + productId + " marked as deleted, and related links deleted");
         } else {
             response.setCode(HttpStatus.NOT_FOUND.value());
             response.setMessage("Product with id " + productId + " not found");
         }
         return response;
     }
+
+
+    @Override
+    public ProductDTO findProductById(Long id) {
+        Optional<ProductEntity> productEntityOptional = productRepository.findById(id);
+        ProductEntity productEntity = null;
+        BaseResponse<ProductDTO> response;
+
+        if (productEntityOptional.isEmpty()) {
+            response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
+            return modelMapper.map(response, ProductDTO.class);
+        }
+
+        productEntity = productEntityOptional.get();
+        if (productEntity.getDeleted()) {
+            response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
+            return modelMapper.map(response, ProductDTO.class);
+        }
+
+        return modelMapper.map(productEntity, ProductDTO.class);
+    }
+
 
 
     @Override

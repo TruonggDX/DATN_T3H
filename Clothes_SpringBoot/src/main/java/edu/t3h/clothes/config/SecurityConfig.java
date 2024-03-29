@@ -52,6 +52,7 @@ public class SecurityConfig {
                                 .requestMatchers("/color/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/category/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/product/**").hasAnyRole("ADMIN")
+
                                 .requestMatchers("/home/shop/**").hasAnyRole("USER")
                                 .requestMatchers("/user/**").hasAnyRole("USER")
 

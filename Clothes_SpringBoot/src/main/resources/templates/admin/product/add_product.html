@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head th:replace="admin/fragments/head :: head"></head>
+
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <nav th:replace="admin/fragments/navbar :: navbar"></nav>
@@ -14,56 +15,92 @@
                     <label >Mã sản phẩm</label>
                     <input  type="text" class="form-control"  placeholder="Nhập mã nsx">
                 </div>
+
                 <div class="form-group">
                     <label >Tên sản phẩm</label>
-                    <input  type="text" class="form-control"  placeholder="Nhập tên nsx">
+                    <input  type="text" class="form-control"  placeholder="Nhập tên sản phẩm">
                 </div>
 
-                <div class="form-group" data-select2-id="74">
+                <div class="form-group">
                     <label>Danh mục</label>
-                    <select class="form-control select2bs4 select2-hidden-accessible" style="width: 100%;" data-select2-id="17" tabindex="-1" aria-hidden="true">
-                        <option selected="selected" data-select2-id="19">Alabama</option>
-                        <option data-select2-id="77">Alaska</option>
-                        <option data-select2-id="78">California</option>
-                        <option data-select2-id="79">Delaware</option>
-                    </select><span class="select2 select2-container select2-container--bootstrap4 select2-container--above" dir="ltr" data-select2-id="18" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-z7yx-container"><span class="select2-selection__rendered" id="select2-z7yx-container" role="textbox" aria-readonly="true" ></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                    <select class="form-control">
+                        <option>option 1</option>
+                        <option>option 2</option>
+                        <option>option 3</option>
+                        <option>option 4</option>
+                        <option>option 5</option>
+                    </select>
                 </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label >Size </label>-->
-<!--                    <input  type="text" class="form-control"  placeholder="Nhập tên nsx">-->
-<!--                </div>-->
+                <label>Size</label>
                 <div class="form-group">
-                <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
-                    <label for="customCheckbox1" class="custom-control-label">Custom Checkbox</label>
-                </div>
-
-
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputFile">Màu sắc</label>
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input">
-                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                    <div class="form-group-size">
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
+                            <label for="customCheckbox1" class="custom-control-label">XS</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="customCheckbox2" value="option1">
+                            <label for="customCheckbox2" class="custom-control-label">S</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="customCheckbox3" value="option1">
+                            <label for="customCheckbox3" class="custom-control-label">M</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="customCheckbox4" value="option1">
+                            <label for="customCheckbox4" class="custom-control-label">L</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="customCheckbox5" value="option1">
+                            <label for="customCheckbox5" class="custom-control-label">XL</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="customCheckbox6" value="option1">
+                            <label for="customCheckbox6" class="custom-control-label">XXL</label>
                         </div>
                     </div>
+
                 </div>
 
+                <div class="form-group">
+                    <!--                    <label>Màu sắc</label>-->
+                    <div class="container">
+                        <div class="dual-list">
+                            <div class="list">
+                                <label>Danh sách màu</label>
+                                <input style="margin-left: 415px;" type="text" id="left-search" placeholder="Search...">
+                                <select  id="left-select" class="duallistbox" multiple="multiple">
+                                    <option>Màu Đỏ</option>
+                                    <option>Màu Đen</option>
+                                    <option>Màu Trắng</option>
+                                    <option>Màu Vàng</option>
+                                    <option>Màu Hồng</option>
+                                    <option>Màu Cam</option>
+                                    <option>Màu Xanh</option>
+                                </select>
+                            </div>
+                            <div class="list_2">
+                                <label>Màu đã chọn</label>
+                                <!--                                <input type="text" id="right-search" placeholder="Search...">-->
+                                <select id="right-select" class="duallistbox_2" multiple="multiple"></select>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="form-group" data-select2-id="74">
+
+                    <div class="form-group">
                     <label>Nhà sản xuất</label>
-                    <select class="form-control select2bs4 select2-hidden-accessible" style="width: 100%;" data-select2-id="17" tabindex="-1" aria-hidden="true">
-                        <option selected="selected" data-select2-id="19">Alabama</option>
-                        <option data-select2-id="77">Alaska</option>
-                        <option data-select2-id="78">California</option>
-                        <option data-select2-id="79">Delaware</option>
-                    </select><span class="select2 select2-container select2-container--bootstrap4 select2-container--above" dir="ltr" data-select2-id="18" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-z7yx-container"><span class="select2-selection__rendered" id="select2-z7yx-container" role="textbox" aria-readonly="true"></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                    <select multiple="" class="custom-select">
+                        <option>option 1</option>
+                        <option>option 2</option>
+                        <option>option 3</option>
+
+                    </select>
                 </div>
                 <div class="form-group">
                     <label >Chất liệu</label>
-                    <input  type="text" class="form-control"  placeholder="Nhập tên nsx">
+                    <input  type="text" class="form-control"  placeholder="Nhập chất liệu">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputFile">Ảnh sản phẩm</label>
@@ -80,15 +117,15 @@
 
                 <div class="form-group">
                     <label >Số lượng</label>
-                    <input  type="text" class="form-control"  placeholder="Nhập tên nsx">
+                    <input  type="text" class="form-control"  placeholder="Nhập số lượng" >
                 </div>
                 <div class="form-group">
                     <label >Giá bán</label>
-                    <input  type="text" class="form-control"  placeholder="Nhập tên nsx">
-                 </div>
+                    <input  type="text" class="form-control"  placeholder="Nhập giá bán">
+                </div>
                 <div class="form-group">
                     <label >Giá nhập</label>
-                    <input  type="text" class="form-control"  placeholder="Nhập tên nsx">
+                    <input  type="text" class="form-control"  placeholder="Nhập giá nhập">
                 </div>
                 <label>Mô tả</label>
                 <div class="form-group">
@@ -98,41 +135,102 @@
                 </div>
 
 
+
             </div>
-            <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
-            </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-outline-primary btn-lg">Thêm sản phẩm</button>
+                </div>
         </div>
     </form>
 
-
-    <div class="card-body">
-        <div class="row">
-            <div class="col-12">
-                <div class="form-group">
-                    <label>Multiple</label>
-                    <select class="duallistbox" multiple="multiple">
-                        <option selected>Alabama</option>
-                        <option>Alaska</option>
-                        <option>California</option>
-                        <option>Delaware</option>
-                        <option>Tennessee</option>
-                        <option>Texas</option>
-                        <option>Washington</option>
-                    </select>
-                </div>
-                <!-- /.form-group -->
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
-    </div>
-    <!-- End Content -->
     <style>
         div, label,button,h3{
             font-family: "Times New Roman";
         }
+        .form-group-size .custom-control {
+            display: inline-block;
+            margin-right: 90px; /* Khoảng cách giữa các checkbox */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .dual-list {
+            display: flex;
+        }
+
+        .list {
+            margin: 0 10px;
+            display: inline-block;
+        }
+        .list_2{
+            margin-top: 29px;
+        }
+        .duallistbox{
+            width: 615px;
+            height: 153px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .duallistbox_2{
+            width: 615px;
+            height: 153px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
     </style>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const leftSelect = document.getElementById('left-select');
+            const rightSelect = document.getElementById('right-select');
+
+            leftSelect.addEventListener('click', function() {
+                const selectedOption = leftSelect.options[leftSelect.selectedIndex];
+                selectedOption.style.backgroundColor = 'white'; // Set background color to gray
+                rightSelect.appendChild(selectedOption);
+                leftSelect.selectedIndex = -1; // Deselect the option
+            });
+
+            rightSelect.addEventListener('click', function() {
+                const selectedOption = rightSelect.options[rightSelect.selectedIndex];
+                selectedOption.style.backgroundColor = 'white'; // Set background color to gray
+                leftSelect.appendChild(selectedOption);
+                rightSelect.selectedIndex = -1; // Deselect the option
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const leftSelect = document.getElementById('left-select');
+            const rightSelect = document.getElementById('right-select');
+            const leftSearch = document.getElementById('left-search');
+            const rightSearch = document.getElementById('right-search');
+
+            leftSearch.addEventListener('input', function() {
+                const searchValue = leftSearch.value.toLowerCase();
+                Array.from(leftSelect.options).forEach(option => {
+                    const text = option.text.toLowerCase();
+                    option.style.display = text.includes(searchValue) ? 'block' : 'none';
+                });
+            });
+
+            rightSearch.addEventListener('input', function() {
+                const searchValue = rightSearch.value.toLowerCase();
+                Array.from(rightSelect.options).forEach(option => {
+                    const text = option.text.toLowerCase();
+                    option.style.display = text.includes(searchValue) ? 'block' : 'none';
+                });
+            });
+        });
+
+
+
+    </script>
+
     <script>
         $(function () {
             //Initialize Select2 Elements

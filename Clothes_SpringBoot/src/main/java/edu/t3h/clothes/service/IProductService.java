@@ -1,5 +1,6 @@
 package edu.t3h.clothes.service;
 
+import edu.t3h.clothes.model.dto.CategoryDTO;
 import edu.t3h.clothes.model.dto.ProductDTO;
 import edu.t3h.clothes.model.request.ProductFilterRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
@@ -13,7 +14,7 @@ public interface IProductService {
     BaseResponse<?> createProduct(ProductDTO productDTO);
 
     BaseResponse<?> deleteProduct(Long productId);
-
+    ProductDTO findProductById(Long id);
     BaseResponse<?> updateProduct(Long productId, ProductDTO productDTO);
 }
 

@@ -1,11 +1,13 @@
 package edu.t3h.clothes.controller.resource;
 
+import edu.t3h.clothes.model.dto.CategoryDTO;
 import edu.t3h.clothes.model.dto.ProducerDTO;
 import edu.t3h.clothes.model.dto.ProductDTO;
 import edu.t3h.clothes.model.request.ProductFilterRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.service.IProducerService;
 import edu.t3h.clothes.service.IProductService;
+import edu.t3h.clothes.utils.Constant;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -67,5 +69,13 @@ public class ProductResource {
         }
     }
 
-
+    @GetMapping("/search/{id}")
+    public BaseResponse<?> getId(@PathVariable Long id) {
+        ProductDTO productDTO = productService.findProductById(id);
+        if (productDTO != null) {
+            return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS,productDTO);
+        } else {
+            return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
+        }
+    }
 }
