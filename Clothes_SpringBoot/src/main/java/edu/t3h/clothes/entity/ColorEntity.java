@@ -10,9 +10,12 @@ import java.util.Set;
 @Table(name = "color")
 
 public class ColorEntity extends AbstractEntity{
-
+    @Column(name = "name")
     private String name;
+    @Column(nullable = true,length = 64)
     private String  image;
+
+
 
 
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)

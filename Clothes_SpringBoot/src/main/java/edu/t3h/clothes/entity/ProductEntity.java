@@ -3,6 +3,8 @@ package edu.t3h.clothes.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Table(name = "product")
@@ -48,7 +50,8 @@ public class ProductEntity extends AbstractEntity {
     )
     @EqualsAndHashCode.Exclude
     private Set<SizeEntity> sizeEntities;
-
+    public ProductEntity() {
+    }
 
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -60,8 +63,9 @@ public class ProductEntity extends AbstractEntity {
     private Set<ProducerEntity> producerEntities;
 
 
-    public ProductEntity() {
-    }
+
+    @OneToMany(mappedBy = "productEntities")
+    private List<ImageProductEntity> imageEntities = new ArrayList<>();
 
 
 }

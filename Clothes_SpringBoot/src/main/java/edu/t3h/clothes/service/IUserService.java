@@ -10,9 +10,6 @@ import java.util.List;
 public interface IUserService {
     UserDTO findUserByUsername(String username);
     BaseResponse<List<UserDTO>> getAll();
-//    BaseResponse<?> creatUserDto(UserDTO userDTO);
-//    BaseResponse<UserDTO> registerUserWithRole(String username, String password);
-//    UserDTO createUserByAdmin(CreateUserform createUserform);
-    BaseResponse<UserDTO> registerAccountUserWithRole(RegisterAccountUserDTO userDTO);
+    UserDTO findUserById(Long id);
 
 }

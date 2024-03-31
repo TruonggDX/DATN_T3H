@@ -6,6 +6,7 @@ import edu.t3h.clothes.model.dto.UserDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.repository.UserEntityRepository;
 import edu.t3h.clothes.service.IUserService;
+import edu.t3h.clothes.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,20 +21,18 @@ public class UserResource {
     private IUserService iUserService;
     @Autowired
     private UserEntityRepository repository;
-        @GetMapping("/list")
-        public ResponseEntity<BaseResponse<List<UserDTO>>> getAllUsersWithRoles() {
-            BaseResponse<List<UserDTO>> response = iUserService.getAll();
-            return ResponseEntity.ok(response);
+    @GetMapping("/list")
+    public ResponseEntity<BaseResponse<List<UserDTO>>> getAllUsersWithRoles() {
+        BaseResponse<List<UserDTO>> response = iUserService.getAll();
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("/search/{id}")
+    public BaseResponse<?> getId(@PathVariable Long id) {
+        UserDTO userDTO = iUserService.findUserById(id);
+        if (userDTO != null) {
+            return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS,userDTO);
+        } else {
+            return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
         }
-//    @PostMapping("/create")
-//    public ResponseEntity<BaseResponse<UserDTO>> createUser(@RequestBody UserDTO userDTO) {
-//        BaseResponse<?> response = iUserService.creatUserDto(userDTO);
-//        return ResponseEntity.ok().body((BaseResponse<UserDTO>) response);
-//    }
-
-//    @PostMapping("/register")
-//    public ResponseEntity<BaseResponse<UserDTO>> registerUser(@RequestParam String username, @RequestParam String password) {
-//        BaseResponse<UserDTO> response = iUserService.registerUserWithRole(username, password);
-//        return ResponseEntity.status(response.getCode()).body(response);
-//    }
+    }
 }

@@ -10,14 +10,14 @@ import edu.t3h.clothes.repository.RoleRepository;
 import edu.t3h.clothes.repository.UserEntityRepository;
 import edu.t3h.clothes.service.IUserService;
 import edu.t3h.clothes.utils.Constant;
-import edu.t3h.clothes.utils.PasswordEncoderUtil;
+//import edu.t3h.clothes.utils.PasswordEncoderUtil;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -78,88 +78,33 @@ public class UserImpl implements IUserService {
 
         return response;
     }
-
-
     @Override
-    public BaseResponse<UserDTO> registerAccountUserWithRole(RegisterAccountUserDTO userDTO) {
-//        Optional<RoleEntity> roleEntities = roleRepository.findById(Long.parseLong(createUserform.getRoleId()));
-//        RoleEntity roleEntity = roleEntities.get();
-//
-//        UserEntity entity = converter.toEntity(createUserform);
-//        entity.getRoles().add(roleEntity);
-//        repository.save(entity);
-//
-//        validateEntity(entity);
-//        roleEntity.getUsers().add(entity);
-//        roleRepository.save(roleEntity);
-//
-//        return converter.toDTO(entity);
-        Optional<RoleEntity> roleEntities = roleRepository.findById(Long.parseLong(userDTO.getRoleId()));
-        RoleEntity roleEntity = roleEntities.get();
-     return  null;
+    public UserDTO findUserById(Long id) {
+        Optional<UserEntity> userEntities = userEntityRepository.findById(id);
+        UserEntity userEntity = null;
+        BaseResponse<UserDTO> response;
+
+        if (userEntities.isEmpty()) {
+            response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
+            return modelMapper.map(response, UserDTO.class);
+        }
+
+        userEntity = userEntities.get();
+        if (userEntity.getDeleted()) {
+            response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
+            return modelMapper.map(response, UserDTO.class);
+        }
+        UserDTO userDTO = modelMapper.map(userEntity, UserDTO.class);
+        Set<RoleEntity> roleEntities = userEntity.getRoles();
+        List<RoleDTO> roleDTOs = roleRepository.getRoleByUsername(userEntity.getUsername()).stream()
+                .map(roleEntity -> {
+                    RoleDTO roleDTO = modelMapper.map(roleEntity, RoleDTO.class);
+                    roleDTO.setId(roleEntity.getId());
+                    roleDTO.setName(roleEntity.getName());
+                    return roleDTO;
+                })
+                .collect(Collectors.toList());
+        userDTO.setRoleDtos(roleDTOs);
+        return modelMapper.map(userEntity, UserDTO.class);
     }
-
-//    @Override
-//    public BaseResponse<UserDTO> creatUserDto(UserDTO userDTO) {
-//        UserEntity userEntity = modelMapper.map(userDTO, UserEntity.class);
-//        userEntity.setDeleted(false);
-//        userEntity.setCreatedDate(LocalDateTime.now());
-//
-//        String encodedPassword = PasswordEncoderUtil.encodePassword(userEntity.getPassword());
-//        userEntity.setPassword(encodedPassword);
-//        // Lấy danh sách quyền từ repository
-//        List<RoleEntity> roleEntities = roleRepository.getRoleByUsername(userEntity.getUsername());
-//
-//        // Chuyển đổi danh sách quyền sang DTO
-//        List<RoleDTO> roleDTOs = roleEntities.stream()
-//                .map(roleEntity -> {
-//                    RoleDTO roleDTO = modelMapper.map(roleEntity, RoleDTO.class);
-//                    roleDTO.setId(roleEntity.getId());
-//                    roleDTO.setName(roleEntity.getName());
-//                    return roleDTO;
-//                })
-//                .collect(Collectors.toList());
-//
-//        // Gán danh sách quyền cho userDTO
-//        userDTO.setRoleDtos(roleDTOs);
-//
-//        // Lưu thông tin người dùng vào cơ sở dữ liệu
-//
-//        // Trả về response
-//        BaseResponse<UserDTO> response = new BaseResponse<>();
-//        response.setCode(HttpStatus.OK.value());
-//        response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-//        response.setData(userDTO);
-//
-//        return response;
-//    }
-
-
-//    @Override
-//    public BaseResponse<UserDTO> registerUserWithRole(String username, String password) {
-//        String encodedPassword = PasswordEncoderUtil.encodePassword(password);
-//
-//        UserEntity userEntity = new UserEntity();
-//        userEntity.setUsername(username);
-//        userEntity.setPassword(encodedPassword);
-//
-//        RoleEntity userRole = new RoleEntity();
-//        userRole.setName("USER");
-//        userEntity.getRoles().add(userRole);
-//
-//        userEntity = userEntityRepository.save(userEntity);
-//
-//        UserDTO userDTO = modelMapper.map(userEntity, UserDTO.class);
-//        userDTO.setId(userEntity.getId());
-//
-//        BaseResponse<UserDTO> response = new BaseResponse<>();
-//        response.setCode(HttpStatus.OK.value());
-//        response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-//        response.setData(userDTO);
-//
-//        return response;
-//    }
-//
-//
-
 }

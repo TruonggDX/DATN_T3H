@@ -79,7 +79,6 @@ public class CategoryImpl implements ICategoryService {
                 .map(category -> modelMapper.map(category, CategoryDTO.class))
                 .collect(Collectors.toList());
         baseResponse= new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS,categoryDTOs);
-
         return baseResponse;
     }
     @Override
@@ -87,18 +86,15 @@ public class CategoryImpl implements ICategoryService {
         Optional<CategoryEntity> categoryEntityOptional = categoryReponsitory.findById(id);
         CategoryEntity categoryEntity = null;
         BaseResponse<CategoryDTO> response;
-
         if (categoryEntityOptional.isEmpty()) {
             response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
             return modelMapper.map(response, CategoryDTO.class);
         }
-
         categoryEntity = categoryEntityOptional.get();
             if (categoryEntity.getDeleted()) {
                 response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
                 return modelMapper.map(response, CategoryDTO.class);
             }
-
         return modelMapper.map(categoryEntity, CategoryDTO.class);
     }
 
@@ -125,5 +121,4 @@ public class CategoryImpl implements ICategoryService {
                 .collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, categoryDTOs);
     }
-
 }

@@ -3,6 +3,7 @@ package edu.t3h.clothes.model.dto;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -60,6 +61,14 @@ public class ProductDTO {
         this.name = name;
     }
 
+
+    private List<ImageProductDTO> imageDTOs = new ArrayList<>();
+    public void addImageDTO(ImageProductDTO imageDTO){
+        this.imageDTOs.add(imageDTO);
+    }
+
     public ProductDTO(){}
+
+
 
 }

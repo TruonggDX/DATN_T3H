@@ -34,20 +34,19 @@ public class ProductResource {
 
 
     @PostMapping("/create")
-    public ResponseEntity<?> createProduction(@RequestBody ProductDTO productDTO){
+    public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
         BaseResponse<?> createdProduct = productService.createProduct(productDTO);
-        if (createdProduct != null) {
+        if (createdProduct != null && createdProduct.getCode() == HttpStatus.OK.value()) {
             // In ra thông tin của sản phẩm đã được tạo thành công
             System.out.println("Product created successfully:");
             System.out.println(createdProduct.toString());
             // Trả về phản hồi cho client
             return ResponseEntity.ok().body(createdProduct);
         } else {
-            // Nếu sản phẩm không được tạo thành công
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create product");
+            // Nếu sản phẩm không được tạo thành công hoặc có lỗi
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createdProduct != null ? createdProduct.getMessage() : "Failed to create product");
         }
     }
-
 
     @DeleteMapping("/delete/{productId}")
     public ResponseEntity<?>deleteProduct(@PathVariable Long productId) {

@@ -10,7 +10,7 @@
         <h3 style="text-align: center; padding: 5px 0px 5px 0px">Danh sách tài khoản</h3>
         <div class="form-group">
             <input type="text" class="form-control" placeholder="Nhập tài khoản cần tìm kiếm">
-            <button type="button" class="btn btn-block btn-outline-primary">Tìm kiếm</button>
+            <button  type="button" class="btn btn-block btn-outline-primary">Tìm kiếm</button>
         </div>
         <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
             <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -29,7 +29,7 @@
                                 <th>Điện thoại</th>
                                 <th>Địa chỉ</th>
                                 <th>Email</th>
-                                <th>ROLE</th>
+                                <th>Quyền</th>
                                 <th>Hành động</th>
                             </tr>
                             </thead>
@@ -140,12 +140,29 @@
                         '</tr>';
                     bodyTable.append(row);
                 });
+                $('.edit-user-btn').click(function(event) {
+                    event.preventDefault();
+                    var userId = $(this).data('id');
+
+                    $.ajax({
+                        type: "GET",
+                        url: "http://localhost:8080/api/user/search/" + userId,
+                        success: function(response) {
+                            var user = response.data;
+                            window.location.href = '/admin/update_account?id=' + user.id;
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                });
             },
             error: function (error) {
                 console.log(error);
             }
         });
     }
+
 
 
 </script>

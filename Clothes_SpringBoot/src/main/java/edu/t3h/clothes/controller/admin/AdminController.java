@@ -21,6 +21,11 @@ public class AdminController {
         return "admin/account/list_account";
     }
 
+    @RequestMapping ("/admin/update_account")
+    public String update(){
+        return "admin/account/update_account";
+    }
+
 
 
 
