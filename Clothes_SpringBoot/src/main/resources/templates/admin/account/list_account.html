@@ -156,14 +156,31 @@
                         }
                     });
                 });
+
+                $('.delete-user-btn').click(function(event) {
+                    event.preventDefault();
+                    var userId = $(this).data('id');
+                    if (confirm('Bạn chắc chắn muốn xóa tài khoản này?')) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "http://localhost:8080/api/user/delete/" + userId,
+                            success: function(response){
+                                console.log(response);
+                                $('#deleteBtn' + userId).closest('tr').remove();
+                                window.location.reload();
+                            },
+                            error: function (error){
+                                console.log(error);
+                            }
+                        });
+                    }
+                });
             },
             error: function (error) {
                 console.log(error);
             }
         });
     }
-
-
 
 </script>
 

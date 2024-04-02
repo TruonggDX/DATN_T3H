@@ -2,6 +2,7 @@ package edu.t3h.clothes.controller.resource;
 
 import edu.t3h.clothes.entity.UserEntity;
 import edu.t3h.clothes.model.dto.CategoryDTO;
+import edu.t3h.clothes.model.dto.RoleDTO;
 import edu.t3h.clothes.model.dto.UserDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.repository.UserEntityRepository;
@@ -34,5 +35,25 @@ public class UserResource {
         } else {
             return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
         }
+    }
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<?>delete(@PathVariable Long userId) {
+        BaseResponse<?> response = iUserService.deleteAccount(userId);
+        if (response.getCode() == HttpStatus.OK.value()) {
+            return ResponseEntity.ok().body(response);
+        } else {
+            return ResponseEntity.status(response.getCode()).body(response.getMessage());
+        }
+    }
+    @PostMapping("/create")
+    public BaseResponse<?> createAccount(@RequestBody UserDTO userDTO) {
+        BaseResponse<?> response = iUserService.createAccount(userDTO);
+        return response;
+    }
+
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<BaseResponse<UserDTO>> updateUser(@PathVariable Long userId, @RequestBody UserDTO updatedUser) {
+        BaseResponse<UserDTO> response = iUserService.updateUser(userId, updatedUser);
+        return ResponseEntity.status(response.getCode()).body(response);
     }
 }

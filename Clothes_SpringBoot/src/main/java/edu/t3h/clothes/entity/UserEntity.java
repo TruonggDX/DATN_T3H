@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+
 @Table(name ="user")
 public class UserEntity extends AbstractEntity{
     @Column(name = "name")
@@ -33,6 +35,8 @@ public class UserEntity extends AbstractEntity{
     private int loyalCustomers;
 
 
+
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.EAGER)
     @JoinTable(
             name = "role_tg",
@@ -40,6 +44,14 @@ public class UserEntity extends AbstractEntity{
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<RoleEntity> roles = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private List<CartEntity> carts;
+
+    @OneToMany(mappedBy = "user")
+    private List<RateEntity> rates;
+
+    @OneToMany(mappedBy = "user")
+    private List<OrdersEntity> orders;
 
 
 

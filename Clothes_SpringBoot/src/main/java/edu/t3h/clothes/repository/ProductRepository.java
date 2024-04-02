@@ -15,7 +15,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     @Query(value = "SELECT distinct p FROM ProductEntity p " +
             "LEFT JOIN p.sizeEntities s " +
             "LEFT JOIN p.categoryEntity c " +
-            "LEFT JOIN p.producerEntities m " +
+            "LEFT JOIN p.producerEntity m " +
             " WHERE " +
             " (:#{#condition.name} is null or lower(p.name) = :#{#condition.name}) " +
             "AND (:#{#condition.price} is null or p.price = :#{#condition.price} )" +

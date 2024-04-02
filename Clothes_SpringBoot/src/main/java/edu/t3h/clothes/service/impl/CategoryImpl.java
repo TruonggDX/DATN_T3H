@@ -54,6 +54,7 @@ public class CategoryImpl implements ICategoryService {
         CategoryEntity categoryEntity = modelMapper.map(categoryDTO, CategoryEntity.class);
         categoryEntity.setDeleted(false);
         categoryEntity.setCreatedDate(LocalDateTime.now());
+
         categoryEntity = categoryReponsitory.save(categoryEntity);
         categoryDTO.setId(categoryEntity.getId());
         BaseResponse<CategoryDTO> response = new BaseResponse<>();

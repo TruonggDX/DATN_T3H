@@ -59,11 +59,10 @@ public class ProductImpl implements IProductService {
             List<ProductDTO> productDTOS = productEntities.getContent().stream().map(productEntity -> {
                 ProductDTO productDTO = modelMapper.map(productEntity, ProductDTO.class);
                 productDTO.setCategory(productEntity.getCategoryEntity().getName());
-                List<String> producerNames = productEntity.getProducerEntities().stream().map(ProducerEntity::getName).collect(Collectors.toList());
+                productDTO.setProducer(productEntity.getProducerEntity().getName());
                 String sizeNames = productEntity.getSizeEntities().stream().map(SizeEntity::getName).collect(Collectors.joining(" ,"));
                 List<String> imagesColor = productEntity.getColorEntities().stream().map(ColorEntity::getImage).collect(Collectors.toList());
                 productDTO.setSize(sizeNames);
-                productDTO.setProducer(producerNames.toString());
                 productDTO.setImagesColor(imagesColor);
                 return productDTO;
             }).collect(Collectors.toList());
@@ -71,13 +70,13 @@ public class ProductImpl implements IProductService {
             Page<ProductDTO> pageData = new PageImpl<>(productDTOS, pageable, productEntities.getTotalElements());
             BaseResponse<Page<ProductDTO>> response = new BaseResponse<>();
             response.setCode(200);
-            response.setMessage("success");
+            response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
             response.setData(pageData);
             return response;
         } else {
             BaseResponse<Page<ProductDTO>> response = new BaseResponse<>();
             response.setCode(HttpStatus.NOT_FOUND.value());
-            response.setMessage("No products found");
+            response.setMessage(Constant.HTTP_MESSAGE.FAILED);
             response.setData(new PageImpl<>(Collections.emptyList()));
             return response;
         }
@@ -97,16 +96,13 @@ public class ProductImpl implements IProductService {
             baseResponse.setMessage("category not exists in system");
             return baseResponse;
         }
+        Optional<ProducerEntity> producer = producerReposiroty.findById(productDTO.getProducerIds());
 
-        // Tìm ProducerEntity từ producerIds trong productDTO
-        Set<ProducerEntity> producerEntities = producerReposiroty.findByProducerByIds(productDTO.getProducerIds());
-
-        if (CollectionUtils.isEmpty(producerEntities)) {
+        if (producer.isEmpty()) {
             baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
-            baseResponse.setMessage("producer not exists in system");
+            baseResponse.setMessage("category not exists in system");
             return baseResponse;
         }
-
         Set<SizeEntity> sizeEntities = sizeRepository.findByIds(productDTO.getSizeIds());
 
         if (CollectionUtils.isEmpty(sizeEntities)) {
@@ -126,7 +122,7 @@ public class ProductImpl implements IProductService {
         // Tạo mới ProductEntity và thiết lập liên kết với CategoryEntity và ProducerEntities
         ProductEntity productEntity = modelMapper.map(productDTO, ProductEntity.class);
         productEntity.setCategoryEntity(category.get());
-        productEntity.setProducerEntities(producerEntities);
+        productEntity.setProducerEntity(producer.get());
         productEntity.setSizeEntities(sizeEntities);
         productEntity.setColorEntities(colorEntities);
 
@@ -160,8 +156,6 @@ public class ProductImpl implements IProductService {
             // Xóa các liên kết trong bảng trung gian product_color
             productEntity.getColorEntities().clear();
 
-            // Xóa các liên kết trong bảng trung gian Producer_Product
-            productEntity.getProducerEntities().clear();
             // Thay đổi trạng thái deleted của sản phẩm và lưu thay đổi vào database
             productEntity.setDeleted(true);
             productRepository.save(productEntity);
@@ -218,13 +212,13 @@ public class ProductImpl implements IProductService {
                 return response;
             }
 
-            Set<ProducerEntity> producerEntities = producerReposiroty.findByProducerByIds(productDTO.getProducerIds());
+            Optional<ProducerEntity> producerEntities = producerReposiroty.findById(productDTO.getProducerIds());
 
-            if (!CollectionUtils.isEmpty(producerEntities)) {
-                productEntity.setProducerEntities(producerEntities);
+            if (producerEntities.isPresent()) {
+                productEntity.setProducerEntity(producerEntities.get());
             } else {
                 response.setCode(HttpStatus.BAD_REQUEST.value());
-                response.setMessage("Producer not found");
+                response.setMessage("Category not found with id " + productDTO.getProducerIds());
                 return response;
             }
 

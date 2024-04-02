@@ -20,10 +20,9 @@ import org.springframework.http.HttpStatus;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -107,4 +106,66 @@ public class UserImpl implements IUserService {
         userDTO.setRoleDtos(roleDTOs);
         return modelMapper.map(userEntity, UserDTO.class);
     }
+
+    @Override
+    public BaseResponse<UserDTO> updateUser(Long userId, UserDTO updatedUser) {
+        Optional<UserEntity> optionalUserEntity = userEntityRepository.findById(userId);
+        if (optionalUserEntity.isEmpty()) {
+            return new BaseResponse<>(HttpStatus.NOT_FOUND.value(), "User not found", null);
+        }
+
+        UserEntity userEntity = optionalUserEntity.get();
+
+        userEntity.setUsername(updatedUser.getUsername());
+        userEntity.setEmail(updatedUser.getEmail());
+        userEntity.setName(updatedUser.getName());
+        userEntity.setCode(updatedUser.getCode());
+        userEntity.setEmail(updatedUser.getEmail());
+        userEntity.setPhone(updatedUser.getPhone());
+        userEntity.setAddress(updatedUser.getAddress());
+        userEntity.setBirthday(updatedUser.getBirthday());
+
+        // Update roles
+        List<RoleEntity> newRoles = new ArrayList<>();
+        for (RoleDTO roleDTO : updatedUser.getRoleDtos()) {
+            Optional<RoleEntity> optionalRoleEntity = roleRepository.findByName(roleDTO.getName());
+            if (optionalRoleEntity.isPresent()) {
+                newRoles.add(optionalRoleEntity.get());
+            } else {
+                return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), "Role " + roleDTO.getName() + " does not exist", null);
+            }
+        }
+        userEntity.setRoles(new HashSet<>(newRoles));
+        UserEntity savedUserEntity = userEntityRepository.save(userEntity);
+        UserDTO responseUserDTO = modelMapper.map(savedUserEntity, UserDTO.class);
+        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, responseUserDTO);
+    }
+
+    @Override
+    public BaseResponse<?> deleteAccount(Long id) {
+        BaseResponse<?> response = new BaseResponse<>();
+        Optional<UserEntity> optionalUserEntity = userEntityRepository.findById(id);
+        if (optionalUserEntity.isPresent()) {
+            UserEntity userEntity = optionalUserEntity.get();
+
+            userEntity.getRoles().clear();
+
+            userEntity.setDeleted(true);
+            userEntityRepository.save(userEntity);
+
+
+            response.setCode(HttpStatus.OK.value());
+            response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+        } else {
+            response.setCode(HttpStatus.NOT_FOUND.value());
+            response.setMessage(Constant.HTTP_MESSAGE.FAILED);
+        }
+        return response;
+    }
+    @Override
+    public BaseResponse<UserDTO> createAccount(UserDTO userDTO) {
+       return null;
+    }
+
+
 }

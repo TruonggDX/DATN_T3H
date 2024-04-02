@@ -72,7 +72,6 @@
         $('#phone').val(user.phone);
         $('#address').val(user.address);
 
-
     }
 
     $(document).ready(function () {
@@ -104,7 +103,7 @@
                 address: $('#address').val()
             };
             $.ajax({
-                type: "POST",
+                type: "PUT",
                 url: "http://localhost:8080/api/user/update/" + formData.id,
                 contentType: "application/json",
                 data: JSON.stringify(formData),

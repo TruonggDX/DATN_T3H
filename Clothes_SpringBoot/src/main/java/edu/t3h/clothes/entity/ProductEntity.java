@@ -54,18 +54,22 @@ public class ProductEntity extends AbstractEntity {
     }
 
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "producer_product",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "producer_id")
-    )
+    @ManyToOne
+    @JoinColumn(name = "producer_id")
     @EqualsAndHashCode.Exclude
-    private Set<ProducerEntity> producerEntities;
-
+    private ProducerEntity producerEntity;
 
 
     @OneToMany(mappedBy = "productEntities")
     private List<ImageProductEntity> imageEntities = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product")
+    private List<CartEntity> carts;
 
+
+    @OneToMany(mappedBy = "product")
+    private List<RateEntity> rates;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrdersEntity> product;
 }

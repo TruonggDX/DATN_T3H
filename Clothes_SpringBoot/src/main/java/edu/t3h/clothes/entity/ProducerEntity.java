@@ -3,6 +3,7 @@ package edu.t3h.clothes.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -30,20 +31,9 @@ public class ProducerEntity extends AbstractEntity{
         this.name = name;
     }
 
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "producerEntities")
-    private Set<ProductEntity>productEntities;
-
-    public ProducerEntity() {
-        this.productEntities = new HashSet<>();
-    }
-
-    public Set<ProductEntity> getProductEntities() {
-        return productEntities;
-    }
-
-    public void setProductEntities(Set<ProductEntity> productEntities) {
-        this.productEntities = productEntities;
-    }
+    @OneToMany(mappedBy = "producerEntity", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<ProductEntity> productEntities;
 
 }

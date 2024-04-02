@@ -278,87 +278,12 @@
     })
 </script>
 <script>
-    function getInfoDataProduct(product) {
-        $('#ids').val(product.id);
-        $('#code').val(product.code);
-        $('#name').val(product.name);
-        $('#material').val(product.material);
-        $('#quantity').val(product.quantity);
-        $('#price').val(product.price);
-        $('#import_price').val(product.import_price);
-        $('#description').val(product.description);
-
-    }
-
-    $(document).ready(function () {
-        initData();
-        var productId = new URLSearchParams(window.location.search).get('id');
-        if (productId) {
-            $.ajax({
-                type: "GET",
-                url: "http://localhost:8080/product/search/" + productId,
-                success: function (response) {
-                    getInfoDataProduct(response.data);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        }
-
-        $('#updateForm').submit(function (event) {
-            event.preventDefault();
-            var formData = {
-                id: $('#ids').val(),
-                code: $('#code').val(),
-                name: $('#name').val(),
-                material: $('#material').val(),
-                quantity: $('#quantity').val(),
-                price: $('#price').val(),
-                import_price: $('#import_price').val(),
-                description: $('#description').val()
-            };
-            $.ajax({
-                type: "PUT",
-                url: "http://localhost:8080/product/update/" + formData.id,
-                contentType: "application/json",
-                data: JSON.stringify(formData),
-                dataType: "json",
-                success: function (response) {
-                    console.log(response);
-                    window.location.href = "/admin/list";
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        });
-    });
     function initData() {
-        getCategory();
         getProducer();
+        getCategory();
+
         getColores();
         getSizes();
-    }
-    function getCategory() {
-        let list = $('#list_category');
-        list.empty();
-        $.ajax({
-            type: "GET",
-            url: "http://localhost:8080/category/list",
-            dataType: "json",
-            success: function (response) {
-                let categories = response?.data;
-
-                categories.forEach(function (category) {
-                    let option = '<option value="' + category.id + '">' + category.name + '</option>';
-                    list.append(option);
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
     }
     function getProducer(){
         let list = $('#list_producer');
@@ -380,6 +305,27 @@
             }
         });
     }
+    function getCategory() {
+        let list = $('#list_category');
+        list.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/category/list",
+            dataType: "json",
+            success: function (response) {
+                let categories = response?.data;
+
+                categories.forEach(function (category) {
+                    let option = '<option value="' + category.id + '">' + category.name + '</option>';
+                    list.append(option);
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
     function getColores() {
         let list = $('#right-select');
         list.empty();
@@ -419,6 +365,70 @@
             }
         });
     }
+
+    function getInfoDataProduct(product) {
+        $('#ids').val(product.id);
+        $('#code').val(product.code);
+        $('#name').val(product.name);
+        $('#material').val(product.material);
+        $('#quantity').val(product.quantity);
+        $('#price').val(product.price);
+        $('#import_price').val(product.import_price);
+        $('#description').val(product.description);
+
+    }
+
+    $(document).ready(function () {
+        initData();
+        var productId = new URLSearchParams(window.location.search).get('id');
+        if (productId) {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/product/search/" + productId,
+                success: function (response) {
+                    getInfoDataProduct(response.data);
+                    let data = response.data;
+                    $('#list_producer').val(data.productId)
+                    $('#list_category').val(data.categoryId)
+
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+
+
+        $('#updateForm').submit(function (event) {
+            event.preventDefault();
+            var formData = {
+                id: $('#ids').val(),
+                code: $('#code').val(),
+                name: $('#name').val(),
+                material: $('#material').val(),
+                quantity: $('#quantity').val(),
+                price: $('#price').val(),
+                import_price: $('#import_price').val(),
+                description: $('#description').val()
+            };
+            $.ajax({
+                type: "PUT",
+                url: "http://localhost:8080/product/update/" + formData.id,
+                contentType: "application/json",
+                data: JSON.stringify(formData),
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    window.location.href = "/admin/list";
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
 
 
 

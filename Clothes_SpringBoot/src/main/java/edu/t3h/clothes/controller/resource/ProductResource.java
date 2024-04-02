@@ -5,18 +5,25 @@ import edu.t3h.clothes.model.dto.ProducerDTO;
 import edu.t3h.clothes.model.dto.ProductDTO;
 import edu.t3h.clothes.model.request.ProductFilterRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
+import edu.t3h.clothes.service.DataService;
 import edu.t3h.clothes.service.IProducerService;
 import edu.t3h.clothes.service.IProductService;
 import edu.t3h.clothes.utils.Constant;
 import org.apache.poi.ss.formula.functions.T;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/product")
 public class ProductResource {
+    @Autowired
+    private DataService dataService;
     private final IProductService productService;
     public ProductResource(IProductService productService){
         this.productService = productService;
@@ -76,5 +83,11 @@ public class ProductResource {
         } else {
             return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED,null);
         }
+    }
+
+
+    @GetMapping("/all")
+    public Map<String, List<?>> getAllData() {
+        return dataService.getAllData();
     }
 }
