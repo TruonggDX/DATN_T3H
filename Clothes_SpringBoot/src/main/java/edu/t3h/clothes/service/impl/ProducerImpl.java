@@ -7,7 +7,8 @@ import edu.t3h.clothes.repository.ProducerReposiroty;
 import edu.t3h.clothes.service.IProducerService;
 import edu.t3h.clothes.utils.Constant;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +19,18 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProducerImpl implements IProducerService {
-@Autowired
     private ProducerReposiroty producerReponsiroty;
-@Autowired
     private  ModelMapper modelMapper;
-
-
+    private Logger logger = LoggerFactory.getLogger(ProducerImpl.class);
+    public ProducerImpl(ProducerReposiroty producerRepository, ModelMapper modelMapper){
+        this.producerReponsiroty =producerRepository;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public BaseResponse<List<ProducerDTO>> getAll() {
         List<ProducerEntity> producerEntities = producerReponsiroty.listProducer();
+        logger.info("Data {}", producerEntities.size());
         List<ProducerDTO> producerDTOS = producerEntities.stream()
                 .map(producerEntity -> modelMapper.map(producerEntity, ProducerDTO.class))
                 .collect(Collectors.toList());
@@ -37,6 +40,9 @@ public class ProducerImpl implements IProducerService {
         response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
         response.setData(producerDTOS);
 
+
+        logger.info("Return size {}", producerDTOS.size());
+        logger.info("Finishing......");
         return response;
     }
 
@@ -45,6 +51,7 @@ public class ProducerImpl implements IProducerService {
         ProducerEntity producerEntity = modelMapper.map(producerDTO, ProducerEntity.class);
         producerEntity.setDeleted(false);
         producerEntity.setCreatedDate(LocalDateTime.now());
+
         producerEntity = producerReponsiroty.save(producerEntity);
         producerDTO.setId(producerEntity.getId());
         BaseResponse<ProducerDTO> response = new BaseResponse<>();

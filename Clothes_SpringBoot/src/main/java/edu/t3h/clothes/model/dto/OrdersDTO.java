@@ -9,7 +9,7 @@ public class OrdersDTO {
     private Long quantity;
     private Double price;
     private String status;
-    private String name;
+    private String nameUser;
     private String address;
     private String notes;
     private Integer ship;
@@ -17,4 +17,6 @@ public class OrdersDTO {
     private String payments;
     private String rate;
     private String nameProduct;
+    private Long userId;
+    private Long productId;
 }

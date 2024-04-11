@@ -24,7 +24,7 @@ public class ProductEntity extends AbstractEntity {
 
     private Integer quantity;
 
-    private Float price;
+    private Double price;
 
     private Float import_price;
 
@@ -32,6 +32,13 @@ public class ProductEntity extends AbstractEntity {
     @JoinColumn(name = "category_id")
     @EqualsAndHashCode.Exclude
     private CategoryEntity categoryEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "producer_id")
+    @EqualsAndHashCode.Exclude
+    private ProducerEntity producerEntity;
+
+
 
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(name = "product_color",
@@ -54,14 +61,12 @@ public class ProductEntity extends AbstractEntity {
     }
 
 
-    @ManyToOne
-    @JoinColumn(name = "producer_id")
-    @EqualsAndHashCode.Exclude
-    private ProducerEntity producerEntity;
 
 
     @OneToMany(mappedBy = "productEntities")
     private List<ImageProductEntity> imageEntities = new ArrayList<>();
+
+
 
     @OneToMany(mappedBy = "product")
     private List<CartEntity> carts;
@@ -72,4 +77,5 @@ public class ProductEntity extends AbstractEntity {
 
     @OneToMany(mappedBy = "product")
     private List<OrdersEntity> product;
+
 }

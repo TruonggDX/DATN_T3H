@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -45,15 +46,13 @@ public class UserResource {
             return ResponseEntity.status(response.getCode()).body(response.getMessage());
         }
     }
-    @PostMapping("/create")
-    public BaseResponse<?> createAccount(@RequestBody UserDTO userDTO) {
-        BaseResponse<?> response = iUserService.createAccount(userDTO);
-        return response;
+    @GetMapping("/loyal-status/{userId}")
+    public ResponseEntity<BaseResponse<UserDTO>> checkLoyalCustomer(@PathVariable Long userId) {
+        BaseResponse<UserDTO> response = iUserService.checkLoyalCustomer(userId);
+
+        HttpStatus httpStatus = HttpStatus.valueOf(response.getCode());
+
+        return new ResponseEntity<>(response, httpStatus);
     }
 
-    @PutMapping("/update/{userId}")
-    public ResponseEntity<BaseResponse<UserDTO>> updateUser(@PathVariable Long userId, @RequestBody UserDTO updatedUser) {
-        BaseResponse<UserDTO> response = iUserService.updateUser(userId, updatedUser);
-        return ResponseEntity.status(response.getCode()).body(response);
-    }
 }

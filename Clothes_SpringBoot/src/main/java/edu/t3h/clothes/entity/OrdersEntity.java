@@ -34,6 +34,9 @@ public class OrdersEntity extends AbstractEntity{
 
 
 
+
+
+
     @OneToMany(mappedBy = "order")
     private List<OrderDetailsEntity> orderDetails;
 

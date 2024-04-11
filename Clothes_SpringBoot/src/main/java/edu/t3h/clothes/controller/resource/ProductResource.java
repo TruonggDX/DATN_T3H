@@ -1,6 +1,7 @@
 package edu.t3h.clothes.controller.resource;
 
 import edu.t3h.clothes.model.dto.CategoryDTO;
+import edu.t3h.clothes.model.dto.OrdersDTO;
 import edu.t3h.clothes.model.dto.ProducerDTO;
 import edu.t3h.clothes.model.dto.ProductDTO;
 import edu.t3h.clothes.model.request.ProductFilterRequest;
@@ -85,7 +86,62 @@ public class ProductResource {
         }
     }
 
+    // tìm kiếm sản phẩm theo danh mục
+    @GetMapping("/searchProductByCategories/{categoryId}")
+    public ResponseEntity<BaseResponse<List<ProductDTO>>> getProductsByCategoryId(@PathVariable Long categoryId) {
+        BaseResponse<List<ProductDTO>> response = productService.findProductsByCategoryId(categoryId);
+        if (response.getCode()==HttpStatus.OK.value()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
 
+    // tìm kiếm theo tên sản phẩm (user)
+    @GetMapping("/searchProductByName/{name}")
+    public ResponseEntity<BaseResponse<List<ProductDTO>>> findProductsByName(@PathVariable String name) {
+        BaseResponse<List<ProductDTO>> response = productService.findProductsByName(name);
+        if (response.getCode()==HttpStatus.OK.value()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
+
+    // tìm kiếm sản phẩm theo tên hoặc mã
+    @GetMapping("/searchByCondition/{condition}")
+    public BaseResponse<?> searchOrdersByCondition(@PathVariable String condition) {
+        BaseResponse<List<ProductDTO>> productDto = productService.searchProductCondition(condition);
+        if (productDto.getData() != null && !productDto.getData().isEmpty()) {
+            BaseResponse<List<ProductDTO>> response = new BaseResponse<>();
+            response.setCode(HttpStatus.OK.value());
+            response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+            response.setData(productDto.getData());
+            return response;
+        } else {
+            return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
+        }
+    }
+
+    // san pham best seller
+    @GetMapping("/bestsellers")
+    public ResponseEntity<BaseResponse<List<ProductDTO>>> getBestSellers() {
+        BaseResponse<List<ProductDTO>> response = productService.getProductBestSellers();
+
+        if (response.getCode() == HttpStatus.OK.value()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    //tim kiem theo khoang gia
+    @GetMapping("/searchByPriceRange")
+    public ResponseEntity<BaseResponse<List<ProductDTO>>> findProductsInPriceRange(@RequestParam double minPrice, @RequestParam double maxPrice) {
+        BaseResponse<List<ProductDTO>> response = productService.findProductsInPriceRange(minPrice, maxPrice);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }
     @GetMapping("/all")
     public Map<String, List<?>> getAllData() {
         return dataService.getAllData();

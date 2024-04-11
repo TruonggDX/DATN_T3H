@@ -14,4 +14,12 @@ public interface UserEntityRepository  extends JpaRepository<UserEntity,Long>{
     UserEntity findByUsername(String username);
     @Query("SELECT u FROM UserEntity u WHERE u.deleted = false")
     List<UserEntity> listUser();
+
+    @Query("SELECT COUNT(o.id) " +
+            "FROM OrdersEntity o " +
+            "WHERE o.user.id = :userId " +
+            "AND o.deleted = false")
+    Integer countOrdersByUserId(@Param("userId") Long userId);
+
+
 }

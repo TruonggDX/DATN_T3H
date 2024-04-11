@@ -51,7 +51,8 @@
 //                                .requestMatchers("/size/**").hasAnyRole("ADMIN")
 //                                .requestMatchers("/color/**").hasAnyRole("ADMIN")
 //                                .requestMatchers("/category/**").hasAnyRole("ADMIN")
-//                                .requestMatchers("/product/**").hasAnyRole("ADMIN")
+//                                .requestMatchers("/product/**").hasAnyRole(new String[]{"ADMIN", "USER"})
+//                                .requestMatchers("/cart/**").hasAnyRole("USER")
 //
 //                                .requestMatchers("/home/shop/**").hasAnyRole("USER")
 //                                .requestMatchers("/user/**").hasAnyRole("USER")

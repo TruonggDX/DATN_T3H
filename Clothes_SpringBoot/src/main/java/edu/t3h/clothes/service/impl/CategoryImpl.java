@@ -9,8 +9,6 @@ import edu.t3h.clothes.utils.Constant;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -92,10 +90,10 @@ public class CategoryImpl implements ICategoryService {
             return modelMapper.map(response, CategoryDTO.class);
         }
         categoryEntity = categoryEntityOptional.get();
-            if (categoryEntity.getDeleted()) {
-                response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
-                return modelMapper.map(response, CategoryDTO.class);
-            }
+        if (categoryEntity.getDeleted()) {
+            response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
+            return modelMapper.map(response, CategoryDTO.class);
+        }
         return modelMapper.map(categoryEntity, CategoryDTO.class);
     }
 

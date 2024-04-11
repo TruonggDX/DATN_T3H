@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <nav th:replace="admin/fragments/navbar :: navbar"></nav>
+    <aside th:replace="admin/fragments/sidebar :: sidebar"></aside>
+    <!-- Content -->
+    <form id="updateOrder" method="post">
+        <div class="content-wrapper" style="min-height: 332.4px;">
+            <h3 style="text-align: center">Chỉnh sửa thông tin đơn hàng</h3>
+            <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
+                <input type="text" id="id" name="id" hidden="hidden" class="form-control">
+                <input type="text" id="idProduct" name="idProduct" hidden="hidden" class="form-control">
+                <input type="text" id="idUser" name="idUser" hidden="hidden" class="form-control">
+                <div class="form-group">
+                    <label>Mã đơn hàng</label>
+                    <input type="text" id="orderCode" name="orderCode" class="form-control" >
+                </div>
+                <div class="form-group">
+                    <label>Tên khách hàng</label>
+                    <input type="text" id="nameUser" name="nameUser" class="form-control" >
+                </div>
+                <div class="form-group">
+                    <label>Tên sản phẩm</label>
+                    <input type="text" id="nameProduct" name="nameProduct" class="form-control" >
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="quantity">Số lượng</label>
+                        <input type="number" id="quantity" name="quantity" class="form-control" >
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="price">Giá</label>
+                        <input type="text" id="price" name="price" class="form-control" >
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Địa chỉ</label>
+                    <input type="text" id="address" name="address" class="form-control" >
+                </div>
+                <div class="form-group">
+                    <label>Ghi chú</label>
+                    <input type="text" id="notes" name="notes" class="form-control" >
+                </div>
+                <div class="form-group">
+                    <label>Trạng thái</label>
+                    <select class="custom-select" id="status" name="status">
+                        <option>Chuẩn bị hàng</option>
+                        <option>Đang giao hàng</option>
+                        <option>Đã giao hàng</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-block btn-outline-primary btn-lg">Cập nhập</button>
+            </div>
+        </div>
+    </form>
+    <style>
+        div, label, button, h3 {
+            font-family: "Times New Roman";
+        }
+    </style>
+    <aside class="control-sidebar control-sidebar-dark"></aside>
+</div>
+<div th:replace="admin/fragments/script :: script"></div>
+<script>
+    function getInfoDataOrder(order) {
+        $('#id').val(order.id);
+        $('#orderCode').val(order.code);
+        $('#nameUser').val(order.nameUser);
+        $('#nameProduct').val(order.nameProduct);
+        $('#quantity').val(order.quantity);
+        $('#price').val(order.price);
+        $('#address').val(order.address);
+        $('#notes').val(order.notes);
+        $('#status').val(order.status);
+        $('#idProduct').val(order.productId);
+        $('#idUser').val(order.userId);
+    }
+    $(document).ready(function () {
+        var id = new URLSearchParams(window.location.search).get('id');
+        if (id) {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/order/search/" + id,
+                success: function (response) {
+                    getInfoDataOrder(response.data);
+                    console.log(response.data)
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        $('#updateOrder').submit(function (event) {
+            event.preventDefault();
+            var formData = {
+                id: $('#id').val(),
+                code: $('#orderCode').val(),
+                nameUser: $('#nameUser').val(),
+                nameProduct: $('#nameProduct').val(),
+                quantity: $('#quantity').val(),
+                price: $('#price').val(),
+                address: $('#address').val(),
+                notes: $('#notes').val(),
+                status: $('#status').val(),
+                productId: $('#idProduct').val(),
+                userId: $('#idUser').val()
+            }
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8080/order/update/" + formData.id,
+                contentType: "application/json",
+                data: JSON.stringify(formData),
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    window.location.href = "/admin/order";
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

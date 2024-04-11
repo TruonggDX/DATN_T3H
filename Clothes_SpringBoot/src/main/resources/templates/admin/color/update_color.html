@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+  <nav th:replace="admin/fragments/navbar :: navbar"></nav>
+  <aside th:replace="admin/fragments/sidebar :: sidebar"></aside>
+  <!-- Content -->
+  <form id="updateCategoryForm" method="post">
+
+    <div class="content-wrapper" style="min-height: 332.4px;">
+      <h3 style="text-align: center">Chỉnh sửa màu</h3>
+      <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
+        <input type="hidden" id="ids" name="colorId" class="form-control">
+        <div class="form-group">
+          <label>Tên màu</label>
+          <input id="code" name="categoryCode" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Hình ảnh</label>
+          <input type="file" class="form-control" id="image">
+        </div>
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary">Cập nhập</button>
+      </div>
+    </div>
+  </form>
+  <!-- End Content -->
+  <style>
+    div, label, button, h3 {
+      font-family: "Times New Roman";
+    }
+  </style>
+  <aside class="control-sidebar control-sidebar-dark"></aside>
+</div>
+<div th:replace="admin/fragments/script :: script"></div>
+<script>
+
+  function getInfoData(category) {
+    $('#ids').val(category.id);
+    $('#name').val(category.name);
+    $('#image').val(category.image);
+  }
+  $(document).ready(function () {
+
+    var colorId = new URLSearchParams(window.location.search).get('id');
+    if (colorId) {
+      $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/color/search/" + colorId,
+        success: function(response) {
+          getInfoData(response.data);
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
+    }
+
+    $('#updateCategoryForm').submit(function(event) {
+      event.preventDefault();
+      var formData = {
+        id: $('#ids').val(),
+        code: $('#name').val(),
+        name: $('#image').val()
+      };
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/color/update/" + formData.id,
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        dataType: "json",
+        success: function (response) {
+          console.log(response);
+          window.location.href = "/admin/color";
+        },
+        error: function (error){
+          console.log(error);
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

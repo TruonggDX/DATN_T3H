@@ -1,8 +1,6 @@
 package edu.t3h.clothes.service.impl;
 
 import edu.t3h.clothes.entity.*;
-import edu.t3h.clothes.model.dto.CategoryDTO;
-import edu.t3h.clothes.model.dto.RegisterAccountUserDTO;
 import edu.t3h.clothes.model.dto.RoleDTO;
 import edu.t3h.clothes.model.dto.UserDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
@@ -19,8 +17,8 @@ import org.springframework.http.HttpStatus;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import javax.management.relation.Role;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -107,39 +105,6 @@ public class UserImpl implements IUserService {
         return modelMapper.map(userEntity, UserDTO.class);
     }
 
-    @Override
-    public BaseResponse<UserDTO> updateUser(Long userId, UserDTO updatedUser) {
-        Optional<UserEntity> optionalUserEntity = userEntityRepository.findById(userId);
-        if (optionalUserEntity.isEmpty()) {
-            return new BaseResponse<>(HttpStatus.NOT_FOUND.value(), "User not found", null);
-        }
-
-        UserEntity userEntity = optionalUserEntity.get();
-
-        userEntity.setUsername(updatedUser.getUsername());
-        userEntity.setEmail(updatedUser.getEmail());
-        userEntity.setName(updatedUser.getName());
-        userEntity.setCode(updatedUser.getCode());
-        userEntity.setEmail(updatedUser.getEmail());
-        userEntity.setPhone(updatedUser.getPhone());
-        userEntity.setAddress(updatedUser.getAddress());
-        userEntity.setBirthday(updatedUser.getBirthday());
-
-        // Update roles
-        List<RoleEntity> newRoles = new ArrayList<>();
-        for (RoleDTO roleDTO : updatedUser.getRoleDtos()) {
-            Optional<RoleEntity> optionalRoleEntity = roleRepository.findByName(roleDTO.getName());
-            if (optionalRoleEntity.isPresent()) {
-                newRoles.add(optionalRoleEntity.get());
-            } else {
-                return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), "Role " + roleDTO.getName() + " does not exist", null);
-            }
-        }
-        userEntity.setRoles(new HashSet<>(newRoles));
-        UserEntity savedUserEntity = userEntityRepository.save(userEntity);
-        UserDTO responseUserDTO = modelMapper.map(savedUserEntity, UserDTO.class);
-        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, responseUserDTO);
-    }
 
     @Override
     public BaseResponse<?> deleteAccount(Long id) {
@@ -162,10 +127,26 @@ public class UserImpl implements IUserService {
         }
         return response;
     }
-    @Override
-    public BaseResponse<UserDTO> createAccount(UserDTO userDTO) {
-       return null;
+
+
+    public BaseResponse<UserDTO> checkLoyalCustomer(Long userId) {
+        BaseResponse<UserDTO> response = new BaseResponse<>();
+        Optional<UserEntity> userOptional = userEntityRepository.findById(userId);
+        if (!userOptional.isPresent()) {
+            response.setMessage(Constant.HTTP_MESSAGE.FAILED);
+            response.setCode(HttpStatus.NOT_FOUND.value());
+            return response;
+        }
+        Integer orderCount = userEntityRepository.countOrdersByUserId(userId);
+        boolean isLoyal = orderCount != null && orderCount >= 5;
+        UserEntity user = userOptional.get();
+        user.setLoyalCustomers(isLoyal);
+        userEntityRepository.save(user);
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        response.setData(userDTO);
+        response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+        response.setCode(HttpStatus.OK.value());
+
+        return response;
     }
-
-
 }

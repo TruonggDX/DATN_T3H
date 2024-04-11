@@ -33,10 +33,10 @@
     <div class="container">
         <div class="row">
             <div class="col-xl-3 col-lg-4 col-md-5">
-                <div class="sidebar-categories" style=" ">
+                <div class="sidebar-categories">
                     <div class="head" style="white-space: nowrap;">Danh mục sản phẩm</div>
-                    <ul class="main-categories">
-                        <li class="common-filter">
+                    <ul class="main-categories" style="height: auto">
+                        <li class="common-filter" style="height: auto">
                             <form action="#">
                                 <ul id="list_category">
                                     <!-- Dữ liệu được thêm vào đây -->
@@ -45,189 +45,58 @@
                         </li>
                     </ul>
                 </div>
+                <br>
+                <hr>
+                <br>
+                <div class="form-group"><label style="color: black;font-size: 18px">Tìm kiếm theo khoảng giá</label></div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="number" class="form-control" id="startedPrice">
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" id="endPrice">
+                    </div>
+                </div>
+
             </div>
 
             <div class="col-xl-9 col-lg-8 col-md-7">
 
                 <!-- Start Best Seller -->
                 <section class="lattest-product-area pb-40 category-list">
-                    <div class="row">
-                        <div class="col-md-6 col-lg-4">
-                            <div class="card text-center card-product">
-                                <div class="card-product__img">
-                                    <img class="card-img" src="img/product/product1.png" alt="">
-                                    <ul class="card-product__imgOverlay">
-                                        <li><button class="my-button"><i class="ti-search"></i></button></li>
-                                        <li><button><i class="ti-shopping-cart"></i></button></li>
-                                        <li><button><i class="ti-heart"></i></button></li>
-                                    </ul>
-                                </div>
-                                <div class="card-body">
-                                    <p>Accessories</p>
-                                    <h4 class="card-product__title"><a href="#">Quartz Belt Watch</a></h4>
-                                    <p class="card-product__price">$150.00</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <div class="card text-center card-product">
-                                <div class="card-product__img">
-                                    <img class="card-img" src="img/product/product2.png" alt="">
-                                    <ul class="card-product__imgOverlay">
-                                        <li><button class="my-button"><i class="ti-search"></i></button></li>
-                                        <li><button><i class="ti-shopping-cart"></i></button></li>
-                                        <li><button><i class="ti-heart"></i></button></li>
-                                    </ul>
-                                </div>
-                                <div class="card-body">
-                                    <p>Beauty</p>
-                                    <h4 class="card-product__title"><a href="#">Women Freshwash</a></h4>
-                                    <p class="card-product__price">$150.00</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <div class="card text-center card-product">
-                                <div class="card-product__img">
-                                    <img class="card-img" src="img/product/product3.png" alt="">
-                                    <ul class="card-product__imgOverlay">
-                                        <li><button class="my-button"><i class="ti-search"></i></button></li>
-                                        <li><button><i class="ti-shopping-cart"></i></button></li>
-                                        <li><button><i class="ti-heart"></i></button></li>
-                                    </ul>
-                                </div>
-                                <div class="card-body">
-                                    <p>Decor</p>
-                                    <h4 class="card-product__title"><a href="#">Room Flash Light</a></h4>
-                                    <p class="card-product__price">$150.00</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="productContainer" class="row">
                     </div>
+
+                    <nav aria-label="...">
+                        <ul class="pagination" id="pageId" style="float: right;">
+
+                        </ul>
+                    </nav>
                 </section>
                 <script>
-                    document.querySelector('.my-button').addEventListener('click', function() {
-                        window.location.href = '/user/product_dentails';
+                    $(document).ready(function () {
+                        $('#productContainer').on('click', '.my-button', function(event) {
+                            event.preventDefault();
+                            var productId = $(this).data('id');
+
+                            $.ajax({
+                                type: "GET",
+                                url: "http://localhost:8080/product/search/" + productId,
+                                success: function(response) {
+                                    var product = response.data;
+                                    window.location.href = '/user/product_dentails?id=' + productId;
+                                },
+                                error: function(error) {
+                                    console.log(error);
+                                }
+                            });
+                        });
                     });
+
+
 
                 </script>
                 <!-- End Best Seller -->
-            </div>
-        </div>
-    </div>
-</section>
-<!-- ================ category section end ================= -->
-
-<!-- ================ top product area start ================= -->
-<section class="related-product-area">
-    <div class="container">
-        <div class="section-intro pb-60px">
-            <p>Mặt hàng phổ biến trên thị trường</p>
-            <h2><span class="section-intro__style">Sản phẩm hàng đầu</span></h2>
-        </div>
-        <div class="row mt-30">
-            <div class="col-sm-6 col-xl-3 mb-4 mb-xl-0">
-                <div class="single-search-product-wrapper">
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="img/product/product-sm-1.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="img/product/product-sm-2.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="img/product/product-sm-3.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-xl-3 mb-4 mb-xl-0">
-                <div class="single-search-product-wrapper">
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="img/product/product-sm-4.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="img/product/product-sm-5.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="img/product/product-sm-6.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-xl-3 mb-4 mb-xl-0">
-                <div class="single-search-product-wrapper">
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="img/product/product-sm-7.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="img/product/product-sm-8.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="img/product/product-sm-9.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-xl-3 mb-4 mb-xl-0">
-                <div class="single-search-product-wrapper">
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="img/product/product-sm-1.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="img/product/product-sm-2.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="img/product/product-sm-3.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -251,16 +120,105 @@
 
 <div th:replace="user/fragments/script :: script"></div>
 <script>
-    $(document).ready(function () {
-        initData();
-    });
-    function initData() {
-        getCategories();
+    function loadAllProducts(page, size) {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/product/list?page=" + page + "&size=" + size,
+            dataType: "json",
+            success: function(response) {
+                let products = response?.data?.content;
+                displayProducts(products);
+                let totalPage = response.data.totalPages;
+                let currentPage = response.data.pageable.pageNumber;
+                if (totalPage > 0) {
+                    $("#pageId").empty();
+                    let pages = '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage - 1) + ',9,event)" href="#">Previous</a></li>';
+                    for (let i = 0; i < totalPage; i++) {
+                        if (currentPage === i) {
+                            pages += '            <li class="page-item active">\n' +
+                                '                <a class="page-link " onclick="changePage(' + i + ',9,event)" href="#">' + (i + 1) + '</a></li>\n' +
+                                '            <li class="page-item">';
+                        } else {
+                            pages += '            <li class="page-item">\n' +
+                                '                <a class="page-link" onclick="changePage(' + i + ',9,event)" href="#">' + (i + 1) + '</a></li>\n' +
+                                '            <li class="page-item">';
+                        }
+                    }
+                    pages += '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage + 1) + ',9,event)" href="#">Next</a></li>';
+                    $("#pageId").append(pages);
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
     }
-    function getCategories() {
+
+    // list product
+    function displayProducts(products) {
+        let productContainer = $('#productContainer');
+        productContainer.empty();
+        products.forEach(function(product) {
+            // Tạo HTML cho từng sản phẩm
+            let productHtml = `
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center card-product">
+                    <div class="card-product__img">
+                        <img class="card-img" src="https://tse2.mm.bing.net/th?id=OIP.PQA6NVTDRyMm_srXe_8w6gHaF7&pid=Api&P=0&h=220">
+                       <ul class="card-product__imgOverlay">
+                            <li><button class="my-button" data-id="${product.id}"><i style="width: 15px;height: 15.2px" class="fa-solid fa-info"></i></button></li>
+                            <li><button class="add-to-cart-btn" data-id="${product.id}"><i class="ti-shopping-cart"></i></button></li>
+                            <li><button><i class="ti-heart"></i></button></li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-product__title"><a href="#">${product.name}</a></h4>
+                        <p class="card-product__price">${product.price}VNĐ</p>
+                    </div>
+                </div>
+            </div>
+        `;
+            console.log(product)
+            productContainer.append(productHtml);
+
+
+        });
+    }
+
+    // list product by categoryId
+    function loadProductsByCategory(categoryId) {
+        let productContainer = $('#productContainer');
+        productContainer.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/product/searchProductByCategories/" + categoryId,
+            dataType: "json",
+            success: function(response) {
+                let products = response?.data;
+                displayProducts(products);
+
+
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+    function changePage(page, size,event) {
+        event.preventDefault();
+        loadAllProducts(page, size);
+    }
+    // Khi trang web được tải
+    $(document).ready(function () {
+        loadCategories();
+        loadAllProducts(0, 9);
+    });
+
+
+    // list category
+    function loadCategories() {
         let listCategory = $('#list_category');
         listCategory.empty();
-        console.log("hi");
         $.ajax({
             type: "GET",
             url: "http://localhost:8080/home/shop",
@@ -271,6 +229,11 @@
                     let li = '<li class="filter-list"><input class="pixel-radio" type="radio" id="' + data.id + '" name="category"><label for="' + data.id + '">' + data.name + '</label></li>';
                     listCategory.append(li);
                 });
+                // Khi danh mục được tải, gán sự kiện khi người dùng chọn một danh mục
+                $('.pixel-radio').change(function() {
+                    var categoryId = $(this).attr('id'); //  id danh mục được chọn
+                    loadProductsByCategory(categoryId);
+                });
             },
             error: function (error){
                 console.log(error);
@@ -278,8 +241,84 @@
         });
     }
 
+    $(document).ready(function () {
+        let page = 0;
+        let size = 9;
+        loadAllProducts(page, size);
+
+        //  sự kiện khi người dùng chọn  danh mục
+        $('.pixel-radio').change(function() {
+            // id danh uujc
+            let categoryId = $(this).attr('id');
+            loadProductsByCategory(categoryId);
+        });
+
+    });
 
 </script>
+<script>
+    $(document).ready(function () {
+        // Khi trang web được tải, gọi hàm tải sản phẩm với khoảng giá mặc định
+        var startedPrice = $('#startedPrice').val();
+        var endPrice = $('#endPrice').val();
+        loadProductsInPriceRange(startedPrice, endPrice);
 
+        // Sự kiện khi phần tử input range thay đổi
+        $('#startedPrice, #endPrice').on('input', function() {
+            var startedPrice = $('#startedPrice').val();
+            var endPrice = $('#endPrice').val();
+            loadProductsInPriceRange(startedPrice, endPrice);
+        });
+    });
+
+    // Hàm tải sản phẩm theo khoảng giá
+    function loadProductsInPriceRange(startedPrice, endPrice) {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/product/searchByPriceRange?minPrice=" + startedPrice + "&maxPrice=" + endPrice,
+            dataType: "json",
+            success: function(response) {
+                let products = response?.data;
+                displayProducts(products);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // hàm thêm sản phẩm vào giỏ hàng
+
+
+</script>
+<script>
+    $(document).ready(function () {
+        // Bắt sự kiện click vào nút "Thêm vào giỏ hàng"
+        $(document).on('click', '.add-to-cart-btn', function(event) {
+            event.preventDefault();
+            var productId = $(this).data('id');
+            addToCart(productId);
+        });
+
+        // Hàm thêm sản phẩm vào giỏ hàng
+        function addToCart(productId) {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8080/cart/add",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "productId": productId
+                }),
+                success: function(response) {
+                    alert("Sản phẩm đã được thêm vào giỏ hàng!");
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                    alert("Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng.");
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>

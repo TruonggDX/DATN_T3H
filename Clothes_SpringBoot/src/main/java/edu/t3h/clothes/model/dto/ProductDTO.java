@@ -25,7 +25,7 @@ public class ProductDTO {
 
     private Integer quantity;
 
-    private Float price;
+    private Double price;
 
     private Float import_price;
 
@@ -46,12 +46,10 @@ public class ProductDTO {
 
     private String color;
 
-
-
     private Long categoryId;
-    private List<Long> colorIds;
-    private List<Long> sizeIds;
-    private Long producerIds;
+    private List<Long> colorId;
+    private List<Long> sizeId;
+    private Long producerId;
 
     private List<String> imagesColor = new ArrayList<>();
 

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="user/fragments/head :: head"></head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body>
 <!--================ Start Header Menu Area =================-->
 <header th:replace="user/fragments/header :: header"></header>
@@ -31,16 +34,19 @@
     <div class="container">
         <div class="cart_inner">
             <div class="table-responsive">
-                <table class="table">
+                <table class="table" id="tableDate">
                     <thead>
                     <tr>
+                        <th hidden="hidden" scope="col">ID</th>
+                        <th scope="col">STT</th>
                         <th scope="col">Sản phẩm</th>
                         <th scope="col">Giá</th>
                         <th scope="col">Số lượng</th>
-                        <th scope="col">Tiền</th>
+                        <th scope="col">Tổng Tiền</th>
+                        <th scope="col">Action</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="listp_cart">
                     <tr>
                         <td>
                             <div class="media">
@@ -57,72 +63,14 @@
                         </td>
                         <td>
                             <div class="product_count">
-                                <input type="text" name="qty" id="" maxlength="12" value="1" title="Quantity:"
-                                       class="input-text qty">
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                        class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                        class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+                                <input type="text" maxlength="12" value="1">
                             </div>
                         </td>
                         <td>
                             <h5>$720.00</h5>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="media">
-                                <div class="d-flex">
-                                    <img src="img/cart/cart2.png" alt="">
-                                </div>
-                                <div class="media-body">
-                                    <p>Minimalistic shop for multipurpose use</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <h5>$360.00</h5>
-                        </td>
-                        <td>
-                            <div class="product_count">
-                                <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
-                                       class="input-text qty">
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                        class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                        class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-                            </div>
-                        </td>
-                        <td>
-                            <h5>$720.00</h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="media">
-                                <div class="d-flex">
-                                    <img src="img/cart/cart3.png" alt="">
-                                </div>
-                                <div class="media-body">
-                                    <p>Minimalistic shop for multipurpose use</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <h5>$360.00</h5>
-                        </td>
-                        <td>
-                            <div class="product_count">
-                                <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
-                                       class="input-text qty">
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                        class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                        class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-                            </div>
-                        </td>
-                        <td>
-                            <h5>$720.00</h5>
+                        <td style="text-align: center">
+                            <a><i style="font-size: 30px" class="far fa-trash-can"></i></a>
                         </td>
                     </tr>
                     <tr class="bottom_button">
@@ -157,7 +105,13 @@
                         </td>
                     </tr>
                     </tbody>
+
                 </table>
+                <nav aria-label="...">
+                    <ul class="pagination" id="pageId" style="float: right;">
+
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
@@ -167,76 +121,135 @@
 
 
 <!--================ Start footer Area  =================-->
-<footer class="footer">
-    <div class="footer-area">
-        <div class="container">
-            <div class="row section_gap">
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="single-footer-widget tp_widgets">
-                        <h4 class="footer_title large_title">Về chúng tôi</h4>
-                        <p>
-                            Chào mừng bạn đến với trang web bán quần áo của chúng tôi!
-                            Chúng tôi tự hào cung cấp những sản phẩm thời trang chất lượng với sự đa dạng và phong phú.
-                            Tại đây, bạn sẽ tìm thấy những bộ trang phục phong cách và phù hợp với mọi dịp, từ công sở đến dạo phố hay dự tiệc.
-                            Chúng tôi cam kết mang đến trải nghiệm mua sắm trực tuyến tuyệt vời và dịch vụ chăm sóc khách hàng tốt nhất.
-                            Hãy khám phá ngay và tìm cho mình những bộ trang phục ưng ý nhất!
-                        </p>
-                        <p>
 
-                        </p>
-                    </div>
-                </div>
+<div th:replace="user/fragments/footer :: footer"></div>
 
-                <div class=" offset-lg-1 col-lg-3  col-md-6 col-sm-6">
-                    <div class="single-footer-widget instafeed">
-                        <h4 class="footer_title">Hàng trưng bày</h4>
-                        <ul class="list instafeed d-flex flex-wrap">
-                            <li><img th:src="@{/user/img/gallery/r1.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r2.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r3.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r5.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r7.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r8.jpg}" alt=""></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="offset-lg-1 col-lg-3 col-md-6 col-sm-6">
-                    <div class="single-footer-widget tp_widgets">
-                        <h4 class="footer_title">Liên hệ chúng tôi</h4>
-                        <div class="ml-40">
-                            <p class="sm-head">
-                                <span class="fa fa-location-arrow"></span>
-                                Địa chỉ
-                            <p>Phúc diễn, Quận Bắc Từ Liêm, thành phố Hà Nội</p>
-
-                            <p class="sm-head">
-                                <span class="fa fa-phone"></span>
-                                Số điện thoại
-                            </p>
-                            <p>
-                                +84 339205335 <br>
-
-                            </p>
-
-                            <p class="sm-head">
-                                <span class="fa fa-envelope"></span>
-                                Email
-                            </p>
-                            <p>
-                                dinhxuantruong2003coi@gmail.com <br>
-
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<!--================ End footer Area  =================-->
-
-
-
-    <div th:replace="user/fragments/script :: script"></div>
+<div th:replace="user/fragments/script :: script"></div>
 </body>
 </html>
+<script>
+    $(document).ready(function () {
+        initData();
+    });
+
+    function initData() {
+        let page = 0;
+        let size = 4;
+        getProductsInCart(page, size);
+    }
+
+    function getProductsInCart(page, size) {
+        let bodyTable = $('#listp_cart');
+        bodyTable.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/cart/list?page=" + page + "&size=" + size,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                let products = response?.data?.content;
+                // Hiển thị dữ liệu trên bảng
+                for (let i = 0; i < products.length; i++) {
+                    let data = products[i];
+                    let row = '<tr>' +
+                        '<td>' + (i + 1) + '</td>' +
+                        '<td hidden="hidden">' + data.id + '</td>' +
+                        '<td>' +
+                        '<div class="media">' +
+                        '<div class="d-flex">' +
+                        '<img width="80px" src="https://tse4.mm.bing.net/th?id=OIP.7ZxepcJaDNoUZqs3JZPxKwHaHa&pid=Api&P=0&h=220" alt="">' +
+                        '</div>' +
+                        '<div class="media-body">' +
+                        '<p>' + data.nameProduct + '</p>' +
+                        '</div>' +
+                        '</div>' +
+                        '</td>' +
+                        '<td><h5>' + data.price + '</h5></td>' +
+                        '<td>' +
+                        '<div class="product_count">' +
+                        '<input type="number" id="quantity' + i + '" class="quantity-input" data-id="' + data.id + '" value="' + data.number + '">' +
+                        '</div>' +
+                        '</td>' +
+                        '<td><h5 id="productTotal' + i + '">' + data.total + '</h5></td>' +
+                        '<td>' +
+                        '<a  class="btn btn-default delete-product-btn" data-id="' + data.id + '"><i style="font-size: 30px" class="far fa-trash-can"></i></a>' +
+                        '</td>' +
+                        '</tr>';
+                    $('#listp_cart').append(row);
+                }
+                let totalPage = response.data.totalPages;
+                let currentPage = response.data.pageable.pageNumber;
+                if (totalPage > 0) {
+                    $("#pageId").empty();
+                    let pages = '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage - 1) + ',4,event)" href="#"><i class="fa-solid fa-chevron-up fa-rotate-270"></i></a></li>';
+                    for (let i = 0; i < totalPage; i++) {
+                        if (currentPage === i) {
+                            pages += '            <li class="page-item active">\n' +
+                                '                <a class="page-link " onclick="changePage(' + i + ',4,event)" href="#">' + (i + 1) + '</a></li>\n' +
+                                '            <li class="page-item">';
+                        } else {
+                            pages += '            <li class="page-item">\n' +
+                                '                <a class="page-link" onclick="changePage(' + i + ',4,event)" href="#">' + (i + 1) + '</a></li>\n' +
+                                '            <li class="page-item">';
+                        }
+                    }
+                    pages += '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage + 1) + ',4,event)" href="#"><i class="fa-solid fa-chevron-up fa-rotate-90"></i></a></li>';
+                    $("#pageId").append(pages);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    $(document).on('click', '.delete-product-btn', function(event) {
+        event.preventDefault();
+        var productID = $(this).data('id');
+        if (confirm('Bạn chắc chắn muốn xóa sản phẩm này?')) {
+            $.ajax({
+                type: "DELETE",
+                url: "http://localhost:8080/cart/delete/" + productID,
+                success: function(response){
+                    console.log(response);
+                    $('#deleteBtn' + productID).closest('tr').remove();
+                    window.location.reload();
+                },
+                error: function (error){
+                    console.log(error);
+                }
+            });
+        }
+    });
+
+    $(document).on('input', '.quantity-input', function(event) {
+        var id = $(this).data('id');
+        var newNumbers = $(this).val();
+        updateQuantityProduct(id, newNumbers);
+    });
+
+    function updateQuantityProduct(id, newNumbers) {
+        $.ajax({
+            type: "PUT",
+            url: "http://localhost:8080/cart/update/" + id,
+            contentType: "application/json",
+            data: JSON.stringify({
+                "number": newNumbers
+            }),
+            success: function(response) {
+                var productTotal = response.data.total;
+                // Hiển thị giá trị mới của sản phẩm theo thời gian thực
+                $('#productTotal').text(productTotal);
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function changePage(page, size, event) {
+        event.preventDefault();
+        getProductsInCart(page, size);
+    }
+
+</script>

@@ -33,23 +33,15 @@ public class DataImpl implements DataService {
     public Map<String, List<?>> getAllData() {
         Map<String, List<?>> allData = new HashMap<>();
 
-        // Lấy danh sách danh mục và chuyển đổi thành List<CategoryDTO>
+
         BaseResponse<List<CategoryDTO>> categoriesResponse = categoryService.getAll();
         List<CategoryDTO> categories = categoriesResponse.getData();
-
-        // Lấy danh sách nhà sản xuất và chuyển đổi thành List<ProducerDTO>
         BaseResponse<List<ProducerDTO>> producersResponse = producerService.getAll();
         List<ProducerDTO> producers = producersResponse.getData();
-
-        // Lấy danh sách màu sắc và chuyển đổi thành List<ColorDTO>
         BaseResponse<List<ColorDTO>> colorsResponse = colorService.getAll();
         List<ColorDTO> colors = colorsResponse.getData();
-
-        // Lấy danh sách kích thước và chuyển đổi thành List<SizeDTO>
         BaseResponse<List<SizeDTO>> sizesResponse = sizeService.getAll();
         List<SizeDTO> sizes = sizesResponse.getData();
-
-        // Đưa dữ liệu vào Map
         allData.put("categories", categories);
         allData.put("producers", producers);
         allData.put("colors", colors);

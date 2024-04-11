@@ -45,22 +45,23 @@
             <div class="col-lg-5 offset-lg-1">
                 <div class="s_product_text">
                     <h3>Faded SkyBlu Denim Jeans</h3>
-                    <h2>$149.99</h2>
+                    <h2>Giá : $149.99</h2>
                     <ul class="list">
+                        <li><a><span>Mã</span> : ABC</a></li>
                         <li><a class="active" href="#"><span>Loại</span> : Household</a></li>
-                        <li><a href="#"><span>Trạng thái</span> : In Stock</a></li>
+                        <li><a href="#"><span>Nhà sản xuất</span> : In Stock</a></li>
                     </ul>
-                    <p>Mill Oil is an innovative oil filled radiator with the most modern technology. If you are looking for
+                    <label>Kích cỡ : </label> <br>
+                    <div>
+                        <input type="checkbox">
+                    </div>
+                    <label>Màu sắc : </label> <br>
+                    <p><span>Mô tả</span> : Mill Oil is an innovative oil filled radiator with the most modern technology. If you are looking for
                         something that can make your interior look awesome, and at the same time give you the pleasant warm feeling
                         during the winter.</p>
                     <div class="product_count">
                         <label >Số lượng :</label>
-<!--                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"-->
-<!--                                class="increase items-count" type="button"><i class="ti-angle-left"></i></button>-->
                         <input type="text" name="qty" id="sst" size="2" maxlength="12" value="1" title="Quantity:" class="input-text qty">
-<!--                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value&#45;&#45;;return false;"-->
-<!--                                class="reduced items-count" type="button"><i class="ti-angle-right"></i></button>-->
-
                         <a class="button primary-btn" th:href="@{/user/productCheckout}">Mua ngay</a>
                     </div>
 

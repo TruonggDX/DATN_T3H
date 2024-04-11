@@ -15,6 +15,7 @@ import java.util.Set;
 
 @Table(name ="user")
 public class UserEntity extends AbstractEntity{
+
     @Column(name = "name")
     private String name;
     @Column(name = "code")
@@ -32,7 +33,7 @@ public class UserEntity extends AbstractEntity{
     @Column (name = "birthday")
     private String birthday;
     @Column (name = "loyal_customers")
-    private int loyalCustomers;
+    private Boolean loyalCustomers;
 
 
 
@@ -44,8 +45,7 @@ public class UserEntity extends AbstractEntity{
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<RoleEntity> roles = new HashSet<>();
-    @OneToMany(mappedBy = "user")
-    private List<CartEntity> carts;
+
 
     @OneToMany(mappedBy = "user")
     private List<RateEntity> rates;

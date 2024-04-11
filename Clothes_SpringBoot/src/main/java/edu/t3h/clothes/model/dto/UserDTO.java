@@ -20,6 +20,8 @@ public class UserDTO {
     private String birthday;
     private int loyalCustomers;
     private String password;
+    private Long roleId;
+    private String nameRole;
 
     List<RoleDTO> roleDtos;
 

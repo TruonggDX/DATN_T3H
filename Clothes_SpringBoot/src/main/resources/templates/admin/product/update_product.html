@@ -38,78 +38,45 @@
                 </div>
                 <div class="form-group">
                     <label>Danh mục</label>
-                    <select class="custom-select" id="list_category">
-                        <option>Áo</option>
-                        <option>Quần</option>
+                    <select class="custom-select" id="list_category" name="categoryId">
+
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>Nhà sản xuất</label>
-                    <select class="custom-select" id="list_producer">
-                        <option>Áo</option>
-                        <option>Quần</option>
+                    <select class="custom-select" id="list_producer" name="producerId">
+
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>Size</label>
-                    <div class="form-group-size" id="list_size">
+                    <div class="form-group-size" name="sizeId" id="list_size">
                         <div class="custom-control custom-checkbox">
                             <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
                             <label for="customCheckbox1" class="custom-control-label">XS</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" id="customCheckbox2" value="option1">
-                            <label for="customCheckbox2" class="custom-control-label">S</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" id="customCheckbox3" value="option1">
-                            <label for="customCheckbox3" class="custom-control-label">M</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" id="customCheckbox4" value="option1">
-                            <label for="customCheckbox4" class="custom-control-label">L</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" id="customCheckbox5" value="option1">
-                            <label for="customCheckbox5" class="custom-control-label">XL</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" id="customCheckbox6" value="option1">
-                            <label for="customCheckbox6" class="custom-control-label">XXL</label>
                         </div>
                     </div>
 
                 </div>
                 <div class="form-group">
-                    <div class="container">
-                        <div class="dual-list">
-                            <div class="list">
-                                <label>Danh sách màu</label>
-                                <input style="margin-left: 415px;" type="text" id="left-search" placeholder="Search...">
-                                <select  id="right-select" class="duallistbox" multiple="multiple">
-
-                                </select>
-                            </div>
-                            <div class="list_2">
-                                <label>Màu đã chọn</label>
-                                <!--                                <input type="text" id="right-search" placeholder="Search...">-->
-                                <select id="right-select" class="duallistbox_2" multiple="multiple"></select>
-                            </div>
-                        </div>
-                    </div>
-
+                    <label>Màu sắc</label>
+                    <select class="js-example-basic-multiple" name="colorId" id="list-color" multiple="multiple" style="width: 100%; height: 250px; font-size: 20px">
+                    </select>
+                </div>
 
                     <div class="form-group">
                         <label>Mô tả</label>
-                        <textarea class="form-control" name="productDescription" id="description" cols="150" rows="5"></textarea>
+                        <textarea class="form-control" name="productDescription" id="description" cols="150"
+                                  rows="5" ></textarea>
                     </div>
 
 
-            </div>
-            <div class="card-footer">
-                <button type="submit" class="btn btn-block btn-outline-primary btn-lg">Cập nhập</button>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-block btn-outline-primary btn-lg">Cập nhập</button>
+                </div>
             </div>
         </div>
     </form>
@@ -124,12 +91,13 @@
 </div>
 <div th:replace="admin/fragments/script :: script"></div>
 <style>
-    div, label,button,h3{
+    div, label, button, h3 {
         font-family: "Times New Roman";
     }
+
     .form-group-size .custom-control {
         display: inline-block;
-        margin-right: 90px; /* Khoảng cách giữa các checkbox */
+        margin-right: 90px;
     }
 
     .container {
@@ -137,155 +105,17 @@
         justify-content: center;
     }
 
-    .dual-list {
-        display: flex;
-    }
-
-    .list {
-        margin: 0 10px;
-        display: inline-block;
-    }
-    .list_2{
-        margin-top: 29px;
-    }
-    .duallistbox{
-        width: 615px;
-        height: 153px;
-        padding: 10px;
-        margin-top: 10px;
-    }
-    .duallistbox_2{
-        width: 615px;
-        height: 153px;
-        padding: 10px;
-        margin-top: 10px;
-    }
-
 </style>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const leftSelect = document.getElementById('right-select');
-        const rightSelect = document.getElementById('left-select');
 
-        leftSelect.addEventListener('click', function() {
-            const selectedOption = leftSelect.options[leftSelect.selectedIndex];
-            selectedOption.style.backgroundColor = 'white'; // Set background color to white
-            rightSelect.appendChild(selectedOption);
-            leftSelect.selectedIndex = -1; // Deselect the option
-        });
-
-        rightSelect.addEventListener('click', function() {
-            const selectedOption = rightSelect.options[rightSelect.selectedIndex];
-            selectedOption.style.backgroundColor = 'white'; // Set background color to white
-            leftSelect.appendChild(selectedOption);
-            rightSelect.selectedIndex = -1; // Deselect the option
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const leftSelect = document.getElementById('left-select');
-        const rightSelect = document.getElementById('right-select');
-        const leftSearch = document.getElementById('left-search');
-        const rightSearch = document.getElementById('right-search');
-
-        leftSearch.addEventListener('input', function() {
-            const searchValue = leftSearch.value.toLowerCase();
-            Array.from(leftSelect.options).forEach(option => {
-                const text = option.text.toLowerCase();
-                option.style.display = text.includes(searchValue) ? 'block' : 'none';
-            });
-        });
-
-        rightSearch.addEventListener('input', function() {
-            const searchValue = rightSearch.value.toLowerCase();
-            Array.from(rightSelect.options).forEach(option => {
-                const text = option.text.toLowerCase();
-                option.style.display = text.includes(searchValue) ? 'block' : 'none';
-            });
-        });
-    });
-
-
-
-</script>
-<script>
-    $(function () {
-        //Initialize Select2 Elements
-        $('.select2').select2()
-
-        //Initialize Select2 Elements
-        $('.select2bs4').select2({
-            theme: 'bootstrap4'
-        })
-
-        //Datemask dd/mm/yyyy
-        $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-        //Datemask2 mm/dd/yyyy
-        $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-        //Money Euro
-        $('[data-mask]').inputmask()
-
-        //Date range picker
-        $('#reservation').daterangepicker()
-        //Date range picker with time picker
-        $('#reservationtime').daterangepicker({
-            timePicker: true,
-            timePickerIncrement: 30,
-            locale: {
-                format: 'MM/DD/YYYY hh:mm A'
-            }
-        })
-        //Date range as a button
-        $('#daterange-btn').daterangepicker(
-            {
-                ranges   : {
-                    'Today'       : [moment(), moment()],
-                    'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month'  : [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                },
-                startDate: moment().subtract(29, 'days'),
-                endDate  : moment()
-            },
-            function (start, end) {
-                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-            }
-        )
-
-        //Timepicker
-        $('#timepicker').datetimepicker({
-            format: 'LT'
-        })
-
-        //Bootstrap Duallistbox
-        $('.duallistbox').bootstrapDualListbox()
-
-        //Colorpicker
-        $('.my-colorpicker1').colorpicker()
-        //color picker with addon
-        $('.my-colorpicker2').colorpicker()
-
-        $('.my-colorpicker2').on('colorpickerChange', function(event) {
-            $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
-        });
-
-        $("input[data-bootstrap-switch]").each(function(){
-            $(this).bootstrapSwitch('state', $(this).prop('checked'));
-        });
-
-    })
-</script>
 <script>
     function initData() {
         getProducer();
         getCategory();
-
-        getColores();
-        getSizes();
+        getColor();
+        getSize();
     }
-    function getProducer(){
+
+    function getProducer() {
         let list = $('#list_producer');
         list.empty();
         $.ajax({
@@ -305,6 +135,7 @@
             }
         });
     }
+
     function getCategory() {
         let list = $('#list_category');
         list.empty();
@@ -326,26 +157,7 @@
         });
     }
 
-    function getColores() {
-        let list = $('#right-select');
-        list.empty();
-        $.ajax({
-            type: "GET",
-            url: "http://localhost:8080/color/list",
-            dataType: "json",
-            success: function (response) {
-                let colors = response?.data;
-                colors.forEach(function (color) {
-                    let option = '<option value="' + color.id + '">' + color.name + '</option>';
-                    list.append(option);
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    }
-    function  getSizes(){
+    function getSize() {
         let list = $('#list_size');
         list.empty();
         $.ajax({
@@ -355,9 +167,11 @@
             success: function (response) {
                 let sizes = response?.data;
                 sizes.forEach(function (size) {
-                    let option = '<label   value="' + size.id + '">' + size.name + '</label>';
-
-                    list.append(option);
+                    let checkbox = $('<div class="custom-control custom-checkbox"> \
+                        <input class="custom-control-input" type="checkbox" id="customCheckbox' + size.id + '" value="' + size.name + '"> \
+                        <label for="customCheckbox' + size.id + '" class="custom-control-label">' + size.name + '</label> \
+                    </div>');
+                    $('#list_size').append(checkbox);
                 });
             },
             error: function (error) {
@@ -365,6 +179,30 @@
             }
         });
     }
+
+    function getColor(selectedColors) {
+        let list = $('#list-color');
+        list.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/color/list",
+            dataType: "json",
+            success: function (response) {
+                let colors = response?.data;
+                colors.forEach(function (color) {
+                    let selected = selectedColors.includes(color.id) ? "selected" : "";
+                    let option = '<option value="' + color.id + '" ' + selected + '>' + color.name + '</option>';
+                    list.append(option);
+                });
+                $('.js-example-basic-multiple').select2();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+
 
     function getInfoDataProduct(product) {
         $('#ids').val(product.id);
@@ -376,7 +214,19 @@
         $('#import_price').val(product.import_price);
         $('#description').val(product.description);
 
+        for (let i = 0; i < product.sizeId.length; i++) {
+            const id = product.sizeId[i];
+            const idCheckbox = 'customCheckbox' + id;
+            $('#' + idCheckbox).prop('checked', true);
+        }
+
+        let selectedColors = product.colorId;
+        getColor(selectedColors);
+
+        $('.js-example-basic-multiple').select2();
     }
+
+
 
     $(document).ready(function () {
         initData();
@@ -388,18 +238,16 @@
                 success: function (response) {
                     getInfoDataProduct(response.data);
                     let data = response.data;
-                    $('#list_producer').val(data.productId)
+                    $('#list_producer').val(data.producerId)
                     $('#list_category').val(data.categoryId)
 
-
+                    console.log(data)
                 },
                 error: function (error) {
                     console.log(error);
                 }
             });
         }
-
-
 
         $('#updateForm').submit(function (event) {
             event.preventDefault();
@@ -411,7 +259,9 @@
                 quantity: $('#quantity').val(),
                 price: $('#price').val(),
                 import_price: $('#import_price').val(),
-                description: $('#description').val()
+                description: $('#description').val(),
+                productId: $('#list_producer').val(),
+                categoryId: $('#list_category').val()
             };
             $.ajax({
                 type: "PUT",
@@ -429,8 +279,6 @@
             });
         });
     });
-
-
 
 
 </script>

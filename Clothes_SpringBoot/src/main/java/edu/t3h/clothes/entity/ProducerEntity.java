@@ -12,7 +12,9 @@ import java.util.Set;
 @Entity
 @Table(name = "producer")
 public class ProducerEntity extends AbstractEntity{
+    @Column(name = "code")
     private String code;
+    @Column(name = "name")
     private String name;
 
     public String getCode() {

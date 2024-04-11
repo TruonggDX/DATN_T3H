@@ -8,12 +8,10 @@
     <!-- Content -->
     <div class="content-wrapper" style="min-height: 332.4px;">
         <h3 style="text-align: center;padding: 5px 0px 5px 0px">Danh sách sản phẩm</h3>
-        <form action="">
+        <form class="form_search" id="searchForm" style="margin-left: 44%">
             <div class="form-group">
-                <input name="keyword" th:value="${keyword}" type="text" class="form-control"
-                       placeholder="Nhập nhà sản xuất tìm kiếm">
-                <button type="submit" class="btn btn-block btn-outline-primary">Tìm kiếm</button>
-
+                <input style="width: 500px" name="condition" id="searchCondition" type="text" class="form-control" placeholder="Nhập mã đơn hàng hoặc tên người dùng cần tìm kiếm">
+                <button type="button" id="searchBtn" class="btn btn-block btn-outline-primary">Tìm kiếm</button>
             </div>
         </form>
         <style>
@@ -62,7 +60,7 @@
                                 <th>Hành động</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="list_product">
                             </tbody>
                         </table>
                     </div>
@@ -203,6 +201,208 @@
                     }
 
                 </script>
+
+                <script>
+                    $(document).ready(function() {
+                        var checkStatus = false;
+
+
+                        $('#searchBtn').click(function() {
+                            checkStatus = !checkStatus;
+                            search();
+                        });
+
+                        function search() {
+                            var condition = $('#searchCondition').val();
+
+                            if (checkStatus) {
+                                $.ajax({
+                                    type: "GET",
+                                    url: "http://localhost:8080/product/searchByCondition/" + condition,
+                                    dataType: "json",
+                                    success: function(response) {
+                                        console.log(response);
+                                        $('#list_product').empty();
+                                        let products = response.data;
+                                        for (let i = 0; i < products.length; i++) {
+                                            let data = products[i];
+                                            let row = '<tr role="row" class="odd" >' +
+                                                '<td>' + data.id + '</td>' +
+                                                '<td>' + data.code + '</td>' +
+                                                '<td>' + data.name + '</td>' +
+                                                '<td>' + data.quantity + '</td>' +
+                                                '<td>' + data.price + '</td>' +
+                                                '<td>' + data.size + '</td>';
+
+                                            let imageColor = '';
+                                            if (data.imagesColor !== undefined && data.imagesColor !== null && data.imagesColor.length > 0) {
+                                                for (let j = 0; j < data.imagesColor.length; j++) {
+                                                    imageColor += '<img style="width: 50px;height: 50px" src="data:image/png;base64, ' + data.imagesColor[j] + '">';
+                                                }
+                                            } else {
+                                                imageColor += 'Empty';
+                                            }
+                                            row += '<td>' + imageColor + '</td>' +
+                                                '<td> <a class="btn btn-default edit-product-btn" data-id="' + data.id + '"><i class="fa-regular fa-pen-to-square"></i></a> ' +
+                                                '<a class="btn btn-default delete-product-btn" data-id="' + data.id + '"><i class="far fa-trash-can"></i></a></td>' +
+                                                '</tr>';
+                                            $('#list_product').append(row);
+                                        }
+                                        $('.delete-product-btn').click(function(event) {
+                                            event.preventDefault();
+                                            var productID = $(this).data('id');
+                                            if (confirm('Bạn chắc chắn muốn xóa sản phẩm này?')) {
+                                                $.ajax({
+                                                    type: "DELETE",
+                                                    url: "http://localhost:8080/product/delete/" + productID,
+                                                    success: function(response){
+                                                        console.log(response);
+
+                                                        $('#deleteBtn' + productID).closest('tr').remove();
+                                                        window.location.reload();
+                                                    },
+                                                    error: function (error){
+                                                        console.log(error);
+                                                    }
+                                                });
+                                            }
+                                        });
+
+                                        $('.edit-product-btn').click(function(event) {
+                                            event.preventDefault();
+                                            var productId = $(this).data('id');
+
+                                            $.ajax({
+                                                type: "GET",
+                                                url: "http://localhost:8080/product/search/" + productId,
+                                                success: function(response) {
+                                                    var product = response.data;
+                                                    window.location.href = '/admin/update_product?id=' + product.id;
+                                                },
+                                                error: function(error) {
+                                                    console.log(error);
+                                                }
+                                            });
+                                        });
+                                    },
+                                    error: function(error) {
+                                        console.log(error);
+                                    }
+                                });
+                            } else {
+                                getProducts();
+                            }
+                        }
+                        function getProducts(page, size) {
+                            let bodyTable = $('#tableDate > tbody');
+                            bodyTable.empty();
+                            $.ajax({
+                                type: "GET",
+                                url: "http://localhost:8080/product/list?page=" + page + "&size=" + size,
+                                dataType: "json",
+                                success: function (response) {
+                                    console.log(response);
+                                    $('#list_product').empty();
+                                    let products = response.data;
+                                    for (let i = 0; i < products.length; i++) {
+                                        let data = products[i];
+                                        let row = '<tr role="row" class="odd" >' +
+                                            '<td>' + data.id + '</td>' +
+                                            '<td>' + data.code + '</td>' +
+                                            '<td>' + data.name + '</td>' +
+                                            '<td>' + data.quantity + '</td>' +
+                                            '<td>' + data.price + '</td>' +
+                                            '<td>' + data.size + '</td>';
+
+                                        let imageColor = '';
+                                        if (data.imagesColor !== undefined && data.imagesColor !== null && data.imagesColor.length > 0) {
+                                            for (let j = 0; j < data.imagesColor.length; j++) {
+                                                imageColor += '<img style="width: 50px;height: 50px" src="data:image/png;base64, ' + data.imagesColor[j] + '">';
+                                            }
+                                        } else {
+                                            imageColor += 'Empty';
+                                        }
+                                        row += '<td>' + imageColor + '</td>' +
+                                            '<td> <a class="btn btn-default edit-product-btn" data-id="' + data.id + '"><i class="fa-regular fa-pen-to-square"></i></a> ' +
+                                            '<a class="btn btn-default delete-product-btn" data-id="' + data.id + '"><i class="far fa-trash-can"></i></a></td>' +
+                                            '</tr>';
+                                        $('#list_product').append(row);
+                                    }
+
+                                    // Phân trang
+                                    let totalPage = response.data.totalPages;
+                                    let currentPage = response.data.pageable.pageNumber;
+                                    if (totalPage > 0) {
+                                        $("#pageId").empty();
+                                        let pages = '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage - 1) + ',5,event)" href="#">Previous</a></li>';
+                                        for (let i = 0; i < totalPage; i++) {
+                                            if (currentPage === i) {
+                                                pages += '            <li class="page-item active">\n' +
+                                                    '                <a class="page-link " onclick="changePage(' + i + ',5,event)" href="#">' + (i + 1) + '</a></li>\n' +
+                                                    '            <li class="page-item">';
+                                            } else {
+                                                pages += '            <li class="page-item">\n' +
+                                                    '                <a class="page-link" onclick="changePage(' + i + ',5,event)" href="#">' + (i + 1) + '</a></li>\n' +
+                                                    '            <li class="page-item">';
+                                            }
+                                        }
+                                        pages += '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage + 1) + ',5,event)" href="#">Next</a></li>';
+                                        $("#pageId").append(pages);
+                                    }
+
+
+                                    $('.edit-product-btn').click(function(event) {
+                                        event.preventDefault();
+                                        var productId = $(this).data('id');
+
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "http://localhost:8080/product/search/" + productId,
+                                            success: function(response) {
+                                                var product = response.data;
+                                                window.location.href = '/admin/update_product?id=' + product.id;
+                                            },
+                                            error: function(error) {
+                                                console.log(error);
+                                            }
+                                        });
+                                    });
+
+
+                                    $('.delete-product-btn').click(function(event) {
+                                        event.preventDefault();
+                                        var productID = $(this).data('id');
+                                        if (confirm('Bạn chắc chắn muốn xóa sản phẩm này?')) {
+                                            $.ajax({
+                                                type: "DELETE",
+                                                url: "http://localhost:8080/product/delete/" + productID,
+                                                success: function(response){
+                                                    console.log(response);
+
+                                                    $('#deleteBtn' + productID).closest('tr').remove();
+                                                    window.location.reload();
+                                                },
+                                                error: function (error){
+                                                    console.log(error);
+                                                }
+                                            });
+                                        }
+                                    });
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+
+                            });
+                        }
+
+                        function changePage(page, size, event) {
+                            event.preventDefault();
+                            getProducts(page, size);
+                        }
+                    });
+                </script>
+
                 <div th:replace="admin/fragments/script :: script"></div>
             </div>
         </div>

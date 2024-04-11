@@ -1,4 +1,7 @@
 <!--================ Start Header Menu Area =================-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <header class="header_area">
     <div class="main_menu">
         <nav class="navbar navbar-expand-lg navbar-light">
@@ -116,7 +119,7 @@
     </div>
 
     <!-- Modal edit-->
-    <div style="opacity: 0.8 ;" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div style="z-index: -1" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -127,12 +130,39 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="" aria-describedby="emailHelp" placeholder="Nhập sản phẩm cần tìm">
-
+                        <form class="form_search" id="searchForm">
+                            <div class="form-group">
+                                <input name="condition" id="searchCondition" type="text" class="form-control" placeholder="Nhập sản phẩm cần tìm ">
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </header>
+<script>
+    $(document).ready(function () {
+        initData();
+    })
+
+    function initData() {
+        getProductByName();
+    }
+    function getProductByName(){
+        var searchCondition = $("#searchCondition").val();
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/product/searchProductByName/" + searchCondition,
+                success: function(response) {
+                    var product = response.data;
+                    // window.location.href = '/user/product_dentails?id=' + searchCondition;
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+    }
+</script>
 <!--================ End Header Menu Area =================-->

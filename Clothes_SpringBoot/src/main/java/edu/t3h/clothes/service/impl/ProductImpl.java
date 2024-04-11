@@ -1,6 +1,7 @@
 package edu.t3h.clothes.service.impl;
 
 import edu.t3h.clothes.entity.*;
+import edu.t3h.clothes.model.dto.OrdersDTO;
 import edu.t3h.clothes.model.dto.ProductDTO;
 import edu.t3h.clothes.model.request.ProductFilterRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
@@ -32,19 +33,19 @@ public class ProductImpl implements IProductService {
     private Logger logger = LoggerFactory.getLogger(ProductImpl.class);
     private final ProductRepository productRepository;
     private final CategoryRepository categoryReponsitory;
+    private final ProducerReposiroty producerReposiroty;
 
     @Autowired
     private ColorRepository colorRepository;
     @Autowired
     private SizeRepository sizeRepository;
-    @Autowired
-    private ProducerReposiroty producerReposiroty;
 
     private final ModelMapper modelMapper;
 
-    public ProductImpl(ProductRepository productRepository, CategoryRepository categoryReponsitory, ModelMapper modelMapper) {
+    public ProductImpl(ProductRepository productRepository,ProducerReposiroty producerReposiroty ,CategoryRepository categoryReponsitory, ModelMapper modelMapper) {
         this.productRepository = productRepository;
         this.categoryReponsitory = categoryReponsitory;
+        this.producerReposiroty = producerReposiroty;
         this.modelMapper = modelMapper;
     }
 
@@ -64,6 +65,10 @@ public class ProductImpl implements IProductService {
                 List<String> imagesColor = productEntity.getColorEntities().stream().map(ColorEntity::getImage).collect(Collectors.toList());
                 productDTO.setSize(sizeNames);
                 productDTO.setImagesColor(imagesColor);
+                List<Long> sizeIds = productEntity.getSizeEntities().stream().map(SizeEntity::getId).collect(Collectors.toList());
+                productDTO.setSizeId(sizeIds);
+                List<Long> colorId = productEntity.getColorEntities().stream().map(ColorEntity::getId).collect(Collectors.toList());
+                productDTO.setColorId(colorId);
                 return productDTO;
             }).collect(Collectors.toList());
 
@@ -89,6 +94,7 @@ public class ProductImpl implements IProductService {
     public BaseResponse<?> createProduct(ProductDTO productDTO) {
         logger.info("start create product: {}", productDTO.toString());
         BaseResponse baseResponse = new BaseResponse();
+
         Optional<CategoryEntity> category = categoryReponsitory.findById(productDTO.getCategoryId());
 
         if (category.isEmpty()) {
@@ -96,14 +102,16 @@ public class ProductImpl implements IProductService {
             baseResponse.setMessage("category not exists in system");
             return baseResponse;
         }
-        Optional<ProducerEntity> producer = producerReposiroty.findById(productDTO.getProducerIds());
+
+        Optional<ProducerEntity> producer = producerReposiroty.findById(productDTO.getProducerId());
 
         if (producer.isEmpty()) {
             baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
-            baseResponse.setMessage("category not exists in system");
+            baseResponse.setMessage("producer not exists in system");
             return baseResponse;
         }
-        Set<SizeEntity> sizeEntities = sizeRepository.findByIds(productDTO.getSizeIds());
+
+        Set<SizeEntity> sizeEntities = sizeRepository.findByIds(productDTO.getSizeId());
 
         if (CollectionUtils.isEmpty(sizeEntities)) {
             baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
@@ -111,7 +119,7 @@ public class ProductImpl implements IProductService {
             return baseResponse;
         }
 
-        Set<ColorEntity> colorEntities = colorRepository.findByIdIsInAndDeletedIsFalse(productDTO.getColorIds());
+        Set<ColorEntity> colorEntities = colorRepository.findByIdIsInAndDeletedIsFalse(productDTO.getColorId());
 
         if (CollectionUtils.isEmpty(colorEntities)) {
             baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
@@ -148,15 +156,8 @@ public class ProductImpl implements IProductService {
         Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
         if (optionalProductEntity.isPresent()) {
             ProductEntity productEntity = optionalProductEntity.get();
-
-            // Xóa các liên kết trong bảng trung gian product_size
             productEntity.getSizeEntities().clear();
-
-
-            // Xóa các liên kết trong bảng trung gian product_color
             productEntity.getColorEntities().clear();
-
-            // Thay đổi trạng thái deleted của sản phẩm và lưu thay đổi vào database
             productEntity.setDeleted(true);
             productRepository.save(productEntity);
 
@@ -188,7 +189,10 @@ public class ProductImpl implements IProductService {
             return modelMapper.map(response, ProductDTO.class);
         }
 
-        return modelMapper.map(productEntity, ProductDTO.class);
+        ProductDTO productDTO = modelMapper.map(productEntity, ProductDTO.class);
+        productDTO.setSizeId(productEntity.getSizeEntities().stream().map(data -> data.getId()).collect(Collectors.toList()));
+        productDTO.setColorId(productEntity.getColorEntities().stream().map(data -> data.getId()).collect(Collectors.toList()));
+        return productDTO;
     }
 
 
@@ -199,6 +203,13 @@ public class ProductImpl implements IProductService {
         Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
         if (optionalProductEntity.isPresent()) {
             ProductEntity productEntity = optionalProductEntity.get();
+            productEntity.setName(productDTO.getName());
+            productEntity.setCode(productDTO.getCode());
+            productEntity.setMaterial(productDTO.getMaterial());
+            productEntity.setQuantity(productDTO.getQuantity());
+            productEntity.setPrice(productDTO.getPrice());
+            productEntity.setImport_price(productDTO.getImport_price());
+            productEntity.setDescription(productDTO.getDescription());
             // Cập nhật thông tin sản phẩm
             modelMapper.map(productDTO, productEntity);
 
@@ -212,17 +223,17 @@ public class ProductImpl implements IProductService {
                 return response;
             }
 
-            Optional<ProducerEntity> producerEntities = producerReposiroty.findById(productDTO.getProducerIds());
+            Optional<ProducerEntity> producerEntities = producerReposiroty.findById(productDTO.getProducerId());
 
             if (producerEntities.isPresent()) {
                 productEntity.setProducerEntity(producerEntities.get());
             } else {
                 response.setCode(HttpStatus.BAD_REQUEST.value());
-                response.setMessage("Category not found with id " + productDTO.getProducerIds());
+                response.setMessage("Category not found with id " + productDTO.getProducerId());
                 return response;
             }
 
-            Set<SizeEntity> sizeEntities = sizeRepository.findByIds(productDTO.getSizeIds());
+            Set<SizeEntity> sizeEntities = sizeRepository.findByIds(productDTO.getSizeId());
             if (!CollectionUtils.isEmpty(sizeEntities)) {
                 productEntity.setSizeEntities(sizeEntities);
             } else {
@@ -231,7 +242,7 @@ public class ProductImpl implements IProductService {
                 return response;
             }
 
-            Set<ColorEntity> colorEntities = colorRepository.findByIdIsInAndDeletedIsFalse(productDTO.getColorIds());
+            Set<ColorEntity> colorEntities = colorRepository.findByIdIsInAndDeletedIsFalse(productDTO.getColorId());
             if (!CollectionUtils.isEmpty(colorEntities)) {
                 productEntity.setColorEntities(colorEntities);
             } else {
@@ -248,6 +259,122 @@ public class ProductImpl implements IProductService {
             response.setCode(HttpStatus.NOT_FOUND.value());
             response.setMessage("Product with id " + productId + " not found");
         }
+        return response;
+    }
+
+    @Override
+    public BaseResponse<List<ProductDTO>> findProductsByCategoryId(Long categoryId) {
+        BaseResponse<List<ProductDTO>> response = new BaseResponse<>();
+        List<ProductEntity> products = productRepository.findProductsByCategoryId(categoryId);
+        if (products != null && !products.isEmpty()) {
+            List<ProductDTO> productDTOs = new ArrayList<>();
+            for (ProductEntity product : products) {
+                ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+                List<Long> sizeIds = product.getSizeEntities().stream().map(SizeEntity::getId).collect(Collectors.toList());
+                List<Long> colorIds = product.getColorEntities().stream().map(ColorEntity::getId).collect(Collectors.toList());
+                productDTO.setSizeId(sizeIds);
+                productDTO.setColorId(colorIds);
+                productDTOs.add(productDTO);
+            }
+            response.setData(productDTOs);
+            response.setCode(HttpStatus.OK.value());
+            response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+        } else {
+            response.setCode(HttpStatus.NOT_FOUND.value());
+            response.setMessage(Constant.HTTP_MESSAGE.FAILED);
+        }
+        return response;
+    }
+    @Override
+    public BaseResponse<List<ProductDTO>> findProductsByName(String name) {
+        BaseResponse<List<ProductDTO>> response = new BaseResponse<>();
+        List<ProductEntity> products = productRepository.findProductsByName(name);
+        if (products != null && !products.isEmpty()) {
+            List<ProductDTO> productDTOs = new ArrayList<>();
+            for (ProductEntity product : products) {
+                ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+                List<Long> sizeIds = product.getSizeEntities().stream().map(SizeEntity::getId).collect(Collectors.toList());
+                List<Long> colorIds = product.getColorEntities().stream().map(ColorEntity::getId).collect(Collectors.toList());
+                productDTO.setSizeId(sizeIds);
+                productDTO.setColorId(colorIds);
+                productDTOs.add(productDTO);
+            }
+            response.setData(productDTOs);
+            response.setCode(HttpStatus.OK.value());
+            response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+        } else {
+            response.setCode(HttpStatus.NOT_FOUND.value());
+            response.setMessage(Constant.HTTP_MESSAGE.FAILED);
+        }
+        return response;
+    }
+
+    @Override
+    public BaseResponse<List<ProductDTO>> searchProductCondition(String condition) {
+        List<ProductEntity> productEntities = productRepository.searchProductByNameAndCode(condition);
+        List<ProductDTO> productDTOs = new ArrayList<>();
+        for (ProductEntity product : productEntities) {
+            ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+            List<Long> sizeIds = product.getSizeEntities().stream().map(SizeEntity::getId).collect(Collectors.toList());
+            List<Long> colorIds = product.getColorEntities().stream().map(ColorEntity::getId).collect(Collectors.toList());
+            productDTO.setSizeId(sizeIds);
+            productDTO.setColorId(colorIds);
+            productDTOs.add(productDTO);
+        }
+        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, productDTOs);
+    }
+
+    @Override
+    public BaseResponse<List<ProductDTO>> getProductBestSellers() {
+        BaseResponse<List<ProductDTO>> response = new BaseResponse<>();
+        List<ProductEntity> productEntities = productRepository.productBestSeller();
+
+        if (productEntities != null && !productEntities.isEmpty()) {
+            List<ProductDTO> productDTOs = new ArrayList<>();
+            for (ProductEntity product : productEntities) {
+                ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+                List<Long> sizeIds = product.getSizeEntities().stream().map(SizeEntity::getId).collect(Collectors.toList());
+                List<Long> colorIds = product.getColorEntities().stream().map(ColorEntity::getId).collect(Collectors.toList());
+                productDTO.setSizeId(sizeIds);
+                productDTO.setColorId(colorIds);
+                productDTOs.add(productDTO);
+            }
+
+            response.setData(productDTOs);
+            response.setCode(HttpStatus.OK.value());
+            response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+        } else {
+            response.setCode(HttpStatus.OK.value());
+            response.setMessage(Constant.HTTP_MESSAGE.FAILED);
+        }
+
+        return response;
+    }
+
+    @Override
+    public BaseResponse<List<ProductDTO>> findProductsInPriceRange(double minPrice, double maxPrice) {
+        BaseResponse<List<ProductDTO>> response = new BaseResponse<>();
+        List<ProductEntity> products = new ArrayList<>();
+
+        if (minPrice < 0 || maxPrice < 0 || maxPrice < minPrice) {
+            response.setMessage(Constant.HTTP_MESSAGE.FAILED);
+            response.setCode(HttpStatus.BAD_REQUEST.value());
+        } else {
+            products = productRepository.findProductsInPriceRange(minPrice, maxPrice);
+            List<ProductDTO> productDTOs = new ArrayList<>();
+            for (ProductEntity product : products) {
+                ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+                List<Long> sizeIds = product.getSizeEntities().stream().map(SizeEntity::getId).collect(Collectors.toList());
+                List<Long> colorIds = product.getColorEntities().stream().map(ColorEntity::getId).collect(Collectors.toList());
+                productDTO.setSizeId(sizeIds);
+                productDTO.setColorId(colorIds);
+                productDTOs.add(productDTO);
+            }
+            response.setData(productDTOs);
+            response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+            response.setCode(HttpStatus.OK.value());
+        }
+
         return response;
     }
 
