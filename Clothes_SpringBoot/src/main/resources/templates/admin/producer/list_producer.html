@@ -5,38 +5,74 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  <nav th:replace="admin/fragments/navbar :: navbar"></nav>
-  <aside th:replace="admin/fragments/sidebar :: sidebar"></aside>
-  <!-- Content -->
-  <div class="content-wrapper" style="min-height: 332.4px;">
-    <h3 style="text-align: center;padding: 5px 0px 5px 0px">Danh sách nhà sản xuất</h3>
-    <button style="width: 100px; float: left;margin-left: 20px" data-toggle="modal" data-target="#modal-lg" type="button" class="btn btn-block btn-outline-info"><i class="fa-solid fa-plus"></i> Thêm</button>
-    <form class="form_search" id="searchForm">
-      <div class="form-group">
-        <input name="condition" id="searchCondition" type="text" class="form-control" placeholder="Nhập điều kiện tìm kiếm">
-        <button type="button" id="searchBtn" class="btn btn-block btn-outline-primary">Tìm kiếm</button>
-      </div>
-    </form>
+    <nav th:replace="admin/fragments/navbar :: navbar"></nav>
+    <aside th:replace="admin/fragments/sidebar :: sidebar"></aside>
+    <!-- Content -->
+    <div class="content-wrapper" style="min-height: 332.4px;">
+        <h3 style="text-align: center;padding: 5px 0px 5px 0px">Danh sách nhà sản xuất</h3>
+        <button style="width: 100px; float: left;margin-left: 20px" data-toggle="modal" data-target="#modal-lg"
+                type="button" class="btn btn-block btn-outline-info"><i class="fa-solid fa-plus"></i> Thêm
+        </button>
+      <form class="form_search" id="searchForm" style="margin-left: 44%">
+        <div class="form-group" style="float: right;margin-right: 20px">
+          <input style="width: 400px" name="condition" id="searchCondition" type="text" class="form-control" placeholder="Nhập mã nhà sản xất hoặc tên nhà sản xuất cần tìm ?">
+          <button type="button" id="searchBtn" class="btn btn-block btn-outline-primary">Tìm kiếm</button>
+        </div>
+      </form>
+      <style>
+        .form-group {
+          display: flex;
+          align-items: center;
+        }
 
-    <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
-      <table style="width: 100%" id="tableProducer" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
-        <thead>
-        <tr role="row">
-          <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">ID</th>
-          <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Mã NSX</th>
-          <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Tên NSX</th>
-          <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Hành động</th>
-        </tr>
-        </thead>
-        <tbody id="producer-list">
+        .form-group label {
+          width: 35px;
+          margin: 5px 0 0 20px;
+        }
 
-        </tbody>
+        .form-group input {
+          width: 230px;
+          margin-left: 20px;
+          margin-right: 20px;
+        }
 
-      </table>
+        .form-group button {
+          width: 150px;
+        }
+
+      </style>
+        <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
+            <table style="width: 100%" id="tableProducer" class="table table-bordered table-hover dataTable dtr-inline"
+                   role="grid" aria-describedby="example2_info">
+                <thead>
+                <tr role="row">
+                    <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                        aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">ID
+                    </th>
+                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                        aria-label="Platform(s): activate to sort column ascending">Mã NSX
+                    </th>
+                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                        aria-label="Browser: activate to sort column ascending">Tên NSX
+                    </th>
+                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                        aria-label="Platform(s): activate to sort column ascending">Hành động
+                    </th>
+                </tr>
+                </thead>
+                <tbody id="producer-list">
+
+                </tbody>
+
+            </table>
+        </div>
+      <nav aria-label="...">
+        <ul class="pagination" id="pageId" style="justify-content: center">
+        </ul>
+      </nav>
     </div>
-  </div>
-  <!-- End Content -->
-  <aside class="control-sidebar control-sidebar-dark"></aside>
+    <!-- End Content -->
+    <aside class="control-sidebar control-sidebar-dark"></aside>
 
 
 </div>
@@ -45,236 +81,301 @@
 <!-- Modal -->
 
 <div style="margin-left:200px ; margin-top: 50px" class="modal fade" id="modal-lg">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content" style="width: 500px">
-      <form method="post">
-        <div class="modal-header">
-          <h4 class="modal-title">Thêm Nhà Sản Xuất</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="width: 500px">
+            <form method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm Nhà Sản Xuất</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label style="width: 135px">Mã NSX</label>
+                        <input th:name="code" type="text" class="form-control" placeholder="Nhập mã nhà sản xuất">
+                    </div>
+                    <div class="form-group">
+                        <label style="width: 135px">Tên NSX</label>
+                        <input th:name="name" type="text" class="form-control" placeholder="Nhập tên nhà sản xuất">
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
         </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label style="width: 135px">Mã NSX</label>
-            <input th:name="code" type="text" class="form-control" placeholder="Nhập mã nhà sản xuất">
-          </div>
-          <div class="form-group">
-            <label style="width: 135px">Tên NSX</label>
-            <input th:name="name" type="text" class="form-control" placeholder="Nhập tên nhà sản xuất">
-          </div>
-        </div>
-        <div class="modal-footer justify-content-between">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-      </form>
     </div>
-  </div>
 </div>
 <style>
-  .form_search {
-    margin-left: 808px;
-  }
+    .form_search {
+        margin-left: 808px;
+    }
 
-  .form-group {
-    display: flex;
-    align-items: center;
-  }
+    .form-group {
+        display: flex;
+        align-items: center;
+    }
 
-  .form-group label {
-    width: 35px;
-    margin: 5px 0 0 20px;
-  }
+    .form-group label {
+        width: 35px;
+        margin: 5px 0 0 20px;
+    }
 
-  .form-group input {
-    width: 250px;
-    margin-left: 20px;
-    margin-right: 20px;
-  }
+    .form-group input {
+        width: 250px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
 
-  .form-group button {
-    width: 150px;
-  }
-  table,tr,th,td,h3{
-    text-align: center;
-    font-family: "Times New Roman";
-  }
+    .form-group button {
+        width: 150px;
+    }
+
+    table, tr, th, td, h3 {
+        text-align: center;
+        font-family: "Times New Roman";
+    }
 </style>
 <script>
-  $(document).ready(function () {
-    initData();
-  });
-  function initData() {
-    getProducers();
-  }
-  function getProducers() {
-    let bodyTable = $('#tableProducer > tbody');
-    bodyTable.empty();
-    $.ajax({
-      type: "GET",
-      url: "http://localhost:8080/producer/list",
-      dataType: "json",
-      success: function (response) {
-        console.log(response);
-        let producers = response?.data;
-        producers.forEach(function (data) {
-          let row = '<tr role="row" class="odd" >' +
-                  '<td tabindex="0" class="sorting_1" >' + data.id + '</td>' +
-                  '<td style="width: 15%;">' + data.code + '</td>' +
-                  '<td>' + data.name + '</td>' +
-                  '<td> <a  class="btn btn-default edit-producer-btn" data-id="' + data.id + '"><i class="fa-regular fa-pen-to-square"></i></a> ' +
-                  '<a class="btn btn-default delete-producer-btn" data-id="' + data.id + '"> <i class="far fa-trash-can"></i></a></td>' +
-                  '</tr>';
-          bodyTable.append(row);
-        });
-
-
-        $('.delete-producer-btn').click(function(event) {
-          event.preventDefault();
-          var producerId = $(this).data('id');
-          if (confirm('Bạn chắc chắn muốn xóa?')) {
-            $.ajax({
-              type: "POST",
-              url: "http://localhost:8080/producer/delete/" + producerId,
-              success: function(response){
-                console.log(response);
-
-                $('#deleteBtn' + producerId).closest('tr').remove();
-                window.location.reload();
-              },
-              error: function (error){
-                console.log(error);
-              }
-            });
-          }
-        });
-
-
-        $('.edit-producer-btn').click(function(event) {
-          event.preventDefault();
-          var producerId = $(this).data('id');
-
-          $.ajax({
-            type: "GET",
-            url: "http://localhost:8080/producer/search/" + producerId,
-            success: function(response) {
-              var producer = response.data;
-              window.location.href = '/admin/update_producer?id=' + producer.id;
-            },
-            error: function(error) {
-              console.log(error);
-            }
-          });
-        });
-
-
-      },
-      error: function (error){
-        console.log(error);
-      }
+    $(document).ready(function () {
+        initData();
     });
-  }
-  $('#modal-lg form').submit(function (event) {
-    event.preventDefault();
 
-    var formData = {
-      code: $('input[name="code"]').val(),
-      name: $('input[name="name"]').val()
-    };
-
-    $.ajax({
-      type: "POST",
-      url: "http://localhost:8080/producer/create",
-      contentType: "application/json",
-      data: JSON.stringify(formData),
-      dataType: "json",
-      success: function (response) {
-        console.log(response);
-        $('#modal-lg').modal('hide');
-        window.location.reload();
-      },
-      error: function (error){
-        console.log(error);
-      }
-    });
-  });
-
-
-
-  var check = false;
-
-  function search() {
-    event.preventDefault();
-    var searchCondition = $("#searchCondition").val();
-
-    if (check) {
-      $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/producer/searchByCondition/" + searchCondition,
-        success: function(response) {
-          $("#producer-list").empty();
-          response.data.forEach(function(data) {
-            var row = '<tr role="row" class="odd" >' +
-                    '<td tabindex="0" class="sorting_1" >' + data.id + '</td>' +
-                    '<td style="width: 15%;">' + data.code + '</td>' +
-                    '<td>' + data.name + '</td>' +
-                    '<td> <a  class="btn btn-default edit-producer-btn" data-id="' + data.id + '"><i class="fa-regular fa-pen-to-square"></i></a> ' +
-                    '<a class="btn btn-default delete-producer-btn" data-id="' + data.id + '"> <i class="far fa-trash-can"></i></a></td>' +
-                    '</tr>';
-            $("#producer-list").append(row);
-          });
-          $('.delete-producer-btn').click(function(event) {
-            event.preventDefault();
-            var producerId = $(this).data('id');
-            if (confirm('Bạn chắc chắn muốn xóa?')) {
-              $.ajax({
-                type: "POST",
-                url: "http://localhost:8080/producer/delete/" + producerId,
-                success: function(response){
-                  console.log(response);
-
-                  $('#deleteBtn' + producerId).closest('tr').remove();
-                  window.location.reload();
-                },
-                error: function (error){
-                  console.log(error);
-                }
-              });
-            }
-          });
-
-
-          $('.edit-producer-btn').click(function(event) {
-            event.preventDefault();
-            var producerId = $(this).data('id');
-
-            $.ajax({
-              type: "GET",
-              url: "http://localhost:8080/producer/search/" + producerId,
-              success: function(response) {
-                var producer = response.data;
-                window.location.href = '/admin/update_producer?id=' + producer.id;
-              },
-              error: function(error) {
-                console.log(error);
-              }
-            });
-          });
-        },
-        error: function(error) {
-          console.log(error);
-        }
-      });
-    } else {
-     getProducers();
+    function initData() {
+        let page = 0;
+        let size = 5;
+        getProducers(page, size);
     }
-  }
 
-  $("#searchBtn").click(function() {
-    check = !check;
-    search();
-  });
+    function getProducers(page, size) {
+        let bodyTable = $('#tableProducer > tbody');
+        bodyTable.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/producer/list?page=" + page + "&size=" + size,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                let producers = response?.data?.content;
+                // hiển thị dữ liệu trên bảng
+                for (let i = 0; i < producers.length; i++) {
+                    let data = producers[i];
+                    let row = '<tr role="row" class="odd" >' +
+                        '<td tabindex="0" class="sorting_1">' + data.id + '</td>' +
+                        '<td >' + data.code + '</td>' +
+                        '<td >' + data.name + '</td>' +
+                        '<td> <a  class="btn btn-default edit-producer-btn" data-id="' + data.id + '"><i class="fa-regular fa-pen-to-square"></i></a> ' +
+                        '<a class="btn btn-default delete-producer-btn" data-id="' + data.id + '"> <i class="far fa-trash-can"></i></a></td>' +
+                        '</tr>';
+                  bodyTable.append(row);
+                }
+
+                // Phân trang
+                let totalPage = response.data.totalPages;
+                let currentPage = response.data.pageable.pageNumber;
+                if (totalPage > 0) {
+                    $("#pageId").empty();
+                    let pages = '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage - 1) + ',5,event)" href="#"><i class="fa-solid fa-chevron-up fa-rotate-270"></i></a></li>';
+                    for (let i = 0; i < totalPage; i++) {
+                        if (currentPage === i) {
+                            pages += '            <li class="page-item active">\n' +
+                                '                <a class="page-link " onclick="changePage(' + i + ',5,event)" href="#">' + (i + 1) + '</a></li>\n' +
+                                '            <li class="page-item">';
+                        } else {
+                            pages += '            <li class="page-item">\n' +
+                                '                <a class="page-link" onclick="changePage(' + i + ',5,event)" href="#">' + (i + 1) + '</a></li>\n' +
+                                '            <li class="page-item">';
+                        }
+                    }
+                    pages += '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage + 1) + ',5,event)" href="#"><i class="fa-solid fa-chevron-up fa-rotate-90"></i></a></li>';
+                    $("#pageId").append(pages);
+                }
+
+
+                $('.delete-producer-btn').click(function (event) {
+                    event.preventDefault();
+                    var producerId = $(this).data('id');
+                    if (confirm('Bạn chắc chắn muốn xóa?')) {
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:8080/producer/delete/" + producerId,
+                            success: function (response) {
+                                console.log(response);
+
+                                $('#deleteBtn' + producerId).closest('tr').remove();
+                                window.location.reload();
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                });
+
+
+                $('.edit-producer-btn').click(function (event) {
+                    event.preventDefault();
+                    var producerId = $(this).data('id');
+
+                    $.ajax({
+                        type: "GET",
+                        url: "http://localhost:8080/producer/search/" + producerId,
+                        success: function (response) {
+                            var producer = response.data;
+                            window.location.href = '/admin/update_producer?id=' + producer.id;
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                });
+
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+    function changePage(page, size, event) {
+        event.preventDefault();
+      getProducers(page, size);
+    }
+
+
+    $('#modal-lg form').submit(function (event) {
+        event.preventDefault();
+
+        var formData = {
+            code: $('input[name="code"]').val(),
+            name: $('input[name="name"]').val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/producer/create",
+            contentType: "application/json",
+            data: JSON.stringify(formData),
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                $('#modal-lg').modal('hide');
+                window.location.reload();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+
+
+    var check = false;
+
+    function search(page, size) {
+        event.preventDefault();
+        var searchCondition = $("#searchCondition").val();
+
+        if (check) {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/producer/searchByCondition/" + searchCondition,
+                data: { page: page, size: size },
+                success: function (response) {
+                    $("#producer-list").empty();
+                    console.log(response);
+                    let producers = response?.data?.content;
+                    for (let i = 0; i < producers.length; i++) {
+                        let data = producers[i];
+                        var row = '<tr role="row" class="odd" >' +
+                            '<td tabindex="0" class="sorting_1" >' + data.id + '</td>' +
+                            '<td style="width: 15%;">' + data.code + '</td>' +
+                            '<td>' + data.name + '</td>' +
+                            '<td> <a  class="btn btn-default edit-producer-btn" data-id="' + data.id + '"><i class="fa-regular fa-pen-to-square"></i></a> ' +
+                            '<a class="btn btn-default delete-producer-btn" data-id="' + data.id + '"> <i class="far fa-trash-can"></i></a></td>' +
+                            '</tr>';
+                        $("#producer-list").append(row);
+                    }
+                    // Pagination
+                    let totalPage = response.data.totalPages;
+                    let currentPage = response.data.pageable.pageNumber;
+                    if (totalPage > 0) {
+                        $("#pageId").empty();
+                        let pages = '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage - 1) + ',5,event)" href="#"><i class="fa-solid fa-chevron-up fa-rotate-270"></i></a></li>';
+                        for (let i = 0; i < totalPage; i++) {
+                            if (currentPage === i) {
+                                pages += '<li class="page-item active">\n' +
+                                    '<a class="page-link " onclick="changePage(' + i + ',5,event)" href="#">' + (i + 1) + '</a></li>\n' +
+                                    '<li class="page-item">';
+                            } else {
+                                pages += '<li class="page-item">\n' +
+                                    '<a class="page-link" onclick="changePage(' + i + ',5,event)" href="#">' + (i + 1) + '</a></li>\n' +
+                                    '<li class="page-item">';
+                            }
+                        }
+                        pages += '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage + 1) + ',5,event)" href="#"><i class="fa-solid fa-chevron-up fa-rotate-90"></i></a></li>';
+                        $("#pageId").append(pages);
+                    }
+                    $('.delete-producer-btn').click(function (event) {
+                        event.preventDefault();
+                        var producerId = $(this).data('id');
+                        if (confirm('Bạn chắc chắn muốn xóa?')) {
+                            $.ajax({
+                                type: "POST",
+                                url: "http://localhost:8080/producer/delete/" + producerId,
+                                success: function (response) {
+                                    console.log(response);
+
+                                    $('#deleteBtn' + producerId).closest('tr').remove();
+                                    window.location.reload();
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        }
+                    });
+
+
+                    $('.edit-producer-btn').click(function (event) {
+                        event.preventDefault();
+                        var producerId = $(this).data('id');
+
+                        $.ajax({
+                            type: "GET",
+                            url: "http://localhost:8080/producer/search/" + producerId,
+                            success: function (response) {
+                                var producer = response.data;
+                                window.location.href = '/admin/update_producer?id=' + producer.id;
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        } else {
+            getProducers(page,size);
+        }
+    }
+    $("#searchBtn").click(function() {
+        check = !check;
+        let page = 0;
+        let size = 5;
+        search(page, size);
+    });
+
+    function changePage(page, size, event) {
+        event.preventDefault();
+        search(page, size);
+    }
 
 </script>
 </body>

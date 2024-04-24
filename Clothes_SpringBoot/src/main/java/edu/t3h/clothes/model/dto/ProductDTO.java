@@ -11,7 +11,7 @@ import java.util.List;
 
 @Setter
 @Getter
-@Data
+
 public class ProductDTO {
     private Long id;
 

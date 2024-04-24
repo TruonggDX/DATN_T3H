@@ -10,6 +10,7 @@ public class CartEntity extends AbstractEntity{
     private Long number;
     private Double price;
     private Double total;
+    private Double total_cart;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

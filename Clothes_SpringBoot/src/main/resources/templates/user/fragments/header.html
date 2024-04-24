@@ -16,14 +16,14 @@
                 </button>
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
-                        <li class="nav-item active"><a id="a_hover" class="nav-link" th:href="@{/user}">Trang chủ</a></li>
-                        <li class="nav-item active"><a id="a_hover" class="nav-link" th:href="@{/user/categroyshop}">Cửa hàng</a></li>
+                        <li class="nav-item active"><a  class="nav-link" th:href="@{/user}">Trang chủ</a></li>
+                        <li class="nav-item active"><a  class="nav-link" th:href="@{/user/categroyshop}">Cửa hàng</a></li>
                         <li class="nav-item submenu dropdown">
-                            <a id="a_hover" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            <a  href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                aria-expanded="false">Blog</a>
                         </li>
                         <li class="nav-item submenu dropdown">
-                            <a id="a_hover" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            <a  href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                aria-expanded="false">Trang</a>
                         </li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/user/contact}">Liên hệ</a></li>
@@ -132,7 +132,8 @@
                     <div class="form-group">
                         <form class="form_search" id="searchForm">
                             <div class="form-group">
-                                <input name="condition" id="searchCondition" type="text" class="form-control" placeholder="Nhập sản phẩm cần tìm ">
+                                <input name="condition" id="searchCondition" type="text" class="form-control" onkeyup="seachPro()" placeholder="Nhập sản phẩm cần tìm ">
+                                <div id="renSearch"></div>
                             </div>
                         </form>
                     </div>
@@ -140,29 +141,47 @@
             </div>
         </div>
     </div>
+    <script>
 
-</header>
-<script>
-    $(document).ready(function () {
-        initData();
-    })
+        function seachPro() {
+            var searchCondition = $("#searchCondition").val();
+            let html=""
+            if(searchCondition==""){
+                document.getElementById("renSearch").innerHTML=""
+            }else{
+                $.ajax({
+                    type: "GET",
+                    url: "http://localhost:8080/product/searchProductByName/" + searchCondition,
+                    success: function(response) {
+                        var products = response.data;
+                        for (const product of products) {
+                            html+=`<a class="btn btn-light d-block" style="text-align: left;margin: 5px 0px 5px 0px" href="/user/product_dentails?id=${product.id}">${product.name}</a>`
+                        }
+                        document.getElementById("renSearch").innerHTML=html
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
 
-    function initData() {
-        getProductByName();
-    }
-    function getProductByName(){
-        var searchCondition = $("#searchCondition").val();
+
+        $(document).ready(function() {
             $.ajax({
-                type: "GET",
-                url: "http://localhost:8080/product/searchProductByName/" + searchCondition,
-                success: function(response) {
-                    var product = response.data;
-                    // window.location.href = '/user/product_dentails?id=' + searchCondition;
+                url: 'http://localhost:8080/cart/count',
+                type: 'GET',
+                success: function(data) {
+                    $('.span_count_product').text(data.data);
+                    console.log(data)
                 },
-                error: function(error) {
+                error: function() {
                     console.log(error);
                 }
             });
-    }
-</script>
+        });
+
+    </script>
+</header>
+
 <!--================ End Header Menu Area =================-->

@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="admin/fragments/head :: head"></head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <nav th:replace="admin/fragments/navbar :: navbar"></nav>
     <aside th:replace="admin/fragments/sidebar :: sidebar"></aside>
+    <form method="post" id="addAccountForm">
     <!-- Content -->
     <div class="content-wrapper" style="min-height: 332.4px;">
         <h3 style="text-align: center">Thêm tài khoản</h3>
         <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
+            <input type="text" id="code" name="code">
             <div class="form-group">
                 <label>Họ và tên</label>
                 <input type="text" class="form-control" placeholder="Nhập họ và tên" id="name">
@@ -35,8 +41,8 @@
             </div>
             <div class="form-group">
                 <label>Quyền</label>
-                <select id="list_role" class="form-control" style="width: 100%;">
-                    <!-- Options will be populated dynamically through JavaScript -->
+                <select class="js-example-basic-multiple" name="colorId" id="list_role" multiple="multiple"
+                        style="width: 100%; height: 50px;">
                 </select>
             </div>
             <div class="form-group">
@@ -45,9 +51,10 @@
             </div>
         </div>
         <div class="card-footer">
-            <button type="button" class="btn btn-primary" onclick="createUser()">Thêm tài khoản</button>
+            <button type="submit" class="btn btn-primary">Thêm tài khoản</button>
         </div>
     </div>
+    </form>
     <!-- End Content -->
     <style>
         div, label, button, h3 {
@@ -59,6 +66,8 @@
 <div th:replace="admin/fragments/script :: script"></div>
 
 <script>
+
+
     $(document).ready(function () {
         getRoles();
     });
@@ -76,6 +85,7 @@
                     let option = '<option value="' + role.id + '">' + role.name + '</option>';
                     list.append(option);
                 });
+                console.log(response)
             },
             error: function (error) {
                 console.log(error);
@@ -83,17 +93,20 @@
         });
     }
 
-    function createUser() {
+
+    $('#addAccountForm').submit(function (event) {
+        event.preventDefault();
+        let roleIds = $("#list_role").val().map(data => parseInt(data));
         var formData = {
             name: $('#name').val(),
+            code: $('#code').val(),
             username: $('#username').val(),
             birthday: $('#birthday').val(),
             address: $('#address').val(),
             phone: $('#phone').val(),
             email: $('#email').val(),
-            role: $('#list_role').val(),
             password: $('#password').val(),
-
+            roleId: roleIds,
         };
 
         $.ajax({
@@ -110,7 +123,7 @@
                 console.log(error);
             }
         });
-    }
+    });
 </script>
 </body>
 </html>

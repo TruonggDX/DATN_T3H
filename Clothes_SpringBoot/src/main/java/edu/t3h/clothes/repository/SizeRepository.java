@@ -1,6 +1,7 @@
 package edu.t3h.clothes.repository;
 
 import edu.t3h.clothes.entity.ProducerEntity;
+import edu.t3h.clothes.entity.ProductSizeEntity;
 import edu.t3h.clothes.entity.SizeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,5 +18,8 @@ public interface SizeRepository extends JpaRepository<SizeEntity, Long>{
     Set<SizeEntity> findByIds(List<Long> ids);
     @Query("SELECT s FROM SizeEntity s WHERE s.deleted = false ")
     List<SizeEntity> listSize();
+
+    @Query(value = "SELECT DISTINCT s FROM SizeEntity s LEFT JOIN ProductSizeEntity ps ON ps.sizeEntity.id = s.id  WHERE ps.productEntity.id = :productId")
+    List<SizeEntity> getSize(@Param("productId") Long productId);
 
 }

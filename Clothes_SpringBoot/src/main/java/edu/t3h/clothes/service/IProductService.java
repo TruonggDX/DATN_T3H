@@ -1,6 +1,7 @@
 package edu.t3h.clothes.service;
 
 import edu.t3h.clothes.entity.ProductEntity;
+import edu.t3h.clothes.entity.ProductSizeEntity;
 import edu.t3h.clothes.model.dto.CategoryDTO;
 import edu.t3h.clothes.model.dto.OrdersDTO;
 import edu.t3h.clothes.model.dto.ProductDTO;
@@ -25,11 +26,18 @@ public interface IProductService {
     BaseResponse<List<ProductDTO>> findProductsByCategoryId(Long categoryId);
     BaseResponse<List<ProductDTO>> findProductsByName(String name);
 
-    BaseResponse<List<ProductDTO>> searchProductCondition(String condition);
+    BaseResponse<Page<ProductDTO>> searchproductCondition(String condition, int page, int size);
 
 
     BaseResponse<List<ProductDTO>> getProductBestSellers();
 
     BaseResponse<List<ProductDTO>> findProductsInPriceRange(double minPrice, double maxPrice);
+
+    BaseResponse<List<ProductDTO>> findAllProductNew();
+    BaseResponse<Long> countProuct();
+
+
+
+
 }
 

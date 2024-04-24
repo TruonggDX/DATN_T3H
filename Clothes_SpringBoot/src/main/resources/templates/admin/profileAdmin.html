@@ -1,78 +1,93 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="admin/fragments/head :: head"></head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body>
 <nav th:replace="admin/fragments/navbar :: navbar "></nav>
 <aside th:replace="admin/fragments/sidebar :: sidebar"></aside>
 <div class="contents">
     <div class="cols">
-        <img style="height: 360px; width: 288px; margin-top: 57px; margin-left: 23px; object-fit: cover" th:src="@{/admin/dist/img/admin.jpg}"
+        <img style="height: 360px; width: 288px; margin-top: 57px; margin-left: 23px; object-fit: cover"
+             th:src="@{/admin/dist/img/admin.jpg}"
              alt="Vui lòng thêm ảnh đại diện">
     </div>
     <div class="main_content">
-        <h5>Thông tin cá nhân:</h5>
-        <form action="" method="post" class="form_edit" >
+        <h5>Thông tin cá nhân</h5>
+        <form action="" method="post" class="form_edit" id="formProfile">
+            <input type="hidden" id="userId" name="userId" class="form-control">
+            <input type="hidden" id="code" name="code" class="form-control">
             <div>
-                <div><span >Tên đăng nhập:</span></div>
-                <div><input type="text"  name="newName"></div>
+                <div><span>Tên đăng nhập:</span></div>
+                <div><input type="text" name="newUserName" id="newUserName"></div>
             </div>
-            <div >
-                <div><span >Họ tên:</span></div>
-                <div><input type="text"  name="hoTen"></div>
+            <div>
+                <div><span>Họ tên:</span></div>
+                <div><input type="text" name="newFullName" id="newFullName"></div>
             </div>
 
-            <div >
+            <div>
                 <div><span for="email-input">Email:</span></div>
-                <div><input type="email" id="email-input" name="email"></div>
+                <div><input type="email" id="newEmail" name="newEmail"></div>
             </div>
-            <div >
-                <div><span >Điện thoại:</span></div>
-                <div><input type="number" name="sDT"></div>
+            <div>
+                <div><span>Điện thoại:</span></div>
+                <div><input type="number" name="newPhone" id="newPhone"></div>
             </div>
-            <div >
-                <div><span >Ngày sinh:</span></div>
-                <div><input type="date"  name="ngaySinh"></div>
+            <div>
+                <div><span>Ngày sinh:</span></div>
+                <div><input type="date" name="newDate" id="newDate"></div>
             </div>
-            <div >
-                <div><span >Ảnh đại diện:</span></div>
-                <div><input type="file"  name="img"></div>
+            <div>
+                <div><span>Địa chỉ:</span></div>
+                <div><input type="text" name="newAddress" id="newAddress"></div>
             </div>
-            <div >
+            <!--            <div >-->
+            <!--                <div><span >Ảnh đại diện:</span></div>-->
+            <!--                <div><input type="file"  name="img"></div>-->
+            <!--            </div>-->
+            <div>
                 <button type="submit" style="margin-left: 149px">Cập nhật</button>
             </div>
         </form>
-        <a style="width: 150px; float: left;margin-left: 156px; margin-top: 15px; cursor: pointer" data-toggle="modal" data-target="#modal-lg" >Đổi mật khẩu</a>
-            <div style="margin-left:200px ; margin-top: 50px" class="modal fade" id="modal-lg">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content" style="width: 500px">
-                        <form  method="post">
-                            <div style="text-align: center; margin-top: 30px">
-                                <h4 class="modal-title" >Đổi mật khẩu</h4>
+
+        <a style="width: 150px; float: left;margin-left: 156px; margin-top: 15px; cursor: pointer" data-toggle="modal"
+           data-target="#modal-lg">Đổi mật khẩu</a>
+        <div style="margin-left:200px ; margin-top: 50px" class="modal fade" id="modal-lg">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content" style="width: 500px">
+                    <form method="post" id="formChangePassword">
+                        <div style="text-align: center; margin-top: 30px">
+                            <h4 class="modal-title">Đổi mật khẩu</h4>
+                        </div>
+                        <div class="modal-body">
+                            <label style="width: 200px;margin-left: 32px">Mật khẩu hiện tại : </label>
+                            <div style="text-align: center" class="form-group">
+                                <input type="password" id="password-input current_password" name="current_password"
+                                       placeholder="Nhập mật khẩu cũ">
                             </div>
-                            <div class="modal-body">
-                                <label style="width: 200px;margin-left: 32px">Mật khẩu hiện tại : </label>
-                                <div style="text-align: center" class="form-group">
-                                    <input type="password" id="password-input current_password" name="current_password" placeholder="Nhập mật khẩu cũ">
-                                </div>
-                                <label style="width: 200px;margin-left: 32px">Mật khẩu mới : </label>
-                                <div style="text-align: center"  class="form-group">
-                                    <input type="password" id="password-input password" name="password" placeholder="Nhập mật khẩu mới">
-                                </div>
-                                <label style="width: 200px;margin-left: 32px">Xác nhận mật khẩu mới : </label>
-                                <div style="text-align: center"  class="form-group">
-                                    <input type="password" id="password-input password_confirmation" name="password_confirmation" placeholder="Nhập lại mật khẩu cũ">
-                                </div>
+                            <label style="width: 200px;margin-left: 32px">Mật khẩu mới : </label>
+                            <div style="text-align: center" class="form-group">
+                                <input type="password" id="password-input password" name="password"
+                                       placeholder="Nhập mật khẩu mới">
                             </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save</button>
+                            <label style="width: 200px;margin-left: 32px">Xác nhận mật khẩu mới : </label>
+                            <div style="text-align: center" class="form-group">
+                                <input type="password" id="password-input password_confirmation"
+                                       name="password_confirmation" placeholder="Nhập lại mật khẩu cũ">
                             </div>
-                        </form>
-                    </div>
-                    <!-- /.modal-content -->
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                        </div>
+                    </form>
                 </div>
-                <!-- /.modal-dialog -->
+                <!-- /.modal-content -->
             </div>
+            <!-- /.modal-dialog -->
+        </div>
     </div>
 </div>
 <div th:replace="admin/fragments/script :: script"></div>
@@ -91,9 +106,11 @@
         box-sizing: border-box;
         margin-bottom: 10px;
     }
-    input{
+
+    input {
         width: 400px;
     }
+
     /* Thiết lập kiểu cho button */
     button {
         background-color: #007bff;
@@ -107,17 +124,21 @@
     button:hover {
         background-color: #0056b3;
     }
-    .cols{
+
+    .cols {
         float: left;
         width: 400px;
     }
-    .contents{
+
+    .contents {
         margin-left: 450px;
         margin-top: 60px;
     }
-    .main_content{
+
+    .main_content {
         margin-left: 400px;
     }
+
     button {
         display: inline-block;
         margin-right: 20px; /* Để cách giữa nút "Cập nhật" và nút "Đổi mật khẩu" */
@@ -126,13 +147,119 @@
     .btn-outline-info {
         display: inline-block;
     }
+
     a[data-toggle="modal"]:hover {
         color: blue; /* Màu chữ sẽ thay đổi khi di chuột vào */
         text-decoration: underline; /* Gạch chân chữ khi di chuột vào */
     }
-    label, a{
+
+    label, a {
         font-size: 17px;
     }
 
 </style>
 </html>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: 'http://localhost:8080/api/user/getUser',
+            type: 'GET',
+            success: function (data) {
+                $('#userId').val(data.data.id);
+                $('#code').val(data.data.code)
+                $('#newFullName').val(data.data.name);
+                $('#newUserName').val(data.data.username);
+                $('#newDate').val(data.data.birthday);
+                $('#newPhone').val(data.data.phone);
+                $('#newEmail').val(data.data.email);
+                $('#newAddress').val(data.data.address);
+
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+
+        $('#formProfile').submit(function(event) {
+            event.preventDefault();
+            var userData = {
+                id: $('#userId').val(),
+                code:$('#code').val(),
+                name: $('#newFullName').val(),
+                username: $('#newUserName').val(),
+                email: $('#newEmail').val(),
+                phone: $('#newPhone').val(),
+                birthday: $('#newDate').val(),
+                address: $('#newAddress').val()
+            };
+            $.ajax({
+                url: 'http://localhost:8080/api/user/update/' + userData.id,
+                type: 'PUT',
+                contentType: "application/json",
+                data: JSON.stringify(userData),
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    console.log("susscess")
+                    window.location.href = "/admin/profile";
+                },
+                error: function (error){
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+
+    });
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: 'http://localhost:8080/api/user/getUser',
+            type: 'GET',
+            success: function (data) {
+                $('#userId').val(data.data.id);
+                $('#current_password').val(data.data.password);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('#formChangePassword').submit(function(event) {
+            event.preventDefault();
+            var changePasswordData = {
+                id: $('#userId').val(),
+                oldPassword: $('#current_password').val(),
+                newPassword: $('#new_password').val(),
+                confirmPassword: $('#password_confirmation').val()
+            };
+            $.ajax({
+                url: 'http://localhost:8080/api/user/updatePass/' + changePasswordData.id,
+                type: 'PUT',
+                contentType: "application/json",
+                data: JSON.stringify(changePasswordData),
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    console.log("success");
+                    // Reload or redirect to a new page after successful password change
+                    // window.location.reload();
+                    // or
+                    // window.location.href = "/admin/profile";
+                },
+                error: function (error){
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+</script>

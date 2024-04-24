@@ -1,12 +1,14 @@
 package edu.t3h.clothes.controller.resource;
 
 
-import edu.t3h.clothes.model.dto.CategoryDTO;
+import edu.t3h.clothes.model.dto.ProducerDTO;
 import edu.t3h.clothes.model.dto.ProducerDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.service.IProducerService;
 import edu.t3h.clothes.utils.Constant;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,9 +22,11 @@ public class ProducerResource {
     public ProducerResource(IProducerService producerService){this.producerService = producerService;}
 
     @GetMapping("/list")
-    public BaseResponse<List<ProducerDTO>> getAllProduceres(){
-        BaseResponse<List<ProducerDTO>> response = producerService.getAll();
-        return  response;
+    public ResponseEntity<BaseResponse<Page<ProducerDTO>>> getAll(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(producerService.getAll(page, size));
     }
 
     @PostMapping("/create")
@@ -52,15 +56,18 @@ public class ProducerResource {
         }
     }
     @GetMapping("/searchByCondition/{condition}")
-    public BaseResponse<?> searchProducerByCondition(@PathVariable String condition){
-        BaseResponse<List<ProducerDTO>> producerDTO = producerService.searchProducerByCondition(condition);
-        if (producerDTO.getData() != null && !producerDTO.getData().isEmpty()){
-            BaseResponse<List<ProducerDTO>> response = new BaseResponse<>();
+    public BaseResponse<Page<ProducerDTO>> searchUsersByCondition(@PathVariable String condition,
+                                                                  @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int size) {
+
+        BaseResponse<Page<ProducerDTO>> prodto = producerService.searchProducerByCondition(condition, page, size);
+        if (prodto.getData() != null && !prodto.getData().isEmpty()) {
+            BaseResponse<Page<ProducerDTO>> response = new BaseResponse<>();
             response.setCode(HttpStatus.OK.value());
             response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-            response.setData(producerDTO.getData());
+            response.setData(prodto.getData());
             return response;
-        }else {
+        } else {
             return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
         }
     }

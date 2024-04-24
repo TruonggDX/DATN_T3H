@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,6 @@ import java.util.Set;
 
 @Table(name ="user")
 public class UserEntity extends AbstractEntity{
-
     @Column(name = "name")
     private String name;
     @Column(name = "code")
@@ -34,8 +34,6 @@ public class UserEntity extends AbstractEntity{
     private String birthday;
     @Column (name = "loyal_customers")
     private Boolean loyalCustomers;
-
-
 
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.EAGER)

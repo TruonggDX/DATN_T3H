@@ -12,6 +12,7 @@
             <h3 style="text-align: center">Chỉnh sửa tài khoản</h3>
             <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
                 <input type="hidden" id="userId" name="userId" class="form-control">
+                <input type="hidden" id="roleId" name="roleId" class="form-control">
                 <div class="form-group">
                     <label>Họ và tên</label>
                     <input id="name" name="name" type="text" class="form-control">
@@ -40,12 +41,7 @@
                     <label>Địa chỉ</label>
                     <input id="address" name="address" type="text" class="form-control">
                 </div>
-                <div class="form-group" data-select2-id="74">
-                    <label>Quyền</label>
-                    <select id="list_role" class="form-control select2bs4 select2-hidden-accessible" style="width: 100%;" data-select2-id="17" tabindex="-1" aria-hidden="true">
-                        <option selected="selected" data-select2-id="19">Alabama</option>
-                    </select><span class="select2 select2-container select2-container--bootstrap4 select2-container--above" dir="ltr" data-select2-id="18" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-z7yx-container"><span class="select2-selection__rendered" id="select2-z7yx-container" role="textbox" aria-readonly="true" ></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                </div>
+
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Cập nhật</button>
@@ -61,6 +57,9 @@
     <aside class="control-sidebar control-sidebar-dark"></aside>
 </div>
 <div th:replace="admin/fragments/script :: script"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     function getData(user){
         $('#userId').val(user.id);
@@ -71,11 +70,9 @@
         $('#email').val(user.email);
         $('#phone').val(user.phone);
         $('#address').val(user.address);
-
     }
 
     $(document).ready(function () {
-        initData();
         var userId = new URLSearchParams(window.location.search).get('id');
         if (userId) {
             $.ajax({
@@ -83,7 +80,11 @@
                 url: "http://localhost:8080/api/user/search/" + userId,
                 success: function(response) {
                     getData(response.data);
+                    let data = response.data;
+                    $('#list_role').val(data.roleId)
+                    console.log(response.data)
                 },
+
                 error: function(error) {
                     console.log(error);
                 }
@@ -92,6 +93,7 @@
 
         $('#updateUserForm').submit(function(event) {
             event.preventDefault();
+
             var formData = {
                 id: $('#userId').val(),
                 code: $('#code').val(),
@@ -100,7 +102,10 @@
                 birthday: $('#birthday').val(),
                 email: $('#email').val(),
                 phone: $('#phone').val(),
-                address: $('#address').val()
+                address: $('#address').val(),
+
+
+
             };
             $.ajax({
                 type: "PUT",
@@ -119,32 +124,6 @@
         });
 
     });
-
-    function initData() {
-        getRoles();
-    }
-    function getRoles() {
-        let list = $('#list_role');
-        list.empty();
-        $.ajax({
-            type: "GET",
-            url: "http://localhost:8080/role/list",
-            dataType: "json",
-            success: function (response) {
-                let roles = response?.data;
-
-                roles.forEach(function (role) {
-                    let option = '<option value="' + role.id + '">' + role.name + '</option>';
-                    list.append(option);
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    }
-
-
 </script>
 </body>
 </html>

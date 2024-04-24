@@ -1,7 +1,12 @@
 package edu.t3h.clothes.service.impl;
 
 import edu.t3h.clothes.entity.CategoryEntity;
+import edu.t3h.clothes.entity.ProducerEntity;
+import edu.t3h.clothes.entity.UserEntity;
 import edu.t3h.clothes.model.dto.CategoryDTO;
+import edu.t3h.clothes.model.dto.ProducerDTO;
+import edu.t3h.clothes.model.dto.ProductDTO;
+import edu.t3h.clothes.model.dto.UserDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.repository.CategoryRepository;
 import edu.t3h.clothes.service.ICategoryService;
@@ -9,6 +14,10 @@ import edu.t3h.clothes.utils.Constant;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -29,22 +38,21 @@ public class CategoryImpl implements ICategoryService {
         this.modelMapper = modelMapper;
     }
     @Override
-    public BaseResponse<List<CategoryDTO>> getAll() {
-        List<CategoryEntity> categoryEntities = categoryReponsitory.listCategory();
-        logger.info("Data  {} ", categoryEntities.size());
+    public BaseResponse<Page<CategoryDTO>> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CategoryEntity> pages = categoryReponsitory.listCategory(pageable);
 
-        List<CategoryDTO> categoryDTOs = categoryEntities.stream()
+        List<CategoryDTO> categoriesDTO = pages.getContent().stream()
                 .map(categoryEntity -> modelMapper.map(categoryEntity, CategoryDTO.class))
                 .collect(Collectors.toList());
 
-        BaseResponse<List<CategoryDTO>> response = new BaseResponse<>();
+        BaseResponse<Page<CategoryDTO>> response = new BaseResponse<>();
         response.setCode(HttpStatus.OK.value());
         response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-        response.setData(categoryDTOs);
+        response.setData(new PageImpl<>(categoriesDTO, pageable, pages.getTotalElements()));
 
-        logger.info("Return size  {}", categoryDTOs.size());
+        logger.info("Return size {}", categoriesDTO.size());
         logger.info("Finishing......");
-
         return response;
     }
     @Override
@@ -72,13 +80,7 @@ public class CategoryImpl implements ICategoryService {
         CategoryEntity categorys = categoryEntity.get();
         categorys.setDeleted(true);
         categoryReponsitory.save(categorys);
-
-        List<CategoryEntity> categoryEntities = categoryReponsitory.listCategory();
-        List<CategoryDTO> categoryDTOs = categoryEntities.stream()
-                .map(category -> modelMapper.map(category, CategoryDTO.class))
-                .collect(Collectors.toList());
-        baseResponse= new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS,categoryDTOs);
-        return baseResponse;
+        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS,null);
     }
     @Override
     public CategoryDTO findCategoryById(Long id) {
@@ -113,11 +115,14 @@ public class CategoryImpl implements ICategoryService {
     }
 
     @Override
-    public BaseResponse<List<CategoryDTO>> searchCategoriesCondition(String condition) {
-        List<CategoryEntity> categoryEntities = categoryReponsitory.searchCategories(condition);
-        List<CategoryDTO> categoryDTOs = categoryEntities.stream()
-                .map(categoryEntity -> modelMapper.map(categoryEntity, CategoryDTO.class))
-                .collect(Collectors.toList());
-        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, categoryDTOs);
+    public BaseResponse<Page<CategoryDTO>> searchCategoriesCondition(String condition, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CategoryEntity> pages = categoryReponsitory.searchCategories(condition, pageable);
+        Page<CategoryDTO> categoryDTOS = pages.map(userEntity -> {
+            CategoryDTO userDTO = modelMapper.map(userEntity, CategoryDTO.class);
+            return userDTO;
+        });
+        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, categoryDTOS);
     }
+
 }

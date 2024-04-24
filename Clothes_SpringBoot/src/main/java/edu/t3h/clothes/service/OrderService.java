@@ -18,4 +18,5 @@ public interface OrderService {
     OrdersDTO findOrderById(Long id);
     BaseResponse<?> updateOrder(Long id, OrdersDTO ordersDTO);
     BaseResponse<List<OrdersDTO>> searchOrderCondition(String condition);
+    BaseResponse<Long> countOrdersInSystem();
 }

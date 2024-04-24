@@ -82,6 +82,10 @@ public class OrderResouce {
             return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
         }
     }
-
+    @GetMapping("/countOrders")
+    public ResponseEntity<BaseResponse<Long>> countCartItems() {
+        BaseResponse<Long> response = orderService.countOrdersInSystem();
+        return ResponseEntity.ok(response);
+    }
 
 }

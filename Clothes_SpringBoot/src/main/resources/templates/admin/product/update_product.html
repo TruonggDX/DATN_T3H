@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="admin/fragments/head :: head"></head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <nav th:replace="admin/fragments/navbar :: navbar"></nav>
@@ -111,8 +114,9 @@
     function initData() {
         getProducer();
         getCategory();
-        getColor();
         getSize();
+        getColor();
+
     }
 
     function getProducer() {
@@ -123,12 +127,13 @@
             url: "http://localhost:8080/producer/list",
             dataType: "json",
             success: function (response) {
-                let producers = response?.data;
-
-                producers.forEach(function (producer) {
-                    let option = '<option value="' + producer.id + '">' + producer.name + '</option>';
+                console.log(response);
+                let categories = response?.data?.content;
+                for (let i = 0; i < categories.length; i++) {
+                    let data = categories[i];
+                    let option = '<option value="' + data.id + '">' + data.name + '</option>';
                     list.append(option);
-                });
+                }
             },
             error: function (error) {
                 console.log(error);
@@ -144,12 +149,13 @@
             url: "http://localhost:8080/category/list",
             dataType: "json",
             success: function (response) {
-                let categories = response?.data;
-
-                categories.forEach(function (category) {
-                    let option = '<option value="' + category.id + '">' + category.name + '</option>';
+                console.log(response);
+                let categories = response?.data?.content;
+                for (let i = 0; i < categories.length; i++) {
+                    let data = categories[i];
+                    let option = '<option value="' + data.id + '">' + data.name + '</option>';
                     list.append(option);
-                });
+                }
             },
             error: function (error) {
                 console.log(error);
@@ -194,7 +200,6 @@
                     let option = '<option value="' + color.id + '" ' + selected + '>' + color.name + '</option>';
                     list.append(option);
                 });
-                $('.js-example-basic-multiple').select2();
             },
             error: function (error) {
                 console.log(error);
@@ -219,11 +224,8 @@
             const idCheckbox = 'customCheckbox' + id;
             $('#' + idCheckbox).prop('checked', true);
         }
-
         let selectedColors = product.colorId;
         getColor(selectedColors);
-
-        $('.js-example-basic-multiple').select2();
     }
 
 
@@ -238,11 +240,13 @@
                 success: function (response) {
                     getInfoDataProduct(response.data);
                     let data = response.data;
-                    $('#list_producer').val(data.producerId)
+                   $('#list_producer').val(data.producerId)
+
                     $('#list_category').val(data.categoryId)
 
-                    console.log(data)
+                    console.log("data",data)
                 },
+
                 error: function (error) {
                     console.log(error);
                 }
@@ -251,6 +255,16 @@
 
         $('#updateForm').submit(function (event) {
             event.preventDefault();
+            let sizeIds = [];
+            $('input[type="checkbox"]:checked').each(function(){
+                if($(this).is(':checked')) {
+                    console.log($(this).attr("id"))
+                    let idStr = $(this).attr("id");
+                    let numberId = idStr.substring('customCheckbox'.length,idStr.length);
+                    sizeIds.push(parseInt(numberId));
+                }
+            });
+            let colorIds = $("#list-color").val().map(data => parseInt(data));
             var formData = {
                 id: $('#ids').val(),
                 code: $('#code').val(),
@@ -260,8 +274,10 @@
                 price: $('#price').val(),
                 import_price: $('#import_price').val(),
                 description: $('#description').val(),
-                productId: $('#list_producer').val(),
-                categoryId: $('#list_category').val()
+                producerId: $('#list_producer').val(),
+                categoryId: $('#list_category').val(),
+                colorId: colorIds,
+                sizeId: sizeIds
             };
             $.ajax({
                 type: "PUT",

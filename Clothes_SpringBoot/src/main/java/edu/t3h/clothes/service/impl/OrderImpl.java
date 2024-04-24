@@ -189,4 +189,14 @@ public class OrderImpl implements OrderService {
                 .collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, orderDTO);
     }
+
+    @Override
+    public BaseResponse<Long> countOrdersInSystem() {
+        Long cartOrder = ordersRepository.countOrders();
+        BaseResponse<Long> response = new BaseResponse<>();
+        response.setData(cartOrder);
+        response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+        response.setCode(HttpStatus.OK.value());
+        return response;
+    }
 }

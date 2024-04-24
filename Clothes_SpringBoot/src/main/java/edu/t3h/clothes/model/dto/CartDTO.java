@@ -1,5 +1,6 @@
 package edu.t3h.clothes.model.dto;
 
+import edu.t3h.clothes.entity.SizeEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,9 +14,10 @@ public class CartDTO {
     private Long number;
     private Double total;
 
-
-    private Long userId;
     private Long productId;
-    private String nameUser;
-    private String nameProduct;
+    private List<Long> sizeId;
+    private List<Long> colorId;
+
+
+
 }

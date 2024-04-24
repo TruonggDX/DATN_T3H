@@ -18,10 +18,10 @@ import java.util.List;
 public class ImageProductResource {
     @Autowired
     private IImageProductService service;
-    @GetMapping("/product")
-    public ResponseEntity<BaseResponse<ImageProductDTO>> getImageProductByProductId(@RequestParam Long productId) {
-        ProductImageFilterRequest filterRequest = new ProductImageFilterRequest(productId);
+    @PostMapping("/findByProductId")
+    public ResponseEntity<BaseResponse<ImageProductDTO>> findByProductId(@RequestBody ProductImageFilterRequest filterRequest) {
         BaseResponse<ImageProductDTO> response = service.findByProductId(filterRequest);
-        return ResponseEntity.status(response.getCode()).body(response);
+        HttpStatus status = HttpStatus.valueOf(response.getCode());
+        return new ResponseEntity<>(response, status);
     }
 }

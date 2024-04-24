@@ -3140,7 +3140,7 @@ a {
         max-width:50%
     }
 }.cart_area {
-     padding-top:90px;
+     padding-top:40px;
      padding-bottom:55px
  }
 .cart_inner .table th,.cart_inner .table td {
@@ -3156,6 +3156,10 @@ a {
     border-bottom:0px !important
 }
 .cart_inner .table tbody tr td {
+    font-size: 15px;
+    color: #222;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
     padding-top:30px;
     padding-bottom:30px;
     vertical-align:middle;
@@ -3445,7 +3449,6 @@ a {
 }
 .s_product_text {
     margin-left:-15px;
-    margin-top:65px
 }
 @media (max-width:575px) {
     .s_product_text {
@@ -3473,7 +3476,7 @@ a {
     color:#777777
 }
 .s_product_text .list li a span {
-    width:90px;
+    width:100px;
     display:inline-block;
     color:#555555
 }

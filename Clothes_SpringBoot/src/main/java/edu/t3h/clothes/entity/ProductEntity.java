@@ -60,9 +60,6 @@ public class ProductEntity extends AbstractEntity {
     public ProductEntity() {
     }
 
-
-
-
     @OneToMany(mappedBy = "productEntities")
     private List<ImageProductEntity> imageEntities = new ArrayList<>();
 

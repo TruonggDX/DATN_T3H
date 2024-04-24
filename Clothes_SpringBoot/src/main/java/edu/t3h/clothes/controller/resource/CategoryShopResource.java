@@ -16,9 +16,9 @@ public class CategoryShopResource {
     public  CategoryShopResource(ICategoryService categoryService){
         this.categoryService = categoryService;
     }
-    @GetMapping("/shop")
-    public BaseResponse<List<CategoryDTO>> getAllCategories() {
-        BaseResponse<List<CategoryDTO>> response = categoryService.getAll();
-        return response;
-    }
+//    @GetMapping("/shop")
+//    public BaseResponse<List<CategoryDTO>> getAllCategories() {
+//        BaseResponse<List<CategoryDTO>> response = categoryService.getAll();
+//        return response;
+//    }
 }

@@ -35,6 +35,7 @@ public interface OrdersRepository extends JpaRepository<OrdersEntity, Long> {
     @Query("SELECT o FROM OrdersEntity o WHERE (o.user.id IN (SELECT u.id FROM UserEntity u WHERE u.name LIKE %:condition% AND u.deleted=false) OR o.code LIKE %:condition%) AND o.deleted = false")
     List<OrdersEntity> searchOrders(@Param("condition") String condition);
 
-
+    @Query(value = "SELECT COUNT(*) FROM OrdersEntity WHERE deleted=false")
+    Long countOrders();
 }
 

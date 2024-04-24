@@ -32,79 +32,24 @@
 <!--================Cart Area =================-->
 <section class="cart_area">
     <div class="container">
+        <h5 style="float: right;margin-bottom: 20px;color: blueviolet" id="khtt"></h5>
         <div class="cart_inner">
             <div class="table-responsive">
                 <table class="table" id="tableDate">
                     <thead>
                     <tr>
-                        <th hidden="hidden" scope="col">ID</th>
-                        <th scope="col">STT</th>
+                        <th scope="col">ID</th>
                         <th scope="col">Sản phẩm</th>
                         <th scope="col">Giá</th>
                         <th scope="col">Số lượng</th>
-                        <th scope="col">Tổng Tiền</th>
+                        <th scope="col">Tiền</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody id="listp_cart">
-                    <tr>
-                        <td>
-                            <div class="media">
-                                <div class="d-flex">
-                                    <img src="img/cart/cart1.png" alt="">
-                                </div>
-                                <div class="media-body">
-                                    <p>Minimalistic shop for multipurpose use</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <h5>$360.00</h5>
-                        </td>
-                        <td>
-                            <div class="product_count">
-                                <input type="text" maxlength="12" value="1">
-                            </div>
-                        </td>
-                        <td>
-                            <h5>$720.00</h5>
-                        </td>
-                        <td style="text-align: center">
-                            <a><i style="font-size: 30px" class="far fa-trash-can"></i></a>
-                        </td>
-                    </tr>
-                    <tr class="bottom_button">
-                        <td>
-                        </td>
-                        <td>
 
-                        </td>
-                        <td>
-                            <h5>Tổng tiền</h5>
-                        </td>
-                        <td>
-                            <h5>$2160.00</h5>
-                        </td>
-                    </tr>
-                    <tr class="out_button_area">
-                        <td class="d-none-l">
-
-                        </td>
-                        <td class="">
-
-                        </td>
-                        <td>
-
-                        </td>
-                        <td></td>
-                        <td style="margin-right: 85%">
-                            <div  class="checkout_btn_inner d-flex align-items-center">
-                                <a class="gray_btn" th:href="@{/user/categroyshop}">Tiếp tục mua sắm</a>
-                                <a class="primary-btn ml-2" th:href="@{/user/productCheckout}">Thanh toán</a>
-                            </div>
-                        </td>
-                    </tr>
                     </tbody>
+
 
                 </table>
                 <nav aria-label="...">
@@ -118,13 +63,9 @@
 </section>
 <!--================End Cart Area =================-->
 
-
-
-<!--================ Start footer Area  =================-->
-
+<div th:replace="user/fragments/script :: script"></div>
 <div th:replace="user/fragments/footer :: footer"></div>
 
-<div th:replace="user/fragments/script :: script"></div>
 </body>
 </html>
 <script>
@@ -138,62 +79,110 @@
         getProductsInCart(page, size);
     }
 
-    function getProductsInCart(page, size) {
+    function getProductsInCart(page, size){
         let bodyTable = $('#listp_cart');
         bodyTable.empty();
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/cart/list?page=" + page + "&size=" + size,
+            url: "http://localhost:8080/cart/listpOfUs?page=" + page + "&size=" + size,
             dataType: "json",
             success: function (response) {
                 console.log(response);
-                let products = response?.data?.content;
+                let cart = response?.data?.content;
                 // Hiển thị dữ liệu trên bảng
-                for (let i = 0; i < products.length; i++) {
-                    let data = products[i];
-                    let row = '<tr>' +
-                        '<td>' + (i + 1) + '</td>' +
-                        '<td hidden="hidden">' + data.id + '</td>' +
-                        '<td>' +
-                        '<div class="media">' +
-                        '<div class="d-flex">' +
-                        '<img width="80px" src="https://tse4.mm.bing.net/th?id=OIP.7ZxepcJaDNoUZqs3JZPxKwHaHa&pid=Api&P=0&h=220" alt="">' +
-                        '</div>' +
-                        '<div class="media-body">' +
-                        '<p>' + data.nameProduct + '</p>' +
-                        '</div>' +
-                        '</div>' +
-                        '</td>' +
-                        '<td><h5>' + data.price + '</h5></td>' +
-                        '<td>' +
-                        '<div class="product_count">' +
-                        '<input type="number" id="quantity' + i + '" class="quantity-input" data-id="' + data.id + '" value="' + data.number + '">' +
-                        '</div>' +
-                        '</td>' +
-                        '<td><h5 id="productTotal' + i + '">' + data.total + '</h5></td>' +
-                        '<td>' +
-                        '<a  class="btn btn-default delete-product-btn" data-id="' + data.id + '"><i style="font-size: 30px" class="far fa-trash-can"></i></a>' +
-                        '</td>' +
-                        '</tr>';
+                for (let i = 0; i < cart.length; i++) {
+                    let data = cart[i];
+                    let row = "<tr>" +
+                        "<td >" + data.id + "</td>" +
+                        "<td>" +
+                        "<div class='media'>" +
+                        "<div class='d-flex'>" +
+                        "<img width='80px' src='https://tse4.mm.bing.net/th?id=OIP.7ZxepcJaDNoUZqs3JZPxKwHaHa&pid=Api&P=0&h=220' alt=''>" +
+                        "</div>" +
+                        "<div class='media-body'>" +
+                        "<p>" + data.name + "</p>" +
+                        "</div>" +
+                        "</div>" +
+                        "</td>" +
+                        "<td><h5>" + data.price + "</h5></td>" +
+                        "<td>" +
+                        "<div class='product_count'>" +
+                        "<input type='number' id='quantity" + i + "' class='quantity-input' data-id='" + data.id + "' value='" + data.number + "'>" +
+                        "</div>" +
+                        "</td>" +
+                        "<td><h5 id='productTotal" + i + "'>" + data.total + "</h5></td>" +
+                        "<td>" +
+                        "<a class='btn btn-default delete-cart-btn' data-id='" + data.id + "'><i style='font-size: 30px' class='far fa-trash-can'></i></a>" +
+                        "</td>" +
+                        "</tr>";
+
                     $('#listp_cart').append(row);
                 }
+                let totalPrice = 0;
+                for (let i = 0; i < cart.length; i++) {
+                    totalPrice += cart[i].total;
+                }
+                let totalRow = "<tr class='bottom_button'>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td ><h4>Tổng tiền :</h4></td>" +
+                    "<td><h5>" + totalPrice + "VNĐ</h5></td>" +
+                    "</tr>";
+                $('#listp_cart').append(totalRow);
+
+                let buttonRow = "<tr class='out_button_area'>" +
+                    "<td class='d-none-l'></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td style='margin-right: 85%'>" +
+                    "<div  class='checkout_btn_inner d-flex align-items-center'>" +
+                    "<a class='gray_btn' href='/user/categroyshop'>Tiếp tục mua sắm</a>" +
+                    "<a class='primary-btn ml-2' href='/user/productCheckout'>Thanh toán</a>" +
+                    "</div>" +
+                    "</td>" +
+                    "</tr>";
+                $('#listp_cart').append(buttonRow);
+
+                $('.delete-cart-btn').click(function(event) {
+                    event.preventDefault();
+                    var id = $(this).data('id');
+                    if (confirm('Bạn chắc chắn muốn xóa sản phẩm này?')) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "http://localhost:8080/cart/delete/" + id,
+                            success: function(response){
+                                console.log(response);
+
+                                $('#deleteBtn' + id).closest('tr').remove();
+                                window.location.reload();
+                            },
+                            error: function (error){
+                                console.log(error);
+                            }
+                        });
+                    }
+                });
+
+
+
                 let totalPage = response.data.totalPages;
                 let currentPage = response.data.pageable.pageNumber;
                 if (totalPage > 0) {
                     $("#pageId").empty();
-                    let pages = '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage - 1) + ',4,event)" href="#"><i class="fa-solid fa-chevron-up fa-rotate-270"></i></a></li>';
+                    let pages = "<li class='page-item'><a class='page-link' onclick='changePage(" + (currentPage - 1) + ", 4, event)' href='#'><i class='fa-solid fa-chevron-up fa-rotate-270'></i></a></li>";
                     for (let i = 0; i < totalPage; i++) {
                         if (currentPage === i) {
-                            pages += '            <li class="page-item active">\n' +
-                                '                <a class="page-link " onclick="changePage(' + i + ',4,event)" href="#">' + (i + 1) + '</a></li>\n' +
-                                '            <li class="page-item">';
+                            pages += "<li class='page-item active'>" +
+                                "<a class='page-link' onclick='changePage(" + i + ", 4, event)' href='#'>" + (i + 1) + "</a></li>" +
+                                "<li class='page-item'>";
                         } else {
-                            pages += '            <li class="page-item">\n' +
-                                '                <a class="page-link" onclick="changePage(' + i + ',4,event)" href="#">' + (i + 1) + '</a></li>\n' +
-                                '            <li class="page-item">';
+                            pages += "<li class='page-item'>" +
+                                "<a class='page-link' onclick='changePage(" + i + ", 4, event)' href='#'>" + (i + 1) + "</a></li>" +
+                                "<li class='page-item'>";
                         }
                     }
-                    pages += '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage + 1) + ',4,event)" href="#"><i class="fa-solid fa-chevron-up fa-rotate-90"></i></a></li>';
+                    pages += "<li class='page-item'><a class='page-link' onclick='changePage(" + (currentPage + 1) + ", 4, event)' href='#'><i class='fa-solid fa-chevron-up fa-rotate-90'></i></a></li>";
                     $("#pageId").append(pages);
                 }
             },
@@ -203,29 +192,26 @@
         });
     }
 
-    $(document).on('click', '.delete-product-btn', function(event) {
-        event.preventDefault();
-        var productID = $(this).data('id');
-        if (confirm('Bạn chắc chắn muốn xóa sản phẩm này?')) {
-            $.ajax({
-                type: "DELETE",
-                url: "http://localhost:8080/cart/delete/" + productID,
-                success: function(response){
-                    console.log(response);
-                    $('#deleteBtn' + productID).closest('tr').remove();
-                    window.location.reload();
-                },
-                error: function (error){
-                    console.log(error);
-                }
-            });
-        }
-    });
 
-    $(document).on('input', '.quantity-input', function(event) {
+
+    $(document).on('input', '.product_count input', function() {
+        let quantity = parseInt($(this).val());
+        let price = parseFloat($(this).closest('tr').find('td:eq(2)').text());
+        let totalPrice = quantity * price;
+        $(this).closest('tr').find('td:eq(4)').text(totalPrice);
         var id = $(this).data('id');
         var newNumbers = $(this).val();
         updateQuantityProduct(id, newNumbers);
+
+        let total = 0;
+        $('.product_count input').each(function() {
+            let quantity = parseInt($(this).val());
+            let price = parseFloat($(this).closest('tr').find('td:eq(2)').text());
+            let totalPrice = quantity * price;
+            total += totalPrice;
+        });
+
+        $('.bottom_button h5').text(total+'VNĐ');
     });
 
     function updateQuantityProduct(id, newNumbers) {
@@ -238,10 +224,11 @@
             }),
             success: function(response) {
                 var productTotal = response.data.total;
-                // Hiển thị giá trị mới của sản phẩm theo thời gian thực
                 $('#productTotal').text(productTotal);
+                var totalPriceOfCart = response.data.total_price;
+                $('#productTotalPrice').text(totalPriceOfCart + 'VNĐ');
             },
-            error: function(xhr, status, error) {
+            error: function(error) {
                 console.log(error);
             }
         });
@@ -251,5 +238,24 @@
         event.preventDefault();
         getProductsInCart(page, size);
     }
+
+    $(document).ready(function() {
+        $.ajax({
+            url: 'http://localhost:8080/api/user/loyal-status',
+            type: 'GET',
+            success: function(data) {
+                console.log(data)
+                if (data.data.loyalCustomers) {
+                    $('#khtt').text('Bạn là khách hàng thân thiết');
+                } else {
+                    $('#khtt').text('');
+                }
+            },
+            error: function() {
+                console.log(error)
+            }
+        });
+    });
+
 
 </script>

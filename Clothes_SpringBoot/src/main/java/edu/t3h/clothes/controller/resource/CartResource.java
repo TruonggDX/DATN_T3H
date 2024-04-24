@@ -6,6 +6,7 @@ import edu.t3h.clothes.model.dto.ProductDTO;
 import edu.t3h.clothes.model.request.CartFilterRequest;
 import edu.t3h.clothes.model.request.ProductFilterRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
+import edu.t3h.clothes.model.response.CartResponse;
 import edu.t3h.clothes.service.ICartService;
 import edu.t3h.clothes.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +21,9 @@ public class CartResource {
     @Autowired
     private ICartService iCartService;
 
-    @GetMapping("/list/{userId}")
-    public ResponseEntity<BaseResponse<Page<CartDTO>>> getAllByUserId(
-            @PathVariable("userId") Long userId,
-            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(name = "size", required = false, defaultValue = "10") int size) {
-            CartFilterRequest filterRequest = new CartFilterRequest();
-        return ResponseEntity.ok(iCartService.getAll(filterRequest, page, size,userId));
-    }
-
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCart(@PathVariable Long id){
-        BaseResponse<?> response = iCartService.deleteById(id);
+        BaseResponse<?> response = iCartService.deleteCartById(id);
         if (response.getCode() == HttpStatus.OK.value()) {
             return ResponseEntity.ok().body(response);
         } else {
@@ -40,9 +32,9 @@ public class CartResource {
     }
 
 
-    @GetMapping("/count/{userId}")
-    public ResponseEntity<BaseResponse<Long>> countCartItems(@PathVariable Long userId) {
-        BaseResponse<Long> response = iCartService.countCart(userId);
+    @GetMapping("/count")
+    public ResponseEntity<BaseResponse<Long>> countCartItems() {
+        BaseResponse<Long> response = iCartService.countCart();
         return ResponseEntity.ok(response);
     }
 
@@ -65,9 +57,30 @@ public class CartResource {
         }
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<BaseResponse<CartDTO>> addToCart(@RequestBody CartDTO cartDTO) {
-        BaseResponse<CartDTO> response = iCartService.addToCart(cartDTO);
-        return ResponseEntity.status(response.getCode()).body(response);
+
+    @PostMapping("/addPInCart")
+    public ResponseEntity<?> createProduct(@RequestBody CartDTO cartDTO) {
+        BaseResponse<?> reponse = iCartService.addToCart(cartDTO);
+        if (reponse != null && reponse.getCode() == HttpStatus.OK.value()) {
+            // In ra thông tin của sản phẩm đã được tạo thành công
+            System.out.println("Product created successfully:");
+            System.out.println(reponse.toString());
+            // Trả về phản hồi cho client
+            return ResponseEntity.ok().body(reponse);
+        } else {
+            // Nếu sản phẩm không được tạo thành công hoặc có lỗi
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(reponse != null ? reponse.getMessage() : "Failed to create product");
+        }
     }
+
+
+    @GetMapping("/listpOfUs")
+    public ResponseEntity<BaseResponse<Page<CartResponse>>> getCartItems(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int size) {
+        BaseResponse<Page<CartResponse>> response = iCartService.getCartItems(page, size);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }
+
+
 }

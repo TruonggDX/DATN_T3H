@@ -1,6 +1,7 @@
 package edu.t3h.clothes.service.impl;
 
 import edu.t3h.clothes.entity.*;
+import edu.t3h.clothes.model.dto.CategoryDTO;
 import edu.t3h.clothes.model.dto.OrdersDTO;
 import edu.t3h.clothes.model.dto.ProductDTO;
 import edu.t3h.clothes.model.request.ProductFilterRequest;
@@ -54,13 +55,17 @@ public class ProductImpl implements IProductService {
     @Override
     public BaseResponse<Page<ProductDTO>> getAll(ProductFilterRequest filterRequest, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProductEntity> productEntities = productRepository.findAllByFilter(filterRequest,pageable);
+        Page<ProductEntity> productEntities = productRepository.findAllByFilter(filterRequest, pageable);
 
         if (productEntities != null && !productEntities.isEmpty()) {
-            List<ProductDTO> productDTOS = productEntities.getContent().stream().map(productEntity -> {
+            Page<ProductDTO> pageData = productEntities.map(productEntity -> {
                 ProductDTO productDTO = modelMapper.map(productEntity, ProductDTO.class);
                 productDTO.setCategory(productEntity.getCategoryEntity().getName());
                 productDTO.setProducer(productEntity.getProducerEntity().getName());
+
+                productDTO.setProducerId(productEntity.getProducerEntity().getId());
+                productDTO.setCategoryId(productEntity.getCategoryEntity().getId());
+
                 String sizeNames = productEntity.getSizeEntities().stream().map(SizeEntity::getName).collect(Collectors.joining(" ,"));
                 List<String> imagesColor = productEntity.getColorEntities().stream().map(ColorEntity::getImage).collect(Collectors.toList());
                 productDTO.setSize(sizeNames);
@@ -70,11 +75,10 @@ public class ProductImpl implements IProductService {
                 List<Long> colorId = productEntity.getColorEntities().stream().map(ColorEntity::getId).collect(Collectors.toList());
                 productDTO.setColorId(colorId);
                 return productDTO;
-            }).collect(Collectors.toList());
+            });
 
-            Page<ProductDTO> pageData = new PageImpl<>(productDTOS, pageable, productEntities.getTotalElements());
             BaseResponse<Page<ProductDTO>> response = new BaseResponse<>();
-            response.setCode(200);
+            response.setCode(HttpStatus.OK.value());
             response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
             response.setData(pageData);
             return response;
@@ -86,6 +90,7 @@ public class ProductImpl implements IProductService {
             return response;
         }
     }
+
 
 
 
@@ -147,9 +152,6 @@ public class ProductImpl implements IProductService {
         return baseResponse;
     }
 
-
-
-
     @Override
     public BaseResponse<?> deleteProduct(Long productId) {
         BaseResponse<?> response = new BaseResponse<>();
@@ -190,8 +192,14 @@ public class ProductImpl implements IProductService {
         }
 
         ProductDTO productDTO = modelMapper.map(productEntity, ProductDTO.class);
+        productDTO.setCategoryId(productEntity.getCategoryEntity().getId());
+        productDTO.setProducerId(productEntity.getProducerEntity().getId());
         productDTO.setSizeId(productEntity.getSizeEntities().stream().map(data -> data.getId()).collect(Collectors.toList()));
         productDTO.setColorId(productEntity.getColorEntities().stream().map(data -> data.getId()).collect(Collectors.toList()));
+        productDTO.setCategory(productEntity.getCategoryEntity().getName());
+        productDTO.setProducer(productEntity.getProducerEntity().getName());
+
+
         return productDTO;
     }
 
@@ -210,10 +218,8 @@ public class ProductImpl implements IProductService {
             productEntity.setPrice(productDTO.getPrice());
             productEntity.setImport_price(productDTO.getImport_price());
             productEntity.setDescription(productDTO.getDescription());
-            // Cập nhật thông tin sản phẩm
-            modelMapper.map(productDTO, productEntity);
 
-            // Cập nhật các thông tin trong các bảng trung gian
+            modelMapper.map(productDTO, productEntity);
             Optional<CategoryEntity> categoryEntityOptional = categoryReponsitory.findById(productDTO.getCategoryId());
             if (categoryEntityOptional.isPresent()) {
                 productEntity.setCategoryEntity(categoryEntityOptional.get());
@@ -222,17 +228,6 @@ public class ProductImpl implements IProductService {
                 response.setMessage("Category not found with id " + productDTO.getCategoryId());
                 return response;
             }
-
-            Optional<ProducerEntity> producerEntities = producerReposiroty.findById(productDTO.getProducerId());
-
-            if (producerEntities.isPresent()) {
-                productEntity.setProducerEntity(producerEntities.get());
-            } else {
-                response.setCode(HttpStatus.BAD_REQUEST.value());
-                response.setMessage("Category not found with id " + productDTO.getProducerId());
-                return response;
-            }
-
             Set<SizeEntity> sizeEntities = sizeRepository.findByIds(productDTO.getSizeId());
             if (!CollectionUtils.isEmpty(sizeEntities)) {
                 productEntity.setSizeEntities(sizeEntities);
@@ -251,7 +246,17 @@ public class ProductImpl implements IProductService {
                 return response;
             }
 
-            productRepository.save(productEntity); // Lưu thay đổi vào database
+            Optional<ProducerEntity> producerEntities = producerReposiroty.findById(productDTO.getProducerId());
+            if (producerEntities.isPresent()) {
+                productEntity.setProducerEntity(producerEntities.get());
+            } else {
+                response.setCode(HttpStatus.BAD_REQUEST.value());
+                response.setMessage("producer not found with id " + productDTO.getProducerId());
+                return response;
+            }
+
+
+            productRepository.save(productEntity);
 
             response.setCode(HttpStatus.OK.value());
             response.setMessage("Update product with id " + productId + " successful");
@@ -310,19 +315,30 @@ public class ProductImpl implements IProductService {
     }
 
     @Override
-    public BaseResponse<List<ProductDTO>> searchProductCondition(String condition) {
-        List<ProductEntity> productEntities = productRepository.searchProductByNameAndCode(condition);
-        List<ProductDTO> productDTOs = new ArrayList<>();
-        for (ProductEntity product : productEntities) {
+    public BaseResponse<Page<ProductDTO>> searchproductCondition(String condition, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductEntity> pages = productRepository.searchProductByNameAndCode(condition, pageable);
+        Page<ProductDTO> productDTOs = pages.map(product -> {
             ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+            productDTO.setCategory(product.getCategoryEntity().getName());
+            productDTO.setProducer(product.getProducerEntity().getName());
+            productDTO.setProducerId(product.getProducerEntity().getId());
+            productDTO.setCategoryId(product.getCategoryEntity().getId());
+            String sizeNames = product.getSizeEntities().stream().map(SizeEntity::getName).collect(Collectors.joining(" ,"));
+            productDTO.setSize(sizeNames);
+            List<String> imagesColor = product.getColorEntities().stream().map(ColorEntity::getImage).collect(Collectors.toList());
+            productDTO.setImagesColor(imagesColor);
             List<Long> sizeIds = product.getSizeEntities().stream().map(SizeEntity::getId).collect(Collectors.toList());
-            List<Long> colorIds = product.getColorEntities().stream().map(ColorEntity::getId).collect(Collectors.toList());
             productDTO.setSizeId(sizeIds);
+            List<Long> colorIds = product.getColorEntities().stream().map(ColorEntity::getId).collect(Collectors.toList());
             productDTO.setColorId(colorIds);
-            productDTOs.add(productDTO);
-        }
+
+            return productDTO;
+        });
+
         return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, productDTOs);
     }
+
 
     @Override
     public BaseResponse<List<ProductDTO>> getProductBestSellers() {
@@ -377,6 +393,38 @@ public class ProductImpl implements IProductService {
 
         return response;
     }
+
+    @Override
+    public BaseResponse<List<ProductDTO>> findAllProductNew() {
+        BaseResponse<List<ProductDTO>> response = new BaseResponse<>();
+        LocalDateTime startDate = LocalDateTime.now().minusDays(5);
+        List<ProductEntity> newProducts = productRepository.listProductNew(startDate);
+        List<ProductDTO> productDTOs = new ArrayList<>();
+        for (ProductEntity product : newProducts) {
+            ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+            List<Long> sizeIds = product.getSizeEntities().stream().map(SizeEntity::getId).collect(Collectors.toList());
+            List<Long> colorIds = product.getColorEntities().stream().map(ColorEntity::getId).collect(Collectors.toList());
+            productDTO.setSizeId(sizeIds);
+            productDTO.setColorId(colorIds);
+            productDTOs.add(productDTO);
+        }
+        response.setData(productDTOs);
+        response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+        response.setCode(HttpStatus.OK.value());
+        return response;
+    }
+
+    @Override
+    public BaseResponse<Long> countProuct() {
+        Long countProducts = productRepository.countProduct();
+        BaseResponse<Long> response = new BaseResponse<>();
+        response.setData(countProducts);
+        response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+        response.setCode(HttpStatus.OK.value());
+        return response;
+    }
+
+
 
 
     public Resource export () {

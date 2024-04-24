@@ -1,5 +1,6 @@
 package edu.t3h.clothes.controller.resource;
 
+import edu.t3h.clothes.entity.ProductSizeEntity;
 import edu.t3h.clothes.model.dto.CategoryDTO;
 import edu.t3h.clothes.model.dto.OrdersDTO;
 import edu.t3h.clothes.model.dto.ProducerDTO;
@@ -23,8 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/product")
 public class ProductResource {
-    @Autowired
-    private DataService dataService;
+
     private final IProductService productService;
     public ProductResource(IProductService productService){
         this.productService = productService;
@@ -97,7 +97,7 @@ public class ProductResource {
         }
     }
 
-    // tìm kiếm theo tên sản phẩm (user)
+    // tìm kiếm theo tên sản phẩm
     @GetMapping("/searchProductByName/{name}")
     public ResponseEntity<BaseResponse<List<ProductDTO>>> findProductsByName(@PathVariable String name) {
         BaseResponse<List<ProductDTO>> response = productService.findProductsByName(name);
@@ -111,10 +111,13 @@ public class ProductResource {
 
     // tìm kiếm sản phẩm theo tên hoặc mã
     @GetMapping("/searchByCondition/{condition}")
-    public BaseResponse<?> searchOrdersByCondition(@PathVariable String condition) {
-        BaseResponse<List<ProductDTO>> productDto = productService.searchProductCondition(condition);
+    public BaseResponse<Page<ProductDTO>> searchUsersByCondition(@PathVariable String condition,
+                                                                  @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+                                                                  @RequestParam(name = "size", required = false, defaultValue = "5") int size) {
+
+        BaseResponse<Page<ProductDTO>> productDto = productService.searchproductCondition(condition, page, size);
         if (productDto.getData() != null && !productDto.getData().isEmpty()) {
-            BaseResponse<List<ProductDTO>> response = new BaseResponse<>();
+            BaseResponse<Page<ProductDTO>> response = new BaseResponse<>();
             response.setCode(HttpStatus.OK.value());
             response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
             response.setData(productDto.getData());
@@ -142,8 +145,21 @@ public class ProductResource {
         BaseResponse<List<ProductDTO>> response = productService.findProductsInPriceRange(minPrice, maxPrice);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
-    @GetMapping("/all")
-    public Map<String, List<?>> getAllData() {
-        return dataService.getAllData();
+
+    // san pham moi them
+    @GetMapping("/newProduct")
+    public ResponseEntity<BaseResponse<List<ProductDTO>>> getProducts() {
+        BaseResponse<List<ProductDTO>> response = productService.findAllProductNew();
+
+        if (response.getCode() == HttpStatus.OK.value()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+    @GetMapping("/countProduct")
+    public ResponseEntity<BaseResponse<Long>> countProduct() {
+        BaseResponse<Long> response = productService.countProuct();
+        return ResponseEntity.ok(response);
     }
 }
