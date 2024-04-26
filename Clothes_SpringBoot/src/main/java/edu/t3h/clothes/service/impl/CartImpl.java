@@ -10,6 +10,7 @@ import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.CartResponse;
 import edu.t3h.clothes.repository.*;
 import edu.t3h.clothes.service.ICartService;
+import edu.t3h.clothes.service.IUserService;
 import edu.t3h.clothes.utils.Constant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,17 +144,31 @@ public class CartImpl implements ICartService {
                 }
                 CartEntity cartEntity = new CartEntity();
                 cartEntity.setId(cartDTO.getId());
-                cartEntity.getProduct().setSizeEntities(sizeEntities);
-                cartEntity.getProduct().setColorEntities(colorEntities);
-                cartEntity.getProduct().setPrice(cartDTO.getPrice());
-                cartEntity.setTotal(cartDTO.getTotal());
-                cartEntity.setNumber(cartDTO.getNumber());
+
                 LocalDateTime now = LocalDateTime.now();
                 cartEntity.setCreatedDate(now);
+
+                ProductEntity productEntity = productOptional.get();
+                productEntity.setId(cartDTO.getProductId());
+                productEntity.setColorEntities(colorEntities);
+                productEntity.setSizeEntities(sizeEntities);
+                Double price =productEntity.getPrice();
+                cartEntity.setProduct(productEntity);
+                cartEntity.setPrice(price);
+
+                cartEntity.setNumber(1L);
+
+
+                cartEntity.setModifiedBy(currentUsername);
+
+                cartEntity.setDeleted(false);
+                cartEntity.setUser(currentUser);
                 cartRepository.save(cartEntity);
+
                 response.setCode(HttpStatus.OK.value());
                 response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
                 return response;
+
             }
             response.setCode(HttpStatus.UNAUTHORIZED.value());
             response.setMessage(Constant.HTTP_MESSAGE.FAILED);
@@ -161,7 +176,7 @@ public class CartImpl implements ICartService {
 
         }
         response.setCode(HttpStatus.UNAUTHORIZED.value());
-        response.setMessage("Không có người dùng đăng nhập");
+        response.setMessage(Constant.HTTP_MESSAGE.FAILED);
         return response;
 
     }

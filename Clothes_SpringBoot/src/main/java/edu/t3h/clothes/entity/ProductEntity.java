@@ -22,7 +22,7 @@ public class ProductEntity extends AbstractEntity {
 
     private String description;
 
-    private Integer quantity;
+    private Long quantity;
 
     private Double price;
 

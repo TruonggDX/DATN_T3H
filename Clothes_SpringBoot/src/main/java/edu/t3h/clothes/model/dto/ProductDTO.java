@@ -23,7 +23,7 @@ public class ProductDTO {
 
     private String  description;
 
-    private Integer quantity;
+    private Long quantity;
 
     private Double price;
 

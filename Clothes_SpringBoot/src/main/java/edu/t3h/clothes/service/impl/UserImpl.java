@@ -64,15 +64,15 @@ public class UserImpl implements IUserService {
         BaseResponse<?> response = new BaseResponse<>();
 
         // Kiểm tra null trước khi truy cập vào danh sách RoleDTO
-        Set<RoleEntity> rolesDto = new HashSet<>();
-        if (userDTO.getRoleDtos() != null) {
-            for (RoleDTO roleDTO : userDTO.getRoleDtos()) {
-                RoleEntity role = roleRepository.findByName(roleDTO.getName());
-                if (role != null) {
-                    rolesDto.add(role);
-                }
-            }
-        }
+//        Set<RoleEntity> rolesDto = new HashSet<>();
+//        if (userDTO.getRoleDtos() != null) {
+//            for (RoleDTO roleDTO : userDTO.getRoleDtos()) {
+//                RoleEntity role = roleRepository.findByName(roleDTO.getName());
+//                if (role != null) {
+//                    rolesDto.add(role);
+//                }
+//            }
+//        }
 
         RoleEntity roleId = roleRepository.findById(userDTO.getRoleId()).orElse(null);
 
@@ -83,7 +83,7 @@ public class UserImpl implements IUserService {
         if (roles == null){
             roles = new HashSet<>();
         }
-        roles.addAll(rolesDto);
+//        roles.addAll(rolesDto);
         if (roleId != null){
             roles.add(roleId);
         }
@@ -355,20 +355,32 @@ public class UserImpl implements IUserService {
             response.setMessage(userResponse.getMessage());
             return response;
         }
+
         UserDTO userDTO = userResponse.getData();
         UserEntity userEntity = modelMapper.map(userDTO, UserEntity.class);
+        Set<RoleEntity> roles = userEntity.getRoles();
+
         if (changePassword.getOldPassword() == null || changePassword.getNewPassword() == null || changePassword.getConfirmPassword() == null) {
             response.setCode(HttpStatus.BAD_REQUEST.value());
             response.setMessage(Constant.HTTP_MESSAGE.FAILED);
             return response;
         }
-        if (!changePassword.getOldPassword().equals(userEntity.getPassword()) || !changePassword.getNewPassword().equals(changePassword.getConfirmPassword())) {
+        if (!PasswordEncoderUtil.matches(changePassword.getOldPassword(), userEntity.getPassword())) {
+            response.setCode(HttpStatus.BAD_REQUEST.value());
+            response.setMessage(Constant.HTTP_MESSAGE.FAILED);
+            return response;
+        }
+        if (!changePassword.getNewPassword().equals(changePassword.getConfirmPassword())) {
             response.setCode(HttpStatus.BAD_REQUEST.value());
             response.setMessage(Constant.HTTP_MESSAGE.FAILED);
             return response;
         }
 
-        userEntity.setPassword(changePassword.getNewPassword());
+
+        String encodedPassword = PasswordEncoderUtil.encodePassword(changePassword.getNewPassword());
+        userEntity.setPassword(encodedPassword);
+        userEntityRepository.save(userEntity);
+        userEntity.setRoles(roles);
         userEntityRepository.save(userEntity);
         response.setCode(HttpStatus.OK.value());
         response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);

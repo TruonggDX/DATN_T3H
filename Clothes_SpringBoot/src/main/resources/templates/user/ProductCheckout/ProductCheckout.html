@@ -34,33 +34,28 @@
         <div class="billing_details">
             <div class="row">
                 <div class="col-lg-8">
-                    <h3>Chi tiết thanh toán</h3>
+<!--                    <h3>Chi tiết thanh toán</h3>-->
                     <form class="row contact_form" action="#" method="post" novalidate="novalidate">
 
                         <div class="col-md-12 form-group">
-                            <input type="text" class="form-control" id="company" name="company" placeholder="Nhập ...">
+                            <label style="color: black">Họ tên</label>
+                            <input readonly type="text" class="form-control" id="name" name="company" placeholder="Nhập ...">
                         </div>
 
                         <div class="col-md-12 form-group p_star">
-                            <input type="text" class="form-control" id="company" name="company" placeholder="Nhập ...">
+                            <label style="color: black">Số điện thoại</label>
+                            <input readonly type="text" class="form-control" id="phone" name="company" placeholder="Nhập ...">
                         </div>
                         <div class="col-md-12 form-group p_star">
-                            <input type="text" class="form-control" id="add1" name="add1" placeholder="Nhập ...">
-
-                        </div>
-                        <div class="col-md-12 form-group p_star">
-                            <input type="text" class="form-control" id="add2" name="add2" placeholder="Nhập ...">
-
-                        </div>
-                        <div class="col-md-12 form-group p_star">
-                            <input type="text" class="form-control" id="city" name="city" placeholder="Nhập ...">
+                            <label style="color: black">Địa chỉ</label>
+                            <input readonly type="text" class="form-control" id="address" name="add1" placeholder="Nhập ...">
 
                         </div>
 
 
                         <div class="col-md-12 form-group mb-0">
 
-                            <textarea class="form-control" name="message" id="message" rows="1"
+                            <textarea class="form-control" name="message" id="note" rows="1"
                                       placeholder="Ghi chú đặt hàng"></textarea>
                         </div>
                         <div class="text-center">
@@ -121,6 +116,23 @@
 
     function initData() {
         getProductsInCart();
+        getUs();
+    }
+    function getUs(){
+        $.ajax({
+            url: 'http://localhost:8080/api/user/getUser',
+            type: 'GET',
+            success: function (data) {
+                $('#userId').val(data.data.id);
+                $('#name').val(data.data.name);
+                $('#phone').val(data.data.phone);
+                $('#address').val(data.data.address);
+
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
     }
 
     function getProductsInCart() {

@@ -35,13 +35,13 @@
             <div class="col-lg-6">
                 <div class="owl-carousel owl-theme s_Product_carousel">
                     <div class="single-prd-item">
-                        <img class="img-fluid" src="img/category/s-p1.jpg" alt="">
+                        <img class="img-fluid" src="img/category/a1.jpg" alt="">
                     </div>
                     <div class="single-prd-item">
-                        <img class="img-fluid" src="img/category/c1.jpg" alt="">
+                        <img class="img-fluid" src="img/category/a2.jpg" alt="">
                     </div>
                     <div class="single-prd-item">
-                        <img class="img-fluid" src="img/category/c2.jpg" alt="">
+                        <img class="img-fluid" src="img/category/a3.jpg" alt="">
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
             <div class="col-lg-5 offset-lg-1" id="productDetail">
 
                 <div class="s_product_text">
-                    <input value="" id="ids">
+                    <input value="" id="ids" hidden="hidden">
                     <h4>Tên sản phẩm : <input style="border: none" readonly type="text" id="name"></h4>
                     <h3>Giá : <input style="border: none;width: 80px" readonly type="text" id="price">VNĐ</h3>
                     <ul class="list">
@@ -256,6 +256,7 @@
                 data: JSON.stringify(productData),
                 success: function(response) {
                     console.log("thanh cong");
+                    window.location.href='/user/categroyshop';
                     console.log(response);
 
                 },
