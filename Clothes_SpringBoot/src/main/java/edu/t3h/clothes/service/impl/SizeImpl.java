@@ -105,4 +105,26 @@ public class SizeImpl implements ISizeService {
         SizeDTO sizeDTOs = modelMapper.map(size, SizeDTO.class);
         return new BaseResponse<>(HttpStatus.OK.value(),Constant.HTTP_MESSAGE.SUCCESS,sizeDTOs);
     }
+
+    @Override
+    public BaseResponse<List<SizeDTO>> getSizeOfProduct(Long productId) {
+        BaseResponse<List<SizeDTO>> response = new BaseResponse<>();
+        List<SizeEntity> sizes = sizeRepository.getSize(productId);
+        if (sizes != null && !sizes.isEmpty()) {
+            List<SizeDTO> sizeDTOs = sizes.stream()
+                    .map(sizeEntity -> modelMapper.map(sizeEntity, SizeDTO.class))
+                    .collect(Collectors.toList());
+
+            response.setData(sizeDTOs);
+            response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+            response.setCode(HttpStatus.OK.value());
+        } else {
+            response.setMessage(Constant.HTTP_MESSAGE.FAILED);
+            response.setCode(HttpStatus.BAD_REQUEST.value());
+        }
+
+        return response;
+    }
+
+
 }

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <nav th:replace="admin/fragments/navbar :: navbar"></nav>
+    <aside th:replace="admin/fragments/sidebar :: sidebar"></aside>
+    <!-- Content -->
+    <form id="updateUserForm" method="post">
+
+        <div class="content-wrapper" style="min-height: 332.4px;">
+            <h3 style="text-align: center">Chỉnh sửa tài khoản</h3>
+            <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
+                <input type="hidden" id="userId" name="userId" class="form-control">
+                <input type="hidden" id="roleId" name="roleId" class="form-control">
+                <div class="form-group">
+                    <label>Họ và tên</label>
+                    <input id="name" name="name" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Mã tài khoản</label>
+                    <input id="code" name="code" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Tên đăng nhập</label>
+                    <input id="username" name="username" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Ngày sinh</label>
+                    <input id="birthday" name="birthday" type="date" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input id="email" name="email" type="email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <input id="phone" name="phone" type="number" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Địa chỉ</label>
+                    <input id="address" name="address" type="text" class="form-control">
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
+            </div>
+        </div>
+    </form>
+    <!-- End Content -->
+    <style>
+        div, label, button, h3 {
+            font-family: "Times New Roman";
+        }
+    </style>
+    <aside class="control-sidebar control-sidebar-dark"></aside>
+</div>
+<div th:replace="admin/fragments/script :: script"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function getData(user){
+        $('#userId').val(user.id);
+        $('#code').val(user.code);
+        $('#name').val(user.name);
+        $('#username').val(user.username);
+        $('#birthday').val(user.birthday);
+        $('#email').val(user.email);
+        $('#phone').val(user.phone);
+        $('#address').val(user.address);
+    }
+
+    $(document).ready(function () {
+        var userId = new URLSearchParams(window.location.search).get('id');
+        if (userId) {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/user/search/" + userId,
+                success: function(response) {
+                    getData(response.data);
+                    let data = response.data;
+                    $('#list_role').val(data.roleId)
+                    console.log(response.data)
+                },
+
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        $('#updateUserForm').submit(function(event) {
+            event.preventDefault();
+
+            var formData = {
+                id: $('#userId').val(),
+                code: $('#code').val(),
+                name: $('#name').val(),
+                username: $('#username').val(),
+                birthday: $('#birthday').val(),
+                email: $('#email').val(),
+                phone: $('#phone').val(),
+                address: $('#address').val(),
+
+
+
+            };
+            $.ajax({
+                type: "PUT",
+                url: "http://localhost:8080/api/user/update/" + formData.id,
+                contentType: "application/json",
+                data: JSON.stringify(formData),
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    window.location.href = "/admin/list_account";
+                },
+                error: function (error){
+                    console.log(error);
+                }
+            });
+        });
+
+    });
+</script>
+</body>
+</html>

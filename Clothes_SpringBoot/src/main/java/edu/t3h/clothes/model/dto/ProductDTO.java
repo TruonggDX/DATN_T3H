@@ -3,6 +3,7 @@ package edu.t3h.clothes.model.dto;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Setter
 @Getter
-@Data
+
 public class ProductDTO {
     private Long id;
 
@@ -18,19 +19,13 @@ public class ProductDTO {
 
     private String name;
 
-    private String size;
-
     private String material;
-
-    private String producer;
 
     private String  description;
 
-    private Integer quantity;
+    private Long quantity;
 
-    private Float price;
-
-    private String category;
+    private Double price;
 
     private Float import_price;
 
@@ -42,18 +37,36 @@ public class ProductDTO {
 
     private String modified_by;
 
+
+    private String category;
+
+    private String size;
+
+    private String producer;
+
+    private String color;
+
     private Long categoryId;
-    private List<Long> colorIds;
-    private List<Long> sizeIds;
+    private List<Long> colorId;
+    private List<Long> sizeId;
+    private Long producerId;
 
     private List<String> imagesColor = new ArrayList<>();
 
-    public ProductDTO(Long id, String code, String name) {
+    public ProductDTO(Long id, String code, String name){
         this.id = id;
         this.code = code;
         this.name = name;
     }
 
-    public ProductDTO() {
+
+    private List<ImageProductDTO> imageDTOs = new ArrayList<>();
+    public void addImageDTO(ImageProductDTO imageDTO){
+        this.imageDTOs.add(imageDTO);
     }
+
+    public ProductDTO(){}
+
+
+
 }

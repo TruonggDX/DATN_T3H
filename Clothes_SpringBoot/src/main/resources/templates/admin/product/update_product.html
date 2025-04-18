@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head :: head"></head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <nav th:replace="admin/fragments/navbar :: navbar"></nav>
+    <aside th:replace="admin/fragments/sidebar :: sidebar"></aside>
+    <!-- Content -->
+    <form id="updateForm" method="post">
+
+        <div class="content-wrapper" style="min-height: 332.4px;">
+            <h3 style="text-align: center">Chỉnh sửa thông tin sản phẩm</h3>
+            <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
+                <input type="hidden" id="ids" name="productId" class="form-control">
+                <div class="form-group">
+                    <label>Mã sản phẩm</label>
+                    <input id="code" name="productCode" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Tên sản phẩm</label>
+                    <input id="name" name="productName" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Chất liệu</label>
+                    <input id="material" name="productMaterial" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Số lượng</label>
+                    <input id="quantity" name="productQuantity" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Giá bán </label>
+                    <input id="price" name="productPrice" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Giá nhập </label>
+                    <input id="import_price" name="productImportPrice" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Danh mục</label>
+                    <select class="custom-select" id="list_category" name="categoryId">
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Nhà sản xuất</label>
+                    <select class="custom-select" id="list_producer" name="producerId">
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Size</label>
+                    <div class="form-group-size" name="sizeId" id="list_size">
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
+                            <label for="customCheckbox1" class="custom-control-label">XS</label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label>Màu sắc</label>
+                    <select class="js-example-basic-multiple" name="colorId" id="list-color" multiple="multiple" style="width: 100%;">
+                    </select>
+                </div>
+
+                    <div class="form-group">
+                        <label>Mô tả</label>
+                        <textarea class="form-control" name="productDescription" id="description" cols="150"
+                                  rows="5" ></textarea>
+                    </div>
+
+
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-block btn-outline-primary btn-lg">Cập nhập</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- End Content -->
+    <style>
+        div, label, button, h3 {
+            font-family: "Times New Roman";
+        }
+    </style>
+    <aside class="control-sidebar control-sidebar-dark"></aside>
+</div>
+<div th:replace="admin/fragments/script :: script"></div>
+<style>
+    div, label, button, h3 {
+        font-family: "Times New Roman";
+    }
+
+    .form-group-size .custom-control {
+        display: inline-block;
+        margin-right: 90px;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+    }
+
+</style>
+
+<script>
+    function initData() {
+        getProducer();
+        getCategory();
+        getSize();
+        getColor();
+
+    }
+
+    function getProducer() {
+        let list = $('#list_producer');
+        list.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/producer/list",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                let categories = response?.data?.content;
+                for (let i = 0; i < categories.length; i++) {
+                    let data = categories[i];
+                    let option = '<option value="' + data.id + '">' + data.name + '</option>';
+                    list.append(option);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function getCategory() {
+        let list = $('#list_category');
+        list.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/category/list",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                let categories = response?.data?.content;
+                for (let i = 0; i < categories.length; i++) {
+                    let data = categories[i];
+                    let option = '<option value="' + data.id + '">' + data.name + '</option>';
+                    list.append(option);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function getSize() {
+        let list = $('#list_size');
+        list.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/size/list",
+            dataType: "json",
+            success: function (response) {
+                let sizes = response?.data;
+                sizes.forEach(function (size) {
+                    let checkbox = $('<div class="custom-control custom-checkbox"> \
+                        <input class="custom-control-input" type="checkbox" id="customCheckbox' + size.id + '" value="' + size.name + '"> \
+                        <label for="customCheckbox' + size.id + '" class="custom-control-label">' + size.name + '</label> \
+                    </div>');
+                    $('#list_size').append(checkbox);
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function getColor(selectedColors) {
+        let list = $('#list-color');
+        list.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/color/list",
+            dataType: "json",
+            success: function (response) {
+                let colors = response?.data;
+                colors.forEach(function (color) {
+                    let selected = selectedColors.includes(color.id) ? "selected" : "";
+                    let option = '<option value="' + color.id + '" ' + selected + '>' + color.name + '</option>';
+                    list.append(option);
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+
+    function getInfoDataProduct(product) {
+        $('#ids').val(product.id);
+        $('#code').val(product.code);
+        $('#name').val(product.name);
+        $('#material').val(product.material);
+        $('#quantity').val(product.quantity);
+        $('#price').val(product.price);
+        $('#import_price').val(product.import_price);
+        $('#description').val(product.description);
+
+        for (let i = 0; i < product.sizeId.length; i++) {
+            const id = product.sizeId[i];
+            const idCheckbox = 'customCheckbox' + id;
+            $('#' + idCheckbox).prop('checked', true);
+        }
+        let selectedColors = product.colorId;
+        getColor(selectedColors);
+    }
+
+
+
+    $(document).ready(function () {
+        initData();
+        var productId = new URLSearchParams(window.location.search).get('id');
+        if (productId) {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/product/search/" + productId,
+                success: function (response) {
+                    getInfoDataProduct(response.data);
+                    let data = response.data;
+                   $('#list_producer').val(data.producerId)
+
+                    $('#list_category').val(data.categoryId)
+
+                    console.log("data",data)
+                },
+
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        $('#updateForm').submit(function (event) {
+            event.preventDefault();
+            let sizeIds = [];
+            $('input[type="checkbox"]:checked').each(function(){
+                if($(this).is(':checked')) {
+                    console.log($(this).attr("id"))
+                    let idStr = $(this).attr("id");
+                    let numberId = idStr.substring('customCheckbox'.length,idStr.length);
+                    sizeIds.push(parseInt(numberId));
+                }
+            });
+            let colorIds = $("#list-color").val().map(data => parseInt(data));
+            var formData = {
+                id: $('#ids').val(),
+                code: $('#code').val(),
+                name: $('#name').val(),
+                material: $('#material').val(),
+                quantity: $('#quantity').val(),
+                price: $('#price').val(),
+                import_price: $('#import_price').val(),
+                description: $('#description').val(),
+                producerId: $('#list_producer').val(),
+                categoryId: $('#list_category').val(),
+                colorId: colorIds,
+                sizeId: sizeIds
+            };
+            $.ajax({
+                type: "PUT",
+                url: "http://localhost:8080/product/update/" + formData.id,
+                contentType: "application/json",
+                data: JSON.stringify(formData),
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    window.location.href = "/admin/list";
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+
+</script>
+
+</body>
+</html>

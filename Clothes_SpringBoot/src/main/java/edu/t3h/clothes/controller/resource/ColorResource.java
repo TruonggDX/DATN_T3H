@@ -6,6 +6,7 @@ import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.service.IColorService;
 import edu.t3h.clothes.utils.Constant;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,5 +54,13 @@ public class ColorResource {
             return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
         }
     }
-
+    @GetMapping("/getColor/{productId}")
+    public ResponseEntity<BaseResponse<List<ColorDTO>>> getSizeOfProduct(@PathVariable Long productId) {
+        BaseResponse<List<ColorDTO>> response = colorService.getColorOfProduct(productId);
+        if (response.getCode()==HttpStatus.OK.value()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
 }

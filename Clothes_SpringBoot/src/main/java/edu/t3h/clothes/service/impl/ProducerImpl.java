@@ -1,52 +1,60 @@
 package edu.t3h.clothes.service.impl;
 
+
 import edu.t3h.clothes.entity.ProducerEntity;
+import edu.t3h.clothes.mapper.ProducerMapper;
 import edu.t3h.clothes.model.dto.ProducerDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
-import edu.t3h.clothes.repository.ProducerReposiroty;
+import edu.t3h.clothes.repository.ProducerRepository;
 import edu.t3h.clothes.service.IProducerService;
 import edu.t3h.clothes.utils.Constant;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
+import edu.t3h.clothes.utils.GenarateCode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ProducerImpl implements IProducerService {
-@Autowired
-    private ProducerReposiroty producerReponsiroty;
-@Autowired
-    private  ModelMapper modelMapper;
-
-
+    @Autowired
+    private ProducerRepository producerRepository;
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
+    private ProducerMapper producerMapper;
 
     @Override
-    public BaseResponse<List<ProducerDTO>> getAll() {
-        List<ProducerEntity> producerEntities = producerReponsiroty.listProducer();
-        List<ProducerDTO> producerDTOS = producerEntities.stream()
-                .map(producerEntity -> modelMapper.map(producerEntity, ProducerDTO.class))
-                .collect(Collectors.toList());
+    public BaseResponse<Page<ProducerDTO>> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProducerEntity> pages = producerRepository.listProducer(pageable);
 
-        BaseResponse<List<ProducerDTO>> response = new BaseResponse<>();
+        List<ProducerDTO> producerdto = pages.getContent().stream()
+                .map(producerEntity -> modelMapper.map(producerEntity, ProducerDTO.class))
+            .toList();
+
+        BaseResponse<Page<ProducerDTO>> response = new BaseResponse<>();
         response.setCode(HttpStatus.OK.value());
         response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-        response.setData(producerDTOS);
-
+        response.setData(new PageImpl<>(producerdto, pageable, pages.getTotalElements()));
         return response;
     }
 
     @Override
     public BaseResponse<?> creatProducer(ProducerDTO producerDTO) {
-        ProducerEntity producerEntity = modelMapper.map(producerDTO, ProducerEntity.class);
+        ProducerEntity producerEntity = producerMapper.toEntity(producerDTO);
         producerEntity.setDeleted(false);
         producerEntity.setCreatedDate(LocalDateTime.now());
-        producerEntity = producerReponsiroty.save(producerEntity);
-        producerDTO.setId(producerEntity.getId());
+        producerEntity.setCode(GenarateCode.generateAccountCode());
+        producerEntity = producerRepository.save(producerEntity);
+        producerDTO = producerMapper.toDto(producerEntity);
         BaseResponse<ProducerDTO> response = new BaseResponse<>();
         response.setCode(HttpStatus.OK.value());
         response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
@@ -56,26 +64,26 @@ public class ProducerImpl implements IProducerService {
 
     @Override
     public ProducerDTO findByProducerById(Long id) {
-        Optional<ProducerEntity> producerEntityOptional = producerReponsiroty.findById(id);
+        Optional<ProducerEntity> producerEntityOptional = producerRepository.findById(id);
         ProducerEntity producerEntity = null;
         BaseResponse<ProducerDTO> response;
 
         if (producerEntityOptional.isEmpty()){
             response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
             return modelMapper.map(response, ProducerDTO.class);
-        } else {
-            producerEntity = producerEntityOptional.get();
-            if (producerEntity.getDeleted()){
-                response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null );
-                return modelMapper.map(response, ProducerDTO.class);
-            }
+        }
+        producerEntity = producerEntityOptional.get();
+        if (producerEntity.getDeleted()) {
+            response = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(),
+                Constant.HTTP_MESSAGE.FAILED, null);
+            return modelMapper.map(response, ProducerDTO.class);
         }
         return modelMapper.map(producerEntity, ProducerDTO.class);
     }
 
     @Override
     public BaseResponse<?> deleteProducer(Long id) {
-        Optional<ProducerEntity> producerEntity = producerReponsiroty.findById(id);
+        Optional<ProducerEntity> producerEntity = producerRepository.findById(id);
         BaseResponse<List<ProducerDTO>> baseResponse;
         if (producerEntity.isEmpty()){
             baseResponse = new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
@@ -83,20 +91,14 @@ public class ProducerImpl implements IProducerService {
         }
         ProducerEntity producers = producerEntity.get();
         producers.setDeleted(true);
-        producerReponsiroty.save(producers);
+        producerRepository.save(producers);
 
-        List<ProducerEntity> producerEntities = producerReponsiroty.listProducer();
-        List<ProducerDTO> producerDTOS = producerEntities.stream()
-                .map(produce -> modelMapper.map(produce, ProducerDTO.class))
-                .collect(Collectors.toList());
-        baseResponse = new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, producerDTOS);
-
-        return baseResponse;
+        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, null);
     }
 
     @Override
     public BaseResponse<?> updateProducer(Long id, ProducerDTO producerDTO) {
-        Optional<ProducerEntity> producerEntityOptional = producerReponsiroty.findById(id);
+        Optional<ProducerEntity> producerEntityOptional = producerRepository.findById(id);
         if (producerEntityOptional.isEmpty()){
             return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
 
@@ -105,21 +107,23 @@ public class ProducerImpl implements IProducerService {
         producers.setName(producerDTO.getName());
         producers.setCode(producerDTO.getCode());
 
-        producerReponsiroty.save(producers);
+        producerRepository.save(producers);
         ProducerDTO producerDTO1 = modelMapper.map(producers, ProducerDTO.class);
 
         return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, producerDTO1);
     }
 
     @Override
-    public BaseResponse<List<ProducerDTO>> searchProducerByCondition(String condition) {
-        List<ProducerEntity> producerEntities = producerReponsiroty.searchProducer(condition);
-        List<ProducerDTO> producerDTOS = producerEntities.stream()
-                .map(producerEntity -> modelMapper.map(producerEntity,ProducerDTO.class))
-                .collect(Collectors.toList());
-
-        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS,producerDTOS);
+    public BaseResponse<Page<ProducerDTO>> searchProducerByCondition(String condition, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProducerEntity> pages = producerRepository.searchProducer(condition, pageable);
+        Page<ProducerDTO> prodto = pages.map(userEntity -> {
+            ProducerDTO producerDTO = modelMapper.map(userEntity, ProducerDTO.class);
+            return producerDTO;
+        });
+        return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, prodto);
     }
+
 
 
 }

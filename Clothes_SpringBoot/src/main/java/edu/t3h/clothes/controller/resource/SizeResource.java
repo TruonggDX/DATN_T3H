@@ -1,11 +1,16 @@
 package edu.t3h.clothes.controller.resource;
 
+import edu.t3h.clothes.entity.SizeEntity;
 import edu.t3h.clothes.model.dto.CategoryDTO;
+import edu.t3h.clothes.model.dto.ProductDTO;
 import edu.t3h.clothes.model.dto.SizeDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
+import edu.t3h.clothes.repository.SizeRepository;
 import edu.t3h.clothes.service.ISizeService;
 import edu.t3h.clothes.utils.Constant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,6 +55,15 @@ public class SizeResource {
             return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, sizeDto);
         } else {
             return new BaseResponse<>(HttpStatus.BAD_REQUEST.value(), Constant.HTTP_MESSAGE.FAILED, null);
+        }
+    }
+    @GetMapping("/getSize/{productId}")
+    public ResponseEntity<BaseResponse<List<SizeDTO>>> getSizeOfProduct(@PathVariable Long productId) {
+        BaseResponse<List<SizeDTO>> response = sizeService.getSizeOfProduct(productId);
+        if (response.getCode()==HttpStatus.OK.value()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 }

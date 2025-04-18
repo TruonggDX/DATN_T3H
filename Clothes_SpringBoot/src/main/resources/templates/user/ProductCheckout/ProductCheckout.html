@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="user/fragments/head :: head"></head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body>
 <!--================ Start Header Menu Area =================-->
 <header th:replace="user/fragments/header :: header"></header>
@@ -31,82 +34,41 @@
         <div class="billing_details">
             <div class="row">
                 <div class="col-lg-8">
-                    <h3>Chi tiết thanh toán</h3>
+<!--                    <h3>Chi tiết thanh toán</h3>-->
                     <form class="row contact_form" action="#" method="post" novalidate="novalidate">
 
                         <div class="col-md-12 form-group">
-                            <input type="text" class="form-control" id="company" name="company" placeholder="Nhập ...">
+                            <label style="color: black">Họ tên</label>
+                            <input readonly type="text" class="form-control" id="name" name="company" placeholder="Nhập ...">
                         </div>
 
                         <div class="col-md-12 form-group p_star">
-                            <input  type="text" class="form-control" id="company" name="company" placeholder="Nhập ...">
+                            <label style="color: black">Số điện thoại</label>
+                            <input readonly type="text" class="form-control" id="phone" name="company" placeholder="Nhập ...">
                         </div>
                         <div class="col-md-12 form-group p_star">
-                            <input type="text" class="form-control" id="add1" name="add1" placeholder="Nhập ...">
+                            <label style="color: black">Địa chỉ</label>
+                            <input readonly type="text" class="form-control" id="address" name="add1" placeholder="Nhập ...">
 
                         </div>
-                        <div class="col-md-12 form-group p_star">
-                            <input type="text" class="form-control" id="add2" name="add2" placeholder="Nhập ...">
-
-                        </div>
-                        <div class="col-md-12 form-group p_star">
-                            <input type="text" class="form-control" id="city" name="city" placeholder="Nhập ...">
-
-                        </div>
-
 
 
                         <div class="col-md-12 form-group mb-0">
 
-                            <textarea class="form-control" name="message" id="message" rows="1" placeholder="Ghi chú đặt hàng"></textarea>
+                            <textarea class="form-control" name="message" id="note" rows="1"
+                                      placeholder="Ghi chú đặt hàng"></textarea>
                         </div>
                         <div class="text-center">
-                            <a id="backCart"  class="btn btn-primary" th:href="@{/user/cart}">Quay lại giỏ hàng</a>
+                            <a id="backCart" class="btn btn-primary" th:href="@{/user/cart}">Quay lại giỏ hàng</a>
                         </div>
                     </form>
 
                 </div>
                 <div class="col-lg-4">
-                    <div class="order_box">
+                    <h5 style="float: right;margin: 20px;" id="khtt"></h5>
+                    <div class="order_box" id="listp_cart">
                         <h2>Đơn hàng của bạn</h2>
-                        <ul class="list">
-                            <li><a href="#"><h4>Sản phẩm <span>Giá</span></h4></a></li>
-                            <li><a href="#">Fresh Blackberry <span class="middle">x 02</span> <span class="last">$720.00</span></a></li>
-                            <li><a href="#">Fresh Tomatoes <span class="middle">x 02</span> <span class="last">$720.00</span></a></li>
-                            <li><a href="#">Fresh Brocoli <span class="middle">x 02</span> <span class="last">$720.00</span></a></li>
-                        </ul>
-                        <ul class="list list_2">
 
-                            <li><a href="#">Phí ship <span>Giá cố định: $50.00</span></a></li>
-                            <li><a href="#">Tổng tiền <span>$2210.00</span></a></li>
-                        </ul>
-                        <div class="payment_item">
-                            <div class="radion_btn">
-                                <input type="radio" id="f-option5" name="selector">
-                                <label for="f-option5">Thanh toán khi nhận hàng</label>
-                                <div class="check"></div>
-                            </div>
-                            <p>Vui lòng nhập đầy đủ thông tin địa chỉ , số điện thoại....</p>
-                        </div>
-                        <div class="payment_item active">
-                            <div class="radion_btn">
-                                <input type="radio" id="f-option6" name="selector">
-                                <label for="f-option6">Thanh toán bằng VNPay </label>
-
-                                <div class="check"></div>
-                            </div>
-                            <p>Thanh toán qua VNPay , bạn có thể thanh toán bằng thẻ tín dụng, sẽ nhanh chóng và tiết kiệm thời gian.</p>
-                        </div>
-                        <div class="creat_account">
-                            <input type="checkbox" id="f-option4" name="selector">
-                            <label for="f-option4">Tôi đã đọc và chấp nhận </label>
-                            <a href="#">Điều khoản và điều kiện</a>
-                        </div>
-                        <div class="text-center">
-                            <a id="abtn" class="btn btn-danger" href="#">Thanh toán khi nhận hàng</a>
-                            <a id="abtn" class="btn btn-primary" href="#">Thanh toán VNPay</a>
-
-                        </div>
                     </div>
                 </div>
             </div>
@@ -114,106 +76,160 @@
     </div>
 </section>
 <style>
-#abtn{
-    width: 250px;
-    line-height: 30px;
-    margin-bottom: 20px;
-    border: none;
-}
-#abtn:hover{
-    background: aqua;
-    color: black;
-}
-#backCart{
-    margin-top: 20px;
-    border-radius: 20px;
-    line-height: 30px;
-    margin-left: 20px;
-    border: orange;
-}
-#backCart:hover{
-    background: orange;
-    color: black;
-}
+    #abtn {
+        width: 250px;
+        line-height: 30px;
+        margin-bottom: 20px;
+        border: none;
+    }
+
+    #abtn:hover {
+        background: aqua;
+        color: black;
+    }
+
+    #backCart {
+        margin-top: 20px;
+        border-radius: 20px;
+        line-height: 30px;
+        margin-left: 20px;
+        border: orange;
+    }
+
+    #backCart:hover {
+        background: orange;
+        color: black;
+    }
 </style>
-<!--================End Checkout Area =================-->
+<div th:replace="user/fragments/footer :: footer"></div>
 
-
-
-<!--================ Start footer Area  =================-->
-<footer class="footer">
-    <div class="footer-area">
-        <div class="container">
-            <div class="row section_gap">
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="single-footer-widget tp_widgets">
-                        <h4 class="footer_title large_title">Về chúng tôi</h4>
-                        <p>
-                            Chào mừng bạn đến với trang web bán quần áo của chúng tôi!
-                            Chúng tôi tự hào cung cấp những sản phẩm thời trang chất lượng với sự đa dạng và phong phú.
-                            Tại đây, bạn sẽ tìm thấy những bộ trang phục phong cách và phù hợp với mọi dịp, từ công sở đến dạo phố hay dự tiệc.
-                            Chúng tôi cam kết mang đến trải nghiệm mua sắm trực tuyến tuyệt vời và dịch vụ chăm sóc khách hàng tốt nhất.
-                            Hãy khám phá ngay và tìm cho mình những bộ trang phục ưng ý nhất!
-                        </p>
-                        <p>
-
-                        </p>
-                    </div>
-                </div>
-
-                <div class=" offset-lg-1 col-lg-3  col-md-6 col-sm-6">
-                    <div class="single-footer-widget instafeed">
-                        <h4 class="footer_title">Hàng trưng bày</h4>
-                        <ul class="list instafeed d-flex flex-wrap">
-                            <li><img th:src="@{/user/img/gallery/r1.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r2.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r3.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r5.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r7.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r8.jpg}" alt=""></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="offset-lg-1 col-lg-3 col-md-6 col-sm-6">
-                    <div class="single-footer-widget tp_widgets">
-                        <h4 class="footer_title">Liên hệ chúng tôi</h4>
-                        <div class="ml-40">
-                            <p class="sm-head">
-                                <span class="fa fa-location-arrow"></span>
-                                Địa chỉ
-                            <p>Phúc diễn, Quận Bắc Từ Liêm, thành phố Hà Nội</p>
-
-                            <p class="sm-head">
-                                <span class="fa fa-phone"></span>
-                                Số điện thoại
-                            </p>
-                            <p>
-                                +84 339205335 <br>
-
-                            </p>
-
-                            <p class="sm-head">
-                                <span class="fa fa-envelope"></span>
-                                Email
-                            </p>
-                            <p>
-                                dinhxuantruong2003coi@gmail.com <br>
-
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- footer -->
-</footer>
-<!--================ End footer Area  =================-->
-
+<div th:replace="user/fragments/script :: script"></div>
 
 
 <div th:replace="user/fragments/script :: script"></div>
 </body>
 </html>
+<script>
+    $(document).ready(function () {
+        initData();
+    });
+
+    function initData() {
+        getProductsInCart();
+        getUs();
+    }
+    function getUs(){
+        $.ajax({
+            url: 'http://localhost:8080/api/user/getUser',
+            type: 'GET',
+            success: function (data) {
+                $('#userId').val(data.data.id);
+                $('#name').val(data.data.name);
+                $('#phone').val(data.data.phone);
+                $('#address').val(data.data.address);
+
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+
+    function getProductsInCart() {
+        let bodyTable = $('#listp_cart');
+        bodyTable.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/cart/listpOfUs",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                let cart = response?.data?.content;
+
+                let commonHtml = "<div class='order_box'>" +
+                    "                        <h2>Đơn hàng của bạn</h2>" +
+                    "                        <ul class='list'>" +
+                    "                            <li><a><h4>Sản phẩm <span>Giá</span></h4></a></li>";
+                bodyTable.append(commonHtml);
+                for (let i = 0; i < cart.length; i++) {
+                    let product = cart[i];
+                    let html = "<li><a>" + product.name + "<span class='middle'>x " + product.number + "</span> <span class='last'>" + product.total + "</span></a></li>";
+                    bodyTable.find('.list').append(html);
+                }
+
+                let closingHtml = "</ul>" +
+                    "</div>";
+                bodyTable.append(closingHtml);
+
+                // Calculate the total amount
+                let ship = 20000;
+                let sumOfNumberAndPriceProduct = 0;
+                for (let i = 0; i < cart.length; i++) {
+                    let proCart = cart[i];
+                    let totalPrice = proCart.number * proCart.price;
+                    sumOfNumberAndPriceProduct += totalPrice;
+                }
+                let sumTotal = sumOfNumberAndPriceProduct * 0.01;
+                let sumTotalOfAllProductInCart = sumOfNumberAndPriceProduct - sumTotal + ship;
+                console.log("Total amount to pay: ", sumTotalOfAllProductInCart);
+
+                let additionalListHtml = "<ul class='list list_2'>" +
+                    "<li><a>Phí ship <span>20.000 VNĐ</span></a></li>" +
+                    "<li><a>Tổng tiền <span>" + sumTotalOfAllProductInCart.toLocaleString() + " VNĐ</span></a></li>" +
+                    "</ul>";
+                bodyTable.append(additionalListHtml);
+
+
+                let rows = "<div class=\"payment_item\">" +
+                    "                    <div class=\"radion_btn\">" +
+                    "                        <input type=\"radio\" id=\"f-option5\" name=\"selector\">" +
+                    "                            <label for=\"f-option5\">Thanh toán khi nhận hàng</label>" +
+                    "                            <div class=\"check\"></div>" +
+                    "                    </div>" +
+                    "                    <p>Vui lòng nhập đầy đủ thông tin địa chỉ , số điện thoại....</p>" +
+                    "                </div>" +
+                    " <div class=\"payment_item active\">" +
+                    "                            <div class=\"radion_btn\">" +
+                    "                                <input type=\"radio\" id=\"f-option6\" name=\"selector\">" +
+                    "                                <label for=\"f-option6\">Thanh toán bằng VNPay </label>" +
+                    "                                <div class=\"check\"></div>" +
+                    "                            </div>" +
+                    "                            <p>Thanh toán qua VNPay , bạn có thể thanh toán bằng thẻ tín dụng, sẽ nhanh chóng và tiết" +
+                    "                                kiệm thời gian.</p>" +
+                    "                        </div>" +
+                    " <div class=\"text-center\">" +
+                    "                            <a id=\"abtn\" class=\"btn btn-danger\" href='/user/categroyshop'>Thanh toán khi nhận" +
+                    "                                hàng</a>" +
+                    "                            <a id=\"abtn\" class=\"btn btn-primary\" href=\"#\">Thanh toán VNPay</a>" +
+                    "                        </div>"
+
+                bodyTable.append(rows);
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+    $(document).ready(function () {
+        $.ajax({
+            url: 'http://localhost:8080/api/user/loyal-status',
+            type: 'GET',
+            success: function (data) {
+                console.log(data)
+                if (data.data.loyalCustomers) {
+                    $('#khtt').text('Giảm 10%');
+                } else {
+                    $('#khtt').text('');
+                }
+            },
+            error: function () {
+                console.log(error)
+            }
+        });
+    });
+
+
+</script>

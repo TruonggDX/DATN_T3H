@@ -1,14 +1,20 @@
 package edu.t3h.clothes.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name ="user")
+
 public class UserEntity extends AbstractEntity{
     @Column(name = "name")
     private String name;
@@ -27,7 +33,7 @@ public class UserEntity extends AbstractEntity{
     @Column (name = "birthday")
     private String birthday;
     @Column (name = "loyal_customers")
-    private int loyalCustomers;
+    private Boolean loyalCustomers;
 
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.EAGER)
@@ -37,4 +43,14 @@ public class UserEntity extends AbstractEntity{
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<RoleEntity> roles = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "user")
+    private List<RateEntity> rates;
+
+    @OneToMany(mappedBy = "user")
+    private List<OrdersEntity> orders;
+
+
+
 }

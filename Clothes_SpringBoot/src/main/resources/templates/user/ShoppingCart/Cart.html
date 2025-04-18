@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="user/fragments/head :: head"></head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body>
 <!--================ Start Header Menu Area =================-->
 <header th:replace="user/fragments/header :: header"></header>
@@ -29,214 +32,230 @@
 <!--================Cart Area =================-->
 <section class="cart_area">
     <div class="container">
+        <h5 style="float: right;margin-bottom: 20px;color: blueviolet" id="khtt"></h5>
         <div class="cart_inner">
             <div class="table-responsive">
-                <table class="table">
+                <table class="table" id="tableDate">
                     <thead>
                     <tr>
+                        <th scope="col">ID</th>
                         <th scope="col">Sản phẩm</th>
                         <th scope="col">Giá</th>
                         <th scope="col">Số lượng</th>
                         <th scope="col">Tiền</th>
+                        <th scope="col">Action</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <div class="media">
-                                <div class="d-flex">
-                                    <img src="img/cart/cart1.png" alt="">
-                                </div>
-                                <div class="media-body">
-                                    <p>Minimalistic shop for multipurpose use</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <h5>$360.00</h5>
-                        </td>
-                        <td>
-                            <div class="product_count">
-                                <input type="text" name="qty" id="" maxlength="12" value="1" title="Quantity:"
-                                       class="input-text qty">
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                        class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                        class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-                            </div>
-                        </td>
-                        <td>
-                            <h5>$720.00</h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="media">
-                                <div class="d-flex">
-                                    <img src="img/cart/cart2.png" alt="">
-                                </div>
-                                <div class="media-body">
-                                    <p>Minimalistic shop for multipurpose use</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <h5>$360.00</h5>
-                        </td>
-                        <td>
-                            <div class="product_count">
-                                <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
-                                       class="input-text qty">
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                        class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                        class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-                            </div>
-                        </td>
-                        <td>
-                            <h5>$720.00</h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="media">
-                                <div class="d-flex">
-                                    <img src="img/cart/cart3.png" alt="">
-                                </div>
-                                <div class="media-body">
-                                    <p>Minimalistic shop for multipurpose use</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <h5>$360.00</h5>
-                        </td>
-                        <td>
-                            <div class="product_count">
-                                <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
-                                       class="input-text qty">
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                        class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                        class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-                            </div>
-                        </td>
-                        <td>
-                            <h5>$720.00</h5>
-                        </td>
-                    </tr>
-                    <tr class="bottom_button">
-                        <td>
-                        </td>
-                        <td>
+                    <tbody id="listp_cart">
 
-                        </td>
-                        <td>
-                            <h5>Tổng tiền</h5>
-                        </td>
-                        <td>
-                            <h5>$2160.00</h5>
-                        </td>
-                    </tr>
-                    <tr class="out_button_area">
-                        <td class="d-none-l">
-
-                        </td>
-                        <td class="">
-
-                        </td>
-                        <td>
-
-                        </td>
-                        <td></td>
-                        <td style="margin-right: 85%">
-                            <div  class="checkout_btn_inner d-flex align-items-center">
-                                <a class="gray_btn" th:href="@{/user/categroyshop}">Tiếp tục mua sắm</a>
-                                <a class="primary-btn ml-2" th:href="@{/user/productCheckout}">Thanh toán</a>
-                            </div>
-                        </td>
-                    </tr>
                     </tbody>
+
+
                 </table>
+                <nav aria-label="...">
+                    <ul class="pagination" id="pageId" style="float: right;">
+
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
 </section>
 <!--================End Cart Area =================-->
 
+<div th:replace="user/fragments/script :: script"></div>
+<div th:replace="user/fragments/footer :: footer"></div>
 
-
-<!--================ Start footer Area  =================-->
-<footer class="footer">
-    <div class="footer-area">
-        <div class="container">
-            <div class="row section_gap">
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="single-footer-widget tp_widgets">
-                        <h4 class="footer_title large_title">Về chúng tôi</h4>
-                        <p>
-                            Chào mừng bạn đến với trang web bán quần áo của chúng tôi!
-                            Chúng tôi tự hào cung cấp những sản phẩm thời trang chất lượng với sự đa dạng và phong phú.
-                            Tại đây, bạn sẽ tìm thấy những bộ trang phục phong cách và phù hợp với mọi dịp, từ công sở đến dạo phố hay dự tiệc.
-                            Chúng tôi cam kết mang đến trải nghiệm mua sắm trực tuyến tuyệt vời và dịch vụ chăm sóc khách hàng tốt nhất.
-                            Hãy khám phá ngay và tìm cho mình những bộ trang phục ưng ý nhất!
-                        </p>
-                        <p>
-
-                        </p>
-                    </div>
-                </div>
-
-                <div class=" offset-lg-1 col-lg-3  col-md-6 col-sm-6">
-                    <div class="single-footer-widget instafeed">
-                        <h4 class="footer_title">Hàng trưng bày</h4>
-                        <ul class="list instafeed d-flex flex-wrap">
-                            <li><img th:src="@{/user/img/gallery/r1.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r2.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r3.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r5.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r7.jpg}" alt=""></li>
-                            <li><img th:src="@{/user/img/gallery/r8.jpg}" alt=""></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="offset-lg-1 col-lg-3 col-md-6 col-sm-6">
-                    <div class="single-footer-widget tp_widgets">
-                        <h4 class="footer_title">Liên hệ chúng tôi</h4>
-                        <div class="ml-40">
-                            <p class="sm-head">
-                                <span class="fa fa-location-arrow"></span>
-                                Địa chỉ
-                            <p>Phúc diễn, Quận Bắc Từ Liêm, thành phố Hà Nội</p>
-
-                            <p class="sm-head">
-                                <span class="fa fa-phone"></span>
-                                Số điện thoại
-                            </p>
-                            <p>
-                                +84 339205335 <br>
-
-                            </p>
-
-                            <p class="sm-head">
-                                <span class="fa fa-envelope"></span>
-                                Email
-                            </p>
-                            <p>
-                                dinhxuantruong2003coi@gmail.com <br>
-
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<!--================ End footer Area  =================-->
-
-
-
-    <div th:replace="user/fragments/script :: script"></div>
 </body>
 </html>
+<script>
+    $(document).ready(function () {
+        initData();
+    });
+
+    function initData() {
+        let page = 0;
+        let size = 4;
+        getProductsInCart(page, size);
+    }
+
+    function getProductsInCart(page, size){
+        let bodyTable = $('#listp_cart');
+        bodyTable.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/cart/listpOfUs?page=" + page + "&size=" + size,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                let cart = response?.data?.content;
+                // Hiển thị dữ liệu trên bảng
+                for (let i = 0; i < cart.length; i++) {
+                    let data = cart[i];
+                    let row = "<tr>" +
+                        "<td >" + data.id + "</td>" +
+                        "<td>" +
+                        "<div class='media'>" +
+                        "<div class='d-flex'>" +
+                        "<img width='80px' src='https://tse4.mm.bing.net/th?id=OIP.7ZxepcJaDNoUZqs3JZPxKwHaHa&pid=Api&P=0&h=220' alt=''>" +
+                        "</div>" +
+                        "<div class='media-body'>" +
+                        "<p>" + data.name + "</p>" +
+                        "</div>" +
+                        "</div>" +
+                        "</td>" +
+                        "<td><h5>" + data.price + "</h5></td>" +
+                        "<td>" +
+                        "<div class='product_count'>" +
+                        "<input type='number' id='quantity" + i + "' class='quantity-input' data-id='" + data.id + "' value='" + data.number + "'>" +
+                        "</div>" +
+                        "</td>" +
+                        "<td><h5 id='productTotal" + i + "'>" + data.total + "</h5></td>" +
+                        "<td>" +
+                        "<a class='btn btn-default delete-cart-btn' data-id='" + data.id + "'><i style='font-size: 30px' class='far fa-trash-can'></i></a>" +
+                        "</td>" +
+                        "</tr>";
+
+                    $('#listp_cart').append(row);
+                }
+                let totalPrice = 0;
+                for (let i = 0; i < cart.length; i++) {
+                    totalPrice += cart[i].total;
+                }
+                let totalRow = "<tr class='bottom_button'>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td ><h4>Tổng tiền :</h4></td>" +
+                    "<td><h5>" + totalPrice + "VNĐ</h5></td>" +
+                    "</tr>";
+                $('#listp_cart').append(totalRow);
+
+                let buttonRow = "<tr class='out_button_area'>" +
+                    "<td class='d-none-l'></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td style='margin-right: 85%'>" +
+                    "<div  class='checkout_btn_inner d-flex align-items-center'>" +
+                    "<a class='gray_btn' href='/user/categroyshop'>Tiếp tục mua sắm</a>" +
+                    "<a class='primary-btn ml-2' href='/user/productCheckout'>Thanh toán</a>" +
+                    "</div>" +
+                    "</td>" +
+                    "</tr>";
+                $('#listp_cart').append(buttonRow);
+
+                $('.delete-cart-btn').click(function(event) {
+                    event.preventDefault();
+                    var id = $(this).data('id');
+                    if (confirm('Bạn chắc chắn muốn xóa sản phẩm này?')) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "http://localhost:8080/cart/delete/" + id,
+                            success: function(response){
+                                console.log(response);
+
+                                $('#deleteBtn' + id).closest('tr').remove();
+                                window.location.reload();
+                            },
+                            error: function (error){
+                                console.log(error);
+                            }
+                        });
+                    }
+                });
+
+
+
+                let totalPage = response.data.totalPages;
+                let currentPage = response.data.pageable.pageNumber;
+                if (totalPage > 0) {
+                    $("#pageId").empty();
+                    let pages = "<li class='page-item'><a class='page-link' onclick='changePage(" + (currentPage - 1) + ", 4, event)' href='#'><i class='fa-solid fa-chevron-up fa-rotate-270'></i></a></li>";
+                    for (let i = 0; i < totalPage; i++) {
+                        if (currentPage === i) {
+                            pages += "<li class='page-item active'>" +
+                                "<a class='page-link' onclick='changePage(" + i + ", 4, event)' href='#'>" + (i + 1) + "</a></li>" +
+                                "<li class='page-item'>";
+                        } else {
+                            pages += "<li class='page-item'>" +
+                                "<a class='page-link' onclick='changePage(" + i + ", 4, event)' href='#'>" + (i + 1) + "</a></li>" +
+                                "<li class='page-item'>";
+                        }
+                    }
+                    pages += "<li class='page-item'><a class='page-link' onclick='changePage(" + (currentPage + 1) + ", 4, event)' href='#'><i class='fa-solid fa-chevron-up fa-rotate-90'></i></a></li>";
+                    $("#pageId").append(pages);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+
+    $(document).on('input', '.product_count input', function() {
+        let quantity = parseInt($(this).val());
+        let price = parseFloat($(this).closest('tr').find('td:eq(2)').text());
+        let totalPrice = quantity * price;
+        $(this).closest('tr').find('td:eq(4)').text(totalPrice);
+        var id = $(this).data('id');
+        var newNumbers = $(this).val();
+        updateQuantityProduct(id, newNumbers);
+
+        let total = 0;
+        $('.product_count input').each(function() {
+            let quantity = parseInt($(this).val());
+            let price = parseFloat($(this).closest('tr').find('td:eq(2)').text());
+            let totalPrice = quantity * price;
+            total += totalPrice;
+        });
+
+        $('.bottom_button h5').text(total+'VNĐ');
+    });
+
+    function updateQuantityProduct(id, newNumbers) {
+        $.ajax({
+            type: "PUT",
+            url: "http://localhost:8080/cart/update/" + id,
+            contentType: "application/json",
+            data: JSON.stringify({
+                "number": newNumbers
+            }),
+            success: function(response) {
+                var productTotal = response.data.total;
+                $('#productTotal').text(productTotal);
+                var totalPriceOfCart = response.data.total_price;
+                $('#productTotalPrice').text(totalPriceOfCart + 'VNĐ');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function changePage(page, size, event) {
+        event.preventDefault();
+        getProductsInCart(page, size);
+    }
+
+    $(document).ready(function() {
+        $.ajax({
+            url: 'http://localhost:8080/api/user/loyal-status',
+            type: 'GET',
+            success: function(data) {
+                console.log(data)
+                if (data.data.loyalCustomers) {
+                    $('#khtt').text('Bạn là khách hàng thân thiết');
+                } else {
+                    $('#khtt').text('');
+                }
+            },
+            error: function() {
+                console.log(error)
+            }
+        });
+    });
+
+
+</script>

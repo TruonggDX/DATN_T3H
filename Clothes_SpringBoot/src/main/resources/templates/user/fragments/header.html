@@ -1,8 +1,12 @@
 <!--================ Start Header Menu Area =================-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <header class="header_area">
     <div class="main_menu">
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
+                <span></span>
                 <a class="navbar-brand logo_h" th:href="@{/user}"><img style="width: 95px; height: 95px" th:src="@{/user/img/logo3.png}" alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,14 +16,14 @@
                 </button>
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
-                        <li class="nav-item active"><a id="a_hover" class="nav-link" th:href="@{/user}">Trang chủ</a></li>
-                        <li class="nav-item active"><a id="a_hover" class="nav-link" th:href="@{/user/categroyshop}">Cửa hàng</a></li>
+                        <li class="nav-item active"><a  class="nav-link" th:href="@{/user}">Trang chủ</a></li>
+                        <li class="nav-item active"><a  class="nav-link" th:href="@{/user/categroyshop}">Cửa hàng</a></li>
                         <li class="nav-item submenu dropdown">
-                            <a id="a_hover" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            <a  href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                aria-expanded="false">Blog</a>
                         </li>
                         <li class="nav-item submenu dropdown">
-                            <a id="a_hover" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            <a  href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                aria-expanded="false">Trang</a>
                         </li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/user/contact}">Liên hệ</a></li>
@@ -115,7 +119,7 @@
     </div>
 
     <!-- Modal edit-->
-    <div style="opacity: 0.8 ;" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div style="z-index: -1" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -126,12 +130,58 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="" aria-describedby="emailHelp" placeholder="Nhập sản phẩm cần tìm">
-
+                        <form class="form_search" id="searchForm">
+                            <div class="form-group">
+                                <input name="condition" id="searchCondition" type="text" class="form-control" onkeyup="seachPro()" placeholder="Nhập sản phẩm cần tìm ">
+                                <div id="renSearch"></div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+
+        function seachPro() {
+            var searchCondition = $("#searchCondition").val();
+            let html=""
+            if(searchCondition==""){
+                document.getElementById("renSearch").innerHTML=""
+            }else{
+                $.ajax({
+                    type: "GET",
+                    url: "http://localhost:8080/product/searchProductByName/" + searchCondition,
+                    success: function(response) {
+                        var products = response.data;
+                        for (const product of products) {
+                            html+=`<a class="btn btn-light d-block" style="text-align: left;margin: 5px 0px 5px 0px" href="/user/product_dentails?id=${product.id}">${product.name}</a>`
+                        }
+                        document.getElementById("renSearch").innerHTML=html
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
+
+
+        $(document).ready(function() {
+            $.ajax({
+                url: 'http://localhost:8080/cart/count',
+                type: 'GET',
+                success: function(data) {
+                    $('.span_count_product').text(data.data);
+                    console.log(data)
+                },
+                error: function() {
+                    console.log(error);
+                }
+            });
+        });
+
+    </script>
 </header>
+
 <!--================ End Header Menu Area =================-->

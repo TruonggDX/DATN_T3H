@@ -1,10 +1,14 @@
 package edu.t3h.clothes.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "producer")
 public class ProducerEntity extends AbstractEntity{
@@ -12,14 +16,10 @@ public class ProducerEntity extends AbstractEntity{
     private String code;
     @Column(name = "name")
     private String name;
-
-    public ProducerEntity() {
-    }
-
-    public ProducerEntity(String code, String name) {
-        this.code = code;
-        this.name = name;
-    }
+    @Column(name = "address")
+    private String address;
+    @Column(name = "phone")
+    private String phone;
 
     public String getCode() {
         return code;
@@ -36,4 +36,10 @@ public class ProducerEntity extends AbstractEntity{
     public void setName(String name) {
         this.name = name;
     }
+
+    @OneToMany(mappedBy = "producerEntity", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<ProductEntity> productEntities;
+
 }

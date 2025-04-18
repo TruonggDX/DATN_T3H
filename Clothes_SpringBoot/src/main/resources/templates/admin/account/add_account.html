@@ -1,68 +1,132 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="admin/fragments/head :: head"></head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <nav th:replace="admin/fragments/navbar :: navbar"></nav>
     <aside th:replace="admin/fragments/sidebar :: sidebar"></aside>
+    <form method="post" id="addAccountForm">
     <!-- Content -->
     <div class="content-wrapper" style="min-height: 332.4px;">
         <h3 style="text-align: center">Thêm tài khoản</h3>
         <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
+            <input hidden="hidden" type="text" id="code" name="code">
             <div class="form-group">
-                <label >Họ và tên</label>
-                <input type="text" class="form-control"  placeholder="Nhập họ và tên">
+                <label>Họ và tên</label>
+                <input type="text" class="form-control" placeholder="Nhập họ và tên" id="name">
             </div>
             <div class="form-group">
-                <label >Tên đăng nhập</label>
-                <input type="text" class="form-control"  placeholder="Nhập tên đăng nhập">
+                <label>Tên đăng nhập</label>
+                <input type="text" class="form-control" placeholder="Nhập tên đăng nhập" id="username">
             </div>
             <div class="form-group">
-                <label >Ngày sinh</label>
-                <input type="date" class="form-control"  placeholder="dd/MM/yyyy">
+                <label>Ngày sinh</label>
+                <input type="date" class="form-control" placeholder="dd/MM/yyyy" id="birthday">
             </div>
             <div class="form-group">
-                <label >Địa chỉ</label>
-                <input type="text" class="form-control"  placeholder="Nhập địa chỉ">
+                <label>Địa chỉ</label>
+                <input type="text" class="form-control" placeholder="Nhập địa chỉ" id="address">
             </div>
             <div class="form-group">
-                <label >Số địên thọai</label>
-                <input type="text" class="form-control"  placeholder="Nhập số điện thoại">
+                <label>Số điện thoại</label>
+                <input type="text" class="form-control" placeholder="Nhập số điện thoại" id="phone">
             </div>
             <div class="form-group">
-                <label >Email</label>
-                <input type="email" class="form-control"  placeholder="Nhập email">
+                <label>Email</label>
+                <input type="email" class="form-control" placeholder="Nhập email" id="email">
             </div>
             <div class="form-group">
-                <label for="exampleInputPassword1">Mật Khẩu</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Nhập mật khẩu">
+                <label>Quyền</label>
+                <select class="js-example-basic-multiple" name="colorId" id="list_role" multiple="multiple"
+                        style="width: 100%; height: 50px;">
+                </select>
             </div>
-
             <div class="form-group">
-                <label for="exampleInputFile">Ảnh đại diện</label>
-                <div class="input-group">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="exampleInputFile">
-                        <label class="custom-file-label" for="exampleInputFile"> Chọn file</label>
-                    </div>
-                    <div class="input-group-append">
-                        <span class="input-group-text" id="">Upload</span>
-                    </div>
-                </div>
+                <label>Mật khẩu</label>
+                <input type="password" class="form-control" placeholder="Nhập mật khẩu" id="password">
             </div>
         </div>
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Thêm tài khoản</button>
         </div>
     </div>
+    </form>
     <!-- End Content -->
     <style>
-        div, label,button,h3{
+        div, label, button, h3 {
             font-family: "Times New Roman";
         }
     </style>
     <aside class="control-sidebar control-sidebar-dark"></aside>
 </div>
 <div th:replace="admin/fragments/script :: script"></div>
+
+<script>
+
+
+    $(document).ready(function () {
+        getRoles();
+    });
+
+    function getRoles() {
+        let list = $('#list_role');
+        list.empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/role/list",
+            dataType: "json",
+            success: function (response) {
+                let roles = response?.data;
+                roles.forEach(function (role) {
+                    let option = '<option value="' + role.id + '">' + role.name + '</option>';
+                    list.append(option);
+                });
+                console.log(response)
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+    $('#addAccountForm').submit(function (event) {
+        event.preventDefault();
+        // let roleIds = $("#list_role").val().map(data => parseInt(data));
+        let roleIds =  $("#list_role").val().map(data => parseInt(data));
+        let roleId = roleIds != null ? roleIds[0] : null;
+
+        var formData = {
+            name: $('#name').val(),
+            code: $('#code').val(),
+            username: $('#username').val(),
+            birthday: $('#birthday').val(),
+            address: $('#address').val(),
+            phone: $('#phone').val(),
+            email: $('#email').val(),
+            password: $('#password').val(),
+            roleId: roleId,
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/api/user/create",
+            contentType: "application/json",
+            data: JSON.stringify(formData),
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                window.location.href = "/admin/list_account";
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+</script>
 </body>
 </html>

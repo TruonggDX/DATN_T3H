@@ -1,7 +1,9 @@
 package edu.t3h.clothes.service.impl;
 
 import edu.t3h.clothes.entity.ColorEntity;
+import edu.t3h.clothes.entity.SizeEntity;
 import edu.t3h.clothes.model.dto.ColorDTO;
+import edu.t3h.clothes.model.dto.SizeDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.repository.ColorRepository;
 import edu.t3h.clothes.service.IColorService;
@@ -111,6 +113,26 @@ public class ColorImpl implements IColorService {
         ColorDTO colorDTO1 = modelMapper.map(color, ColorDTO.class);
         return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, colorDTO1);
 
+    }
+
+    @Override
+    public BaseResponse<List<ColorDTO>> getColorOfProduct(Long productId) {
+        BaseResponse<List<ColorDTO>> response = new BaseResponse<>();
+        List<ColorEntity> sizes = colorRepository.getColor(productId);
+        if (sizes != null && !sizes.isEmpty()) {
+            List<ColorDTO> sizeDTOs = sizes.stream()
+                    .map(colorentity -> modelMapper.map(colorentity, ColorDTO.class))
+                    .collect(Collectors.toList());
+
+            response.setData(sizeDTOs);
+            response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+            response.setCode(HttpStatus.OK.value());
+        } else {
+            response.setMessage(Constant.HTTP_MESSAGE.FAILED);
+            response.setCode(HttpStatus.BAD_REQUEST.value());
+        }
+
+        return response;
     }
 
 }

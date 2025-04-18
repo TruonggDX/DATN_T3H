@@ -21,6 +21,10 @@ public class AuthController {
     public String loginPage(){
         return "/auth/login";
     }
+    @GetMapping("/registers")
+    public String register(){
+        return "/auth/register";
+    }
 
     @GetMapping(value = "/process-after-login")
     public String processAfterLogin() {
