@@ -1,46 +1,28 @@
 package edu.t3h.clothes.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.util.List;
 
 @Entity
 @Data
 @Table(name = "category")
 public class CategoryEntity extends AbstractEntity {
-    @Column(name = "code")
-    private String code;
-    @Column(name = "name")
-    private String name;
 
-    public String getCode() {
-        return code;
-    }
+  @Column(name = "code")
+  private String code;
+  @Column(name = "name")
+  private String name;
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public CategoryEntity() {
-    }
-
-    public CategoryEntity(String code, String name) {
-        this.code = code;
-        this.name = name;
-    }
-    @OneToMany(mappedBy = "categoryEntity", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private List<ProductEntity> productEntities;
+  @OneToMany(mappedBy = "categoryEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  private List<ProductEntity> productEntities;
 }

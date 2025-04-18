@@ -1,8 +1,6 @@
 package edu.t3h.clothes.service.impl;
 
 import edu.t3h.clothes.entity.*;
-import edu.t3h.clothes.model.dto.CategoryDTO;
-import edu.t3h.clothes.model.dto.OrdersDTO;
 import edu.t3h.clothes.model.dto.ProductDTO;
 import edu.t3h.clothes.model.request.ProductFilterRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
@@ -34,7 +32,7 @@ public class ProductImpl implements IProductService {
     private Logger logger = LoggerFactory.getLogger(ProductImpl.class);
     private final ProductRepository productRepository;
     private final CategoryRepository categoryReponsitory;
-    private final ProducerReposiroty producerReposiroty;
+    private final ProducerRepository producerReposiroty;
 
     @Autowired
     private ColorRepository colorRepository;
@@ -43,7 +41,7 @@ public class ProductImpl implements IProductService {
 
     private final ModelMapper modelMapper;
 
-    public ProductImpl(ProductRepository productRepository,ProducerReposiroty producerReposiroty ,CategoryRepository categoryReponsitory, ModelMapper modelMapper) {
+    public ProductImpl(ProductRepository productRepository, ProducerRepository producerReposiroty ,CategoryRepository categoryReponsitory, ModelMapper modelMapper) {
         this.productRepository = productRepository;
         this.categoryReponsitory = categoryReponsitory;
         this.producerReposiroty = producerReposiroty;

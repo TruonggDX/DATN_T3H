@@ -96,7 +96,10 @@
 
     $('#addAccountForm').submit(function (event) {
         event.preventDefault();
-        let roleIds = $("#list_role").val().map(data => parseInt(data));
+        // let roleIds = $("#list_role").val().map(data => parseInt(data));
+        let roleIds =  $("#list_role").val().map(data => parseInt(data));
+        let roleId = roleIds != null ? roleIds[0] : null;
+
         var formData = {
             name: $('#name').val(),
             code: $('#code').val(),
@@ -106,7 +109,7 @@
             phone: $('#phone').val(),
             email: $('#email').val(),
             password: $('#password').val(),
-            roleId: roleIds,
+            roleId: roleId,
         };
 
         $.ajax({

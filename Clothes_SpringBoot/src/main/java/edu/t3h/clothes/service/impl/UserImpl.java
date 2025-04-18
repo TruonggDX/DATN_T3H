@@ -1,17 +1,24 @@
 package edu.t3h.clothes.service.impl;
 
-import edu.t3h.clothes.entity.*;
-import edu.t3h.clothes.model.dto.CategoryDTO;
+import edu.t3h.clothes.entity.RoleEntity;
+import edu.t3h.clothes.entity.UserEntity;
 import edu.t3h.clothes.model.dto.RoleDTO;
 import edu.t3h.clothes.model.dto.UserDTO;
 import edu.t3h.clothes.model.request.ChangePassword;
+import edu.t3h.clothes.model.request.UserRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.repository.RoleRepository;
 import edu.t3h.clothes.repository.UserEntityRepository;
 import edu.t3h.clothes.service.IUserService;
 import edu.t3h.clothes.utils.Constant;
-//import edu.t3h.clothes.utils.PasswordEncoderUtil;
+import edu.t3h.clothes.utils.GenarateCode;
 import edu.t3h.clothes.utils.PasswordEncoderUtil;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,18 +28,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 
@@ -46,11 +45,6 @@ public class UserImpl implements IUserService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public UserImpl() {
-        logger.info("Tạo ra bean: {}",UserImpl.class);
-    }
-
-
     @Override
     public UserDTO findUserByUsername(String username) {
         UserEntity userEntity = userEntityRepository.findByUsername(username);
@@ -60,60 +54,26 @@ public class UserImpl implements IUserService {
         return userDTO;
     }
     @Override
-    public BaseResponse<?> createAccount(UserDTO userDTO) {
+    public BaseResponse<?> createAccount(UserRequest userRequest) {
         BaseResponse<?> response = new BaseResponse<>();
 
-        // Kiểm tra null trước khi truy cập vào danh sách RoleDTO
-//        Set<RoleEntity> rolesDto = new HashSet<>();
-//        if (userDTO.getRoleDtos() != null) {
-//            for (RoleDTO roleDTO : userDTO.getRoleDtos()) {
-//                RoleEntity role = roleRepository.findByName(roleDTO.getName());
-//                if (role != null) {
-//                    rolesDto.add(role);
-//                }
-//            }
-//        }
-
-        RoleEntity roleId = roleRepository.findById(userDTO.getRoleId()).orElse(null);
-
-
-        // Tạo mới một đối tượng UserEntity từ thông tin trong UserDTO
+        RoleEntity roleId = roleRepository.findById(userRequest.getRoleId()).orElse(null);
         UserEntity newUser = new UserEntity();
         Set<RoleEntity> roles = newUser.getRoles();
         if (roles == null){
             roles = new HashSet<>();
         }
-//        roles.addAll(rolesDto);
         if (roleId != null){
             roles.add(roleId);
         }
-        String codeAccount = generateAccountCode();
-        newUser.setCode(codeAccount);
+        newUser.setCode(GenarateCode.generateAccountCode());
+        newUser.setUsername(userRequest.getUsername());
+        newUser.setPassword(PasswordEncoderUtil.encodePassword(userRequest.getPassword()));
         newUser.setRoles(roles);
-        newUser.setName(userDTO.getName());
-        newUser.setUsername(userDTO.getUsername());
-        newUser.setEmail(userDTO.getEmail());
-        newUser.setPhone(userDTO.getPhone());
-        newUser.setPassword(userDTO.getPassword());
-        newUser.setAddress(userDTO.getAddress());
-        newUser.setBirthday(userDTO.getBirthday());
-
-
-        UserEntity savedUser = userEntityRepository.save(newUser);
-
+        userEntityRepository.save(newUser);
         response.setCode(HttpStatus.OK.value());
         response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
         return response;
-    }
-
-    private String generateAccountCode() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 7; i++) {
-            sb.append(characters.charAt(random.nextInt(characters.length())));
-        }
-        return sb.toString();
     }
 
     @Override
@@ -141,19 +101,7 @@ public class UserImpl implements IUserService {
         response.setCode(HttpStatus.OK.value());
         response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
         response.setData(new PageImpl<>(userdto, pageable, pages.getTotalElements()));
-
-        logger.info("Return size {}", userdto.size());
-        logger.info("Finishing......");
         return response;
-    }
-    private String generateUserCode() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 7; i++) {
-            sb.append(characters.charAt(random.nextInt(characters.length())));
-        }
-        return sb.toString();
     }
     @Override
     public UserDTO findUserById(Long id) {
@@ -172,10 +120,6 @@ public class UserImpl implements IUserService {
             return modelMapper.map(response, UserDTO.class);
         }
         UserDTO userDTO = modelMapper.map(userEntity, UserDTO.class);
-//        List<Long> roleIdList = userEntity.getRoles().stream()
-//                .map(RoleEntity::getId)
-//                .collect(Collectors.toList());
-//        userDTO.setRoleId(roleIdList);
         Set<RoleEntity> roleEntities = userEntity.getRoles();
         List<RoleDTO> roleDTOs = roleRepository.getRoleByUsername(userEntity.getUsername()).stream()
                 .map(roleEntity -> {
@@ -194,21 +138,17 @@ public class UserImpl implements IUserService {
     public BaseResponse<?> deleteAccount(Long id) {
         BaseResponse<?> response = new BaseResponse<>();
         Optional<UserEntity> optionalUserEntity = userEntityRepository.findById(id);
-        if (optionalUserEntity.isPresent()) {
-            UserEntity userEntity = optionalUserEntity.get();
-
-            userEntity.getRoles().clear();
-
-            userEntity.setDeleted(true);
-            userEntityRepository.save(userEntity);
-
-
-            response.setCode(HttpStatus.OK.value());
-            response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-        } else {
+        if (optionalUserEntity.isEmpty()) {
             response.setCode(HttpStatus.NOT_FOUND.value());
             response.setMessage(Constant.HTTP_MESSAGE.FAILED);
+            return response;
         }
+        UserEntity userEntity = optionalUserEntity.get();
+        userEntity.getRoles().clear();
+        userEntity.setDeleted(true);
+        userEntityRepository.save(userEntity);
+        response.setCode(HttpStatus.OK.value());
+        response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
         return response;
     }
 
@@ -255,7 +195,6 @@ public class UserImpl implements IUserService {
         userEntity.setPhone(updatedUser.getPhone());
         userEntity.setAddress(updatedUser.getAddress());
         userEntity.setBirthday(updatedUser.getBirthday());
-
         UserEntity savedUserEntity = userEntityRepository.save(userEntity);
         UserDTO userDTO = modelMapper.map(savedUserEntity, UserDTO.class);
         return new BaseResponse<>(HttpStatus.OK.value(), Constant.HTTP_MESSAGE.SUCCESS, userDTO);

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "order_dentails")
+@Table(name = "order_details")
 public class OrderDetailsEntity extends AbstractEntity{
     private Long quantity;
     @Column(name = "name_product")

@@ -5,6 +5,7 @@ import edu.t3h.clothes.model.dto.CategoryDTO;
 import edu.t3h.clothes.model.dto.RoleDTO;
 import edu.t3h.clothes.model.dto.UserDTO;
 import edu.t3h.clothes.model.request.ChangePassword;
+import edu.t3h.clothes.model.request.UserRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.repository.UserEntityRepository;
 import edu.t3h.clothes.service.IUserService;
@@ -90,8 +91,8 @@ public class UserResource {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createAccount(@RequestBody UserDTO userDTO){
-        BaseResponse<?> createAccount = iUserService.createAccount(userDTO);
+    public ResponseEntity<?> createAccount(@RequestBody UserRequest userRequest){
+        BaseResponse<?> createAccount = iUserService.createAccount(userRequest);
         if (createAccount != null && createAccount.getCode() == HttpStatus.OK.value()){
             return ResponseEntity.ok().body(createAccount);
         }else {

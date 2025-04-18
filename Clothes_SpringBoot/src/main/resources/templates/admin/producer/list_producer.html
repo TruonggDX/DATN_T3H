@@ -154,7 +154,7 @@
         bodyTable.empty();
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/producer/list?page=" + page + "&size=" + size,
+            url: "http://localhost:8080/api/producer/list?page=" + page + "&size=" + size,
             dataType: "json",
             success: function (response) {
                 console.log(response);
@@ -200,7 +200,7 @@
                     if (confirm('Bạn chắc chắn muốn xóa?')) {
                         $.ajax({
                             type: "POST",
-                            url: "http://localhost:8080/producer/delete/" + producerId,
+                            url: "http://localhost:8080/api/producer/delete/" + producerId,
                             success: function (response) {
                                 console.log(response);
 
@@ -221,7 +221,7 @@
 
                     $.ajax({
                         type: "GET",
-                        url: "http://localhost:8080/producer/search/" + producerId,
+                        url: "http://localhost:8080/api/producer/search/" + producerId,
                         success: function (response) {
                             var producer = response.data;
                             window.location.href = '/admin/update_producer?id=' + producer.id;
@@ -257,7 +257,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/producer/create",
+            url: "http://localhost:8080/api/producer/create",
             contentType: "application/json",
             data: JSON.stringify(formData),
             dataType: "json",
@@ -282,7 +282,7 @@
         if (check) {
             $.ajax({
                 type: "GET",
-                url: "http://localhost:8080/producer/searchByCondition/" + searchCondition,
+                url: "http://localhost:8080/api/producer/searchByCondition/" + searchCondition,
                 data: { page: page, size: size },
                 success: function (response) {
                     $("#producer-list").empty();
@@ -325,7 +325,7 @@
                         if (confirm('Bạn chắc chắn muốn xóa?')) {
                             $.ajax({
                                 type: "POST",
-                                url: "http://localhost:8080/producer/delete/" + producerId,
+                                url: "http://localhost:8080/api/producer/delete/" + producerId,
                                 success: function (response) {
                                     console.log(response);
 
@@ -346,7 +346,7 @@
 
                         $.ajax({
                             type: "GET",
-                            url: "http://localhost:8080/producer/search/" + producerId,
+                            url: "http://localhost:8080/api/producer/search/" + producerId,
                             success: function (response) {
                                 var producer = response.data;
                                 window.location.href = '/admin/update_producer?id=' + producer.id;

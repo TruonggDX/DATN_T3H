@@ -147,7 +147,6 @@ public class CartImpl implements ICartService {
 
                 LocalDateTime now = LocalDateTime.now();
                 cartEntity.setCreatedDate(now);
-
                 ProductEntity productEntity = productOptional.get();
                 productEntity.setId(cartDTO.getProductId());
                 productEntity.setColorEntities(colorEntities);
@@ -155,12 +154,8 @@ public class CartImpl implements ICartService {
                 Double price =productEntity.getPrice();
                 cartEntity.setProduct(productEntity);
                 cartEntity.setPrice(price);
-
                 cartEntity.setNumber(1L);
-
-
                 cartEntity.setModifiedBy(currentUsername);
-
                 cartEntity.setDeleted(false);
                 cartEntity.setUser(currentUser);
                 cartRepository.save(cartEntity);

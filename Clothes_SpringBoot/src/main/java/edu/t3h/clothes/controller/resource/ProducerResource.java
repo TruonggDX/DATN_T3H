@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/producer")
+@RequestMapping("/api/producer")
 public class ProducerResource {
 
     private  final IProducerService producerService;

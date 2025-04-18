@@ -10,10 +10,13 @@
     <!-- Content -->
     <div class="content-wrapper" style="min-height: 332.4px;">
         <h3 style="text-align: center;padding: 5px 0px 5px 0px">Danh sách danh mục</h3>
-        <button style="width: 100px; float: left;margin-left: 20px" data-toggle="modal" data-target="#modal-lg" type="button" class="btn btn-block btn-outline-info"><i class="fa-solid fa-plus"></i> Thêm</button>
+        <button style="width: 100px; float: left;margin-left: 20px" data-toggle="modal" data-target="#modal-lg"
+                type="button" class="btn btn-block btn-outline-info"><i class="fa-solid fa-plus"></i> Thêm
+        </button>
         <form class="form_search" id="searchForm" style="margin-left: 44%">
             <div class="form-group" style="float: right;margin-right: 20px">
-                <input style="width: 400px" name="condition" id="searchCondition" type="text" class="form-control" placeholder="Nhập mã danh mục hoặc tên danh mục cần tìm ?">
+                <input style="width: 400px" name="condition" id="searchCondition" type="text" class="form-control"
+                       placeholder="Nhập mã danh mục hoặc tên danh mục cần tìm ?">
                 <button type="button" id="searchBtn" class="btn btn-block btn-outline-primary">Tìm kiếm</button>
             </div>
         </form>
@@ -41,13 +44,22 @@
         </style>
 
         <div class="card-body" style="padding: 0 1.25rem 1.25rem 1.25rem">
-            <table style="width: 100%" id="tableDate" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
+            <table style="width: 100%" id="tableDate" class="table table-bordered table-hover dataTable dtr-inline"
+                   role="grid" aria-describedby="example2_info">
                 <thead>
                 <tr role="row">
-                    <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">ID</th>
-                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Mã danh mục</th>
-                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Tên danh mục</th>
-                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Hành động</th>
+                    <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                        aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">ID
+                    </th>
+                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                        aria-label="Platform(s): activate to sort column ascending">Mã danh mục
+                    </th>
+                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                        aria-label="Browser: activate to sort column ascending">Tên danh mục
+                    </th>
+                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                        aria-label="Platform(s): activate to sort column ascending">Hành động
+                    </th>
                 </tr>
                 </thead>
                 <tbody id="category-list">
@@ -85,10 +97,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label style="width: 135px">Mã danh mục</label>
-                        <input th:name="code" type="text" class="form-control" placeholder="Nhập mã danh mục">
-                    </div>
-                    <div class="form-group">
                         <label style="width: 135px">Tên danh mục</label>
                         <input th:name="name" type="text" class="form-control" placeholder="Nhập tên danh mục">
                     </div>
@@ -125,7 +133,8 @@
     .form-group button {
         width: 150px;
     }
-    table,tr,th,td,h3{
+
+    table, tr, th, td, h3 {
         text-align: center;
         font-family: "Times New Roman";
     }
@@ -134,12 +143,14 @@
     $(document).ready(function () {
         initData();
     });
+
     function initData() {
         let page = 0;
         let size = 5;
-        getCategories(page,size);
+        getCategories(page, size);
     }
-    function getCategories(page,size){
+
+    function getCategories(page, size) {
         let bodyTable = $('#tableDate > tbody');
         bodyTable.empty();
         $.ajax({
@@ -182,20 +193,20 @@
                     pages += '<li class="page-item"><a class="page-link" onclick="changePage(' + (currentPage + 1) + ',5,event)" href="#"><i class="fa-solid fa-chevron-up fa-rotate-90"></i></a></li>';
                     $("#pageId").append(pages);
                 }
-                $('.delete-category-btn').click(function(event) {
+                $('.delete-category-btn').click(function (event) {
                     event.preventDefault();
                     var categoryId = $(this).data('id');
                     if (confirm('Bạn chắc chắn muốn xóa?')) {
                         $.ajax({
                             type: "POST",
                             url: "http://localhost:8080/category/delete/" + categoryId,
-                            success: function(response){
+                            success: function (response) {
                                 console.log(response);
 
                                 $('#deleteBtn' + categoryId).closest('tr').remove();
                                 window.location.reload();
                             },
-                            error: function (error){
+                            error: function (error) {
                                 console.log(error);
                             }
                         });
@@ -203,18 +214,18 @@
                 });
 
 
-                $('.edit-category-btn').click(function(event) {
+                $('.edit-category-btn').click(function (event) {
                     event.preventDefault();
                     var categoryId = $(this).data('id');
 
                     $.ajax({
                         type: "GET",
                         url: "http://localhost:8080/category/search/" + categoryId,
-                        success: function(response) {
+                        success: function (response) {
                             var category = response.data;
                             window.location.href = '/admin/update_category?id=' + category.id;
                         },
-                        error: function(error) {
+                        error: function (error) {
                             console.log(error);
                         }
                     });
@@ -222,7 +233,7 @@
 
 
             },
-            error: function (error){
+            error: function (error) {
                 console.log(error);
             }
         });
@@ -237,7 +248,7 @@
         event.preventDefault();
 
         var formData = {
-            code: $('input[name="code"]').val(),
+            // code: $('input[name="code"]').val(),
             name: $('input[name="name"]').val()
         };
 
@@ -248,16 +259,17 @@
             data: JSON.stringify(formData),
             dataType: "json",
             success: function (response) {
-                    console.log(response);
+                console.log(response);
                 $('#modal-lg').modal('hide');
                 window.location.reload();
             },
-            error: function (error){
+            error: function (error) {
                 console.log(error);
             }
         });
     });
     var check = false;
+
     function search(page, size) {
         event.preventDefault();
         var searchCondition = $("#searchCondition").val();
@@ -265,8 +277,8 @@
             $.ajax({
                 type: "GET",
                 url: "http://localhost:8080/category/searchByCondition/" + searchCondition,
-                data: { page: page, size: size },
-                success: function(response) {
+                data: {page: page, size: size},
+                success: function (response) {
                     $("#category-list").empty();
                     console.log(response);
                     let categories = response?.data?.content;
@@ -304,42 +316,42 @@
                     }
 
 
-                    $('.delete-category-btn').click(function(event) {
+                    $('.delete-category-btn').click(function (event) {
                         event.preventDefault();
                         var categoryId = $(this).data('id');
                         if (confirm('Bạn chắc chắn muốn xóa?')) {
                             $.ajax({
                                 type: "POST",
                                 url: "http://localhost:8080/category/delete/" + categoryId,
-                                success: function(response) {
+                                success: function (response) {
                                     console.log(response);
                                     $('#deleteBtn' + categoryId).closest('tr').remove();
                                     window.location.reload();
                                 },
-                                error: function(error) {
+                                error: function (error) {
                                     console.log(error);
                                 }
                             });
                         }
                     });
 
-                    $('.edit-category-btn').click(function(event) {
+                    $('.edit-category-btn').click(function (event) {
                         event.preventDefault();
                         var categoryId = $(this).data('id');
                         $.ajax({
                             type: "GET",
                             url: "http://localhost:8080/category/search/" + categoryId,
-                            success: function(response) {
+                            success: function (response) {
                                 var category = response.data;
                                 window.location.href = '/admin/update_category?id=' + category.id;
                             },
-                            error: function(error) {
+                            error: function (error) {
                                 console.log(error);
                             }
                         });
                     });
                 },
-                error: function(error) {
+                error: function (error) {
                     console.log(error);
                 }
             });
@@ -347,7 +359,8 @@
             getCategories(page, size);
         }
     }
-    $("#searchBtn").click(function() {
+
+    $("#searchBtn").click(function () {
         check = !check;
         let page = 0;
         let size = 5;
