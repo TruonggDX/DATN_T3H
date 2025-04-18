@@ -9,10 +9,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProducerRepository extends JpaRepository<ProducerEntity,Long> {
-    @Query("SELECT p FROM ProducerEntity p WHERE p.deleted = false")
-    Page<ProducerEntity> listProducer(Pageable pageable);
+public interface ProducerRepository extends JpaRepository<ProducerEntity, Long> {
 
-    @Query("SELECT c FROM ProducerEntity c WHERE (c.name LIKE %:condition% OR c.code LIKE %:condition%) AND c.deleted = false")
-    Page<ProducerEntity> searchProducer(@Param("condition") String condition, Pageable pageable);
+  @Query("SELECT p FROM ProducerEntity p WHERE p.deleted = false")
+  Page<ProducerEntity> listProducer(Pageable pageable);
+
+  @Query("SELECT c FROM ProducerEntity c WHERE (c.name LIKE %:condition% OR c.code LIKE %:condition%) AND c.deleted = false")
+  Page<ProducerEntity> searchProducer(@Param("condition") String condition, Pageable pageable);
 }

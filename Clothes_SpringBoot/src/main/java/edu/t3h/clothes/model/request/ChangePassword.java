@@ -1,12 +1,11 @@
 package edu.t3h.clothes.model.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class ChangePassword {
-    public String oldPassword;
-    public String newPassword;
-    public String confirmPassword;
+
+  public String oldPassword;
+  public String newPassword;
+  public String confirmPassword;
 }

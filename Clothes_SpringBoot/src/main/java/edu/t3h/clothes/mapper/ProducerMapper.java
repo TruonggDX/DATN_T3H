@@ -1,13 +1,14 @@
 package edu.t3h.clothes.mapper;
 
 import edu.t3h.clothes.entity.ProducerEntity;
-import edu.t3h.clothes.model.dto.ProducerDTO;
+import edu.t3h.clothes.model.dto.ProducerDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProducerMapper {
-  public ProducerDTO toDto(ProducerEntity producerEntity) {
-    ProducerDTO producerDTO = new ProducerDTO();
+
+  public ProducerDto toDto(ProducerEntity producerEntity) {
+    ProducerDto producerDTO = new ProducerDto();
     producerDTO.setId(producerEntity.getId());
     producerDTO.setName(producerEntity.getName());
     producerDTO.setCode(producerEntity.getCode());
@@ -15,7 +16,8 @@ public class ProducerMapper {
     producerDTO.setPhone(producerEntity.getPhone());
     return producerDTO;
   }
-  public ProducerEntity toEntity(ProducerDTO producerDTO) {
+
+  public ProducerEntity toEntity(ProducerDto producerDTO) {
     ProducerEntity producerEntity = new ProducerEntity();
     producerEntity.setId(producerDTO.getId());
     producerEntity.setName(producerDTO.getName());

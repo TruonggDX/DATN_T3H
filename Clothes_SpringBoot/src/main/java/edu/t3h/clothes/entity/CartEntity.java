@@ -5,18 +5,14 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "shopping_cart")
-public class CartEntity extends AbstractEntity{
-    private Long number;
-    private Double price;
-    private Double total;
-    private Double total_cart;
+@Table(name = "cart")
+public class CartEntity extends AbstractEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private ProductEntity product;
+  private Long number;
+  @ManyToOne
+  @JoinColumn(name = "account_id")
+  private AccountEntity account;
+  @ManyToOne
+  @JoinColumn(name = "product_id")
+  private ProductEntity product;
 }
