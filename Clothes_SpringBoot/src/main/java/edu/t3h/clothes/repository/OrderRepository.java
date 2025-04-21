@@ -1,5 +1,8 @@
 package edu.t3h.clothes.repository;
 
-public interface OrderRepository {
+import edu.t3h.clothes.entity.OrdersEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OrderRepository extends JpaRepository<OrdersEntity,Long> {
 
 }
