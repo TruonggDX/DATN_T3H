@@ -2,9 +2,11 @@ package edu.t3h.clothes.controller;
 
 import edu.t3h.clothes.model.dto.CategoryDto;
 import edu.t3h.clothes.model.response.BaseResponse;
+import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.service.ICategoryService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,15 +26,12 @@ public class ApiCategory {
   private final ICategoryService categoryService;
 
   @GetMapping("/list")
-  public ResponseEntity<BaseResponse<Page<CategoryDto>>> getAll(
-      @RequestParam(name = "page", required = false, defaultValue = "0") int page,
-      @RequestParam(name = "size", required = false, defaultValue = "10") int size) {
-    return ResponseEntity.ok(categoryService.getAll(page, size));
+  public ResponseEntity<ResponsePage<List<CategoryDto>>> getAll(Pageable pageable) {
+    return ResponseEntity.ok(categoryService.getAll(pageable));
   }
 
   @PostMapping("/create")
-  public ResponseEntity<BaseResponse<CategoryDto>> createCategory(
-      @RequestBody CategoryDto categoryDTO) {
+  public ResponseEntity<BaseResponse<CategoryDto>> createCategory(@RequestBody CategoryDto categoryDTO) {
     BaseResponse<CategoryDto> response = categoryService.creatCategory(categoryDTO);
     return ResponseEntity.ok(response);
   }
@@ -56,13 +55,9 @@ public class ApiCategory {
     return ResponseEntity.ok(categoryDTO);
   }
 
-  @GetMapping("/searchByCondition/{condition}")
-  public ResponseEntity<BaseResponse<Page<CategoryDto>>> searchUsersByCondition(
-      @PathVariable String condition,
-      @RequestParam(name = "page", required = false, defaultValue = "0") int page,
-      @RequestParam(name = "size", required = false, defaultValue = "10") int size) {
-    BaseResponse<Page<CategoryDto>> cateDto = categoryService.searchCategoriesCondition(condition,
-        page, size);
+  @GetMapping("/searchByCondition")
+  public ResponseEntity<ResponsePage<List<CategoryDto>>> searchUsersByCondition(@RequestParam(value = "code") String code, @RequestParam(value = "name") String name, Pageable pageable) {
+    ResponsePage<List<CategoryDto>> cateDto = categoryService.searchCategoriesCondition(code,name,pageable);
     return ResponseEntity.ok(cateDto);
   }
 

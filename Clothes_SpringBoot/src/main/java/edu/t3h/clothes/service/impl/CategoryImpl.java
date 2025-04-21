@@ -4,6 +4,7 @@ import edu.t3h.clothes.entity.CategoryEntity;
 import edu.t3h.clothes.mapper.CategoryMapper;
 import edu.t3h.clothes.model.dto.CategoryDto;
 import edu.t3h.clothes.model.response.BaseResponse;
+import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.repository.CategoryRepository;
 import edu.t3h.clothes.service.ICategoryService;
 import edu.t3h.clothes.utils.Constant;
@@ -11,8 +12,6 @@ import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
 import edu.t3h.clothes.utils.GenarateCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,26 +26,26 @@ public class CategoryImpl implements ICategoryService {
   private final CategoryMapper categoryMapper;
 
   @Override
-  public BaseResponse<Page<CategoryDto>> getAll(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
-    Page<CategoryEntity> pages = categoryRepository.listCategory(pageable);
-    List<CategoryDto> categoriesDTO = pages.getContent().stream().map(categoryMapper::toDto)
-        .toList();
-    BaseResponse<Page<CategoryDto>> response = new BaseResponse<>();
-    response.setCode(HttpStatus.OK.value());
-    response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-    response.setData(new PageImpl<>(categoriesDTO, pageable, pages.getTotalElements()));
-    return response;
+  public ResponsePage<List<CategoryDto>> getAll(Pageable pageable) {
+    ResponsePage<List<CategoryDto>> responsePage = new ResponsePage<>();
+    Page<CategoryEntity> page = categoryRepository.listCategory(pageable);
+    List<CategoryDto> categoriesDTO = page.getContent().stream().map(categoryMapper::toDto).toList();
+    responsePage.setPageNumber(pageable.getPageNumber());
+    responsePage.setPageSize(pageable.getPageSize());
+    responsePage.setTotalElements(page.getTotalElements());
+    responsePage.setTotalPages(page.getTotalPages());
+    responsePage.setContent(categoriesDTO);
+    return responsePage;
   }
 
   @Override
   public BaseResponse<CategoryDto> creatCategory(CategoryDto categoryDTO) {
+    BaseResponse<CategoryDto> response = new BaseResponse<>();
     CategoryEntity categoryEntity = categoryMapper.toEntity(categoryDTO);
     categoryEntity.setDeleted(false);
     categoryEntity.setCode(GenarateCode.generateAccountCode());
     categoryEntity = categoryRepository.save(categoryEntity);
     categoryDTO = categoryMapper.toDto(categoryEntity);
-    BaseResponse<CategoryDto> response = new BaseResponse<>();
     response.setCode(HttpStatus.OK.value());
     response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
     response.setData(categoryDTO);
@@ -107,16 +106,17 @@ public class CategoryImpl implements ICategoryService {
   }
 
   @Override
-  public BaseResponse<Page<CategoryDto>> searchCategoriesCondition(String condition, int page,
-      int size) {
-    BaseResponse<Page<CategoryDto>> response = new BaseResponse<>();
-    Pageable pageable = PageRequest.of(page, size);
-    Page<CategoryEntity> pages = categoryRepository.searchCategories(condition, pageable);
-    Page<CategoryDto> categoryDTOS = pages.map(categoryMapper::toDto);
-    response.setCode(HttpStatus.OK.value());
-    response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-    response.setData(categoryDTOS);
-    return response;
+  public ResponsePage<List<CategoryDto>> searchCategoriesCondition(String code, String name,
+      Pageable pageable) {
+    ResponsePage<List<CategoryDto>> responsePage = new ResponsePage<>();
+    Page<CategoryEntity> page = categoryRepository.searchCategories(code,name, pageable);
+    List<CategoryDto> categoryDTOS = page.getContent().stream().map(categoryMapper::toDto).toList();
+    responsePage.setPageNumber(pageable.getPageNumber());
+    responsePage.setPageSize(pageable.getPageSize());
+    responsePage.setTotalElements(page.getTotalElements());
+    responsePage.setTotalPages(page.getTotalPages());
+    responsePage.setContent(categoryDTOS);
+    return responsePage;
   }
 
 }

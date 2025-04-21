@@ -12,6 +12,10 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
   @Query("SELECT c FROM CategoryEntity c WHERE c.deleted = false")
   Page<CategoryEntity> listCategory(Pageable pageable);
 
-  @Query("SELECT c FROM CategoryEntity c WHERE (c.name LIKE %:condition% OR c.code LIKE %:condition%) AND c.deleted = false")
-  Page<CategoryEntity> searchCategories(@Param("condition") String condition, Pageable pageable);
+  @Query("SELECT c FROM CategoryEntity c " +
+      "WHERE (:name IS NULL OR c.name LIKE CONCAT('%', :name, '%')) " +
+      "AND (:code IS NULL OR c.code LIKE CONCAT('%', :code, '%')) " +
+      "AND c.deleted = false")
+  Page<CategoryEntity> searchCategories(@Param("code") String code, @Param("name") String name,
+      Pageable pageable);
 }

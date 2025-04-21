@@ -7,7 +7,6 @@ import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.service.IProducerService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +31,13 @@ public class ApiProducer {
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping("/delete/{id}")
+  @DeleteMapping("/delete/{id}")
   public ResponseEntity<BaseResponse<ProducerDto>> deleteProducer(@PathVariable Long id) {
     BaseResponse<ProducerDto> response = producerService.deleteProducer(id);
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping("/update/{id}")
+  @PutMapping("/update/{id}")
   public ResponseEntity<BaseResponse<ProducerDto>> updateProducer(@PathVariable Long id,
       @RequestBody ProducerDto producerDTO) {
     BaseResponse<ProducerDto> response = producerService.updateProducer(id, producerDTO);
@@ -51,14 +50,9 @@ public class ApiProducer {
     return ResponseEntity.ok(producerDTO);
   }
 
-  @GetMapping("/searchByCondition/{condition}")
-  public ResponseEntity<BaseResponse<Page<ProducerDto>>> searchUsersByCondition(
-      @PathVariable String condition,
-      @RequestParam(name = "page", required = false, defaultValue = "0") int page,
-      @RequestParam(name = "size", required = false, defaultValue = "10") int size) {
-
-    BaseResponse<Page<ProducerDto>> prodto = producerService.searchProducerByCondition(condition,
-        page, size);
-    return ResponseEntity.ok(prodto);
+  @GetMapping("/searchByCondition")
+  public ResponseEntity<ResponsePage<List<ProducerDto>>> searchUsersByCondition(@RequestParam(value = "name") String name,@RequestParam(value = "code") String code, @RequestParam(value = "address") String address, @RequestParam(value = "phone") String phone, Pageable pageable) {
+    ResponsePage<List<ProducerDto>> producer = producerService.searchProducerByCondition(name, code, address, phone, pageable);
+    return ResponseEntity.ok(producer);
   }
 }

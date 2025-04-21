@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/account")
 @RequiredArgsConstructor
-public class ApiUser {
+public class ApiAccount {
     private IAccountService iAccountService;
 
 }

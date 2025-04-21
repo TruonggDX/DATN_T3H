@@ -1,6 +1,5 @@
 package edu.t3h.clothes.service.impl;
 
-
 import edu.t3h.clothes.entity.ProducerEntity;
 import edu.t3h.clothes.mapper.ProducerMapper;
 import edu.t3h.clothes.model.dto.ProducerDto;
@@ -11,12 +10,10 @@ import edu.t3h.clothes.service.IProducerService;
 import edu.t3h.clothes.utils.Constant;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
 import edu.t3h.clothes.utils.GenarateCode;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,7 +24,6 @@ public class ProducerImpl implements IProducerService {
 
   private final ProducerRepository producerRepository;
   private final ProducerMapper producerMapper;
-
 
   @Override
   public ResponsePage<List<ProducerDto>> getAll(Pageable pageable) {
@@ -46,7 +42,6 @@ public class ProducerImpl implements IProducerService {
   public BaseResponse<ProducerDto> creatProducer(ProducerDto producerDTO) {
     ProducerEntity producerEntity = producerMapper.toEntity(producerDTO);
     producerEntity.setDeleted(false);
-    producerEntity.setCreatedDate(LocalDateTime.now());
     producerEntity.setCode(GenarateCode.generateAccountCode());
     producerEntity = producerRepository.save(producerEntity);
     producerDTO = producerMapper.toDto(producerEntity);
@@ -100,8 +95,9 @@ public class ProducerImpl implements IProducerService {
       response.setMessage(HTTP_MESSAGE.FAILED);
       return response;
     }
-    ProducerEntity producer = check.get();
+    ProducerEntity producer = producerMapper.toEntity(producerDTO);
     producer.setId(id);
+    producer.setDeleted(false);
     producerRepository.save(producer);
     response.setCode(HttpStatus.OK.value());
     response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
@@ -110,17 +106,17 @@ public class ProducerImpl implements IProducerService {
   }
 
   @Override
-  public BaseResponse<Page<ProducerDto>> searchProducerByCondition(String condition, int page,
-      int size) {
-    BaseResponse<Page<ProducerDto>> response = new BaseResponse<>();
-    Pageable pageable = PageRequest.of(page, size);
-    Page<ProducerEntity> pages = producerRepository.searchProducer(condition, pageable);
-    Page<ProducerDto> prodto = pages.map(producerMapper::toDto);
-    response.setCode(HttpStatus.OK.value());
-    response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-    response.setData(prodto);
-    return response;
+  public ResponsePage<List<ProducerDto>> searchProducerByCondition(String name, String code,
+      String address, String phone, Pageable pageable) {
+    ResponsePage<List<ProducerDto>> responsePage = new ResponsePage<>();
+    Page<ProducerEntity> page = producerRepository.searchProducer(name, code, address, phone,
+        pageable);
+    List<ProducerDto> pro = page.getContent().stream().map(producerMapper::toDto).toList();
+    responsePage.setPageNumber(pageable.getPageNumber());
+    responsePage.setPageSize(pageable.getPageSize());
+    responsePage.setTotalElements(page.getTotalElements());
+    responsePage.setTotalPages(page.getTotalPages());
+    responsePage.setContent(pro);
+    return responsePage;
   }
-
-
 }

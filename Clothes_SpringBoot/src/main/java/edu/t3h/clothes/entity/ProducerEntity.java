@@ -2,7 +2,6 @@ package edu.t3h.clothes.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.List;
 
 @Entity
 @Table(name = "producer")
@@ -17,10 +16,5 @@ public class ProducerEntity extends AbstractEntity {
   private String address;
   @Column(name = "phone")
   private String phone;
-
-  @OneToMany(mappedBy = "producerEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @EqualsAndHashCode.Exclude
-  @ToString.Exclude
-  private List<ProductEntity> productEntities;
 
 }

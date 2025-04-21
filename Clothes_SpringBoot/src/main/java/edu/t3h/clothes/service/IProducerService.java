@@ -4,8 +4,8 @@ import edu.t3h.clothes.model.dto.ProducerDto;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import java.util.List;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 
 public interface IProducerService {
 
@@ -19,6 +19,6 @@ public interface IProducerService {
 
   BaseResponse<ProducerDto> updateProducer(Long id, ProducerDto producerDTO);
 
-  BaseResponse<Page<ProducerDto>> searchProducerByCondition(String condition, int page, int size);
+  ResponsePage<List<ProducerDto>> searchProducerByCondition(String name,String code,String address,String phone,Pageable pageable);
 
 }
