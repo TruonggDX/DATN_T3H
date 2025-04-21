@@ -16,10 +16,11 @@ import lombok.EqualsAndHashCode;
 public class AttributeValueEntity extends AbstractEntity {
 
   private String value;
+  private String colorCode;
   @ManyToOne
   @JoinColumn(name = "attribute_id")
   @EqualsAndHashCode.Exclude
-  private AttributeEntity attributeEntity;
+  private AttributeEntity attribute;
   @ManyToMany(mappedBy = "attributeValueEntities")
   private Set<VariantEntity> variantEntities = new HashSet<>();
 

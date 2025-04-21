@@ -1,17 +1,19 @@
 package edu.t3h.clothes.controller;
 
-import edu.t3h.clothes.model.dto.PaymentDto;
-import edu.t3h.clothes.model.response.BaseResponse;
-import edu.t3h.clothes.model.response.ResponsePage;
+import edu.t3h.clothes.model.request.MomoRequest;
+import edu.t3h.clothes.model.response.VNPayResponse;
 import edu.t3h.clothes.service.IPaymentService;
-import java.util.List;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,19 +21,53 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ApiPayment {
 
-  private final IPaymentService iPaymentService;
+  private final IPaymentService paymentService;
 
-  @GetMapping("/list")
-  public ResponseEntity<ResponsePage<List<PaymentDto>>> getAllPayments(Pageable pageable) {
-    ResponsePage<List<PaymentDto>> responsePage = iPaymentService.getAllPayments(pageable);
-    return ResponseEntity.ok(responsePage);
+  @GetMapping("/vn-pay")
+  public VNPayResponse pay(HttpServletRequest request) {
+    return paymentService.createVnPayPayment(request);
   }
 
-  @PostMapping("/create")
-  public ResponseEntity<BaseResponse<PaymentDto>> createPayment(
-      @RequestBody PaymentDto paymentDto) {
-    BaseResponse<PaymentDto> response = iPaymentService.createPayment(paymentDto);
+  @GetMapping("/vnpay_return")
+  public ResponseEntity<?> vnpayReturn(@RequestParam Map<String, String> queryParams) {
+    String responseCode = queryParams.get("vnp_ResponseCode");
+    if ("00".equals(responseCode)) {
+      return ResponseEntity.ok(Map.of("status", "00", "message", "Payment success"));
+    }
+    return ResponseEntity.badRequest()
+        .body(Map.of("status", responseCode, "message", "Payment failed"));
+  }
+
+
+  //MOMO
+  @PostMapping()
+  public ResponseEntity<String> momoPayment(@RequestBody MomoRequest paymentRequest) {
+    String response = paymentService.createPaymentRequest(paymentRequest.getAmount());
     return ResponseEntity.ok(response);
   }
+
+  @GetMapping("/order-status/{orderId}")
+  public ResponseEntity<String> checkPaymentStatus(@PathVariable String orderId) {
+    String response = paymentService.checkPaymentStatus(orderId);
+    return ResponseEntity.ok(response);
+  }
+
+  //Zalo Pay
+  @PostMapping("/create-zalopay")
+  public ResponseEntity<String> createPayment(@RequestBody Map<String, Object> orderRequest) {
+    try {
+      String response = paymentService.createOrder(orderRequest);
+      return ResponseEntity.ok(response);
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body(e.getMessage());
+    }
+  }
+
+  @GetMapping("/order-status-zalopay/{appTransId}")
+  public ResponseEntity<String> getOrderStatus(@PathVariable String appTransId) {
+    String response = paymentService.getOrderStatus(appTransId);
+    return ResponseEntity.ok(response);
+  }
+
 
 }

@@ -58,7 +58,10 @@ public class AttributeServiceImpl implements IAttributeService {
       response.setMessage(HTTP_MESSAGE.FAILED);
       return response;
     }
-    AttributeEntity attributeEntity = check.get();
+    AttributeEntity attributeEntity = attributeMapper.toEntity(attributeDto);
+    attributeEntity.setId(id);
+    attributeEntity.setDeleted(false);
+    attributeRepository.save(attributeEntity);
     response.setData(attributeMapper.toDto(attributeEntity));
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setCode(HttpStatus.OK.value());
