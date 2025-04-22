@@ -5,7 +5,9 @@ import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.service.ICategoryService;
 import java.util.List;
+import java.util.logging.Logger;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +33,8 @@ public class ApiCategory {
   }
 
   @PostMapping("/create")
-  public ResponseEntity<BaseResponse<CategoryDto>> createCategory(@RequestBody CategoryDto categoryDTO) {
+  public ResponseEntity<BaseResponse<CategoryDto>> createCategory(
+      @RequestBody CategoryDto categoryDTO) {
     BaseResponse<CategoryDto> response = categoryService.creatCategory(categoryDTO);
     return ResponseEntity.ok(response);
   }
@@ -56,8 +59,11 @@ public class ApiCategory {
   }
 
   @GetMapping("/searchByCondition")
-  public ResponseEntity<ResponsePage<List<CategoryDto>>> searchUsersByCondition(@RequestParam(value = "code") String code, @RequestParam(value = "name") String name, Pageable pageable) {
-    ResponsePage<List<CategoryDto>> cateDto = categoryService.searchCategoriesCondition(code,name,pageable);
+  public ResponseEntity<ResponsePage<List<CategoryDto>>> searchUsersByCondition(
+      @RequestParam(value = "code") String code, @RequestParam(value = "name") String name,
+      Pageable pageable) {
+    ResponsePage<List<CategoryDto>> cateDto = categoryService.searchCategoriesCondition(code, name,
+        pageable);
     return ResponseEntity.ok(cateDto);
   }
 

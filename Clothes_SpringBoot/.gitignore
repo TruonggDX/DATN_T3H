@@ -16,6 +16,7 @@ target/
 
 # config information
 .env
+logs/
 ### IntelliJ IDEA ###
 .idea
 *.iws

@@ -1,6 +1,7 @@
 package edu.t3h.clothes.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -21,7 +22,9 @@ public class AttributeValueEntity extends AbstractEntity {
   @JoinColumn(name = "attribute_id")
   @EqualsAndHashCode.Exclude
   private AttributeEntity attribute;
-  @ManyToMany(mappedBy = "attributeValueEntities")
+
+  @ManyToMany(mappedBy = "attributeValues", fetch = FetchType.EAGER)
   private Set<VariantEntity> variantEntities = new HashSet<>();
+
 
 }

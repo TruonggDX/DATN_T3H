@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
 
   @Query("SELECT r FROM RoleEntity r WHERE r.deleted = false ")
