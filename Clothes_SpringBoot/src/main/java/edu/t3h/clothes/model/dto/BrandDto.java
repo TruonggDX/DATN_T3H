@@ -8,8 +8,9 @@ import lombok.Setter;
 @Setter
 
 public class BrandDto {
+
   private Long id;
   private String name;
   private String description;
-  private String image;
+  private String imageUrl;
 }
