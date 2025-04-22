@@ -11,5 +11,6 @@ public class BrandEntity extends AbstractEntity {
 
   private String name;
   private String description;
+  private String image;
 
 }
