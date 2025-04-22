@@ -26,8 +26,8 @@ public class AccountEntity extends AbstractEntity {
   private String birthday;
   @Column(name = "loyal_customers")
   private Boolean loyalCustomers;
+  private boolean enabled;
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
   @JoinTable(name = "account_role", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<RoleEntity> roles = new HashSet<>();
-
 }
