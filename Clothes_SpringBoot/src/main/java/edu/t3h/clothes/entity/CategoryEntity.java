@@ -1,15 +1,11 @@
 package edu.t3h.clothes.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.List;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 @Entity
 @Data
@@ -21,8 +17,7 @@ public class CategoryEntity extends AbstractEntity {
   @Column(name = "name")
   private String name;
 
-  @OneToMany(mappedBy = "categoryEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @EqualsAndHashCode.Exclude
-  @ToString.Exclude
-  private List<ProductEntity> productEntities;
+  @ManyToOne
+  @JoinColumn(name = "parent_id")
+  private CategoryEntity parent;
 }

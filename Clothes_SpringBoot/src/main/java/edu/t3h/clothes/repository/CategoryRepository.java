@@ -1,6 +1,7 @@
 package edu.t3h.clothes.repository;
 
 import edu.t3h.clothes.entity.CategoryEntity;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,13 +12,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
 
-  @Query("SELECT c FROM CategoryEntity c WHERE c.deleted = false")
-  Page<CategoryEntity> listCategory(Pageable pageable);
+  @Query(value = "SELECT c FROM CategoryEntity c WHERE c.deleted=false AND c.parent IS NULL")
+  List<CategoryEntity> findAllCategories();
 
-  @Query("SELECT c FROM CategoryEntity c " +
+  @Query(value = "SELECT c FROM CategoryEntity c WHERE c.deleted = false AND c.parent.code = :code")
+  List<CategoryEntity> findByParentCode(String code);
+
+  @Query(value = "SELECT c FROM CategoryEntity c " +
       "WHERE (:name IS NULL OR c.name LIKE CONCAT('%', :name, '%')) " +
-      "AND (:code IS NULL OR c.code LIKE CONCAT('%', :code, '%')) " +
       "AND c.deleted = false")
-  Page<CategoryEntity> searchCategories(@Param("code") String code, @Param("name") String name,
-      Pageable pageable);
+  Page<CategoryEntity> searchCategories(@Param("name") String name, Pageable pageable);
 }

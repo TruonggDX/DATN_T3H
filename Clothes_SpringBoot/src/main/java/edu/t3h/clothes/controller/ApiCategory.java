@@ -28,8 +28,9 @@ public class ApiCategory {
   private final ICategoryService categoryService;
 
   @GetMapping("/list")
-  public ResponseEntity<ResponsePage<List<CategoryDto>>> getAll(Pageable pageable) {
-    return ResponseEntity.ok(categoryService.getAll(pageable));
+  public ResponseEntity<BaseResponse<List<CategoryDto>>> getAll() {
+    BaseResponse<List<CategoryDto>> response = categoryService.getAllCategories();
+    return ResponseEntity.ok(response);
   }
 
   @PostMapping("/create")
@@ -60,9 +61,9 @@ public class ApiCategory {
 
   @GetMapping("/searchByCondition")
   public ResponseEntity<ResponsePage<List<CategoryDto>>> searchUsersByCondition(
-      @RequestParam(value = "code") String code, @RequestParam(value = "name") String name,
+      @RequestParam(value = "name") String name,
       Pageable pageable) {
-    ResponsePage<List<CategoryDto>> cateDto = categoryService.searchCategoriesCondition(code, name,
+    ResponsePage<List<CategoryDto>> cateDto = categoryService.searchCategoriesCondition(name,
         pageable);
     return ResponseEntity.ok(cateDto);
   }

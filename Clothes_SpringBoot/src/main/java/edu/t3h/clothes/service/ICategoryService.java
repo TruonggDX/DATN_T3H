@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ICategoryService {
 
-  ResponsePage<List<CategoryDto>> getAll(Pageable pageable);
+  BaseResponse<List<CategoryDto>> getAllCategories();
 
   BaseResponse<CategoryDto> creatCategory(CategoryDto categoryDTO);
 
@@ -18,7 +18,7 @@ public interface ICategoryService {
 
   BaseResponse<CategoryDto> updateCategory(Long id, CategoryDto categoryDTO);
 
-  ResponsePage<List<CategoryDto>> searchCategoriesCondition(String code,String name,Pageable pageable);
+  ResponsePage<List<CategoryDto>> searchCategoriesCondition(String name,Pageable pageable);
 
 
 }

@@ -25,17 +25,24 @@ public class CategoryImpl implements ICategoryService {
   private final CategoryRepository categoryRepository;
   private final CategoryMapper categoryMapper;
 
+
   @Override
-  public ResponsePage<List<CategoryDto>> getAll(Pageable pageable) {
-    ResponsePage<List<CategoryDto>> responsePage = new ResponsePage<>();
-    Page<CategoryEntity> page = categoryRepository.listCategory(pageable);
-    List<CategoryDto> categoriesDTO = page.getContent().stream().map(categoryMapper::toDto).toList();
-    responsePage.setPageNumber(pageable.getPageNumber());
-    responsePage.setPageSize(pageable.getPageSize());
-    responsePage.setTotalElements(page.getTotalElements());
-    responsePage.setTotalPages(page.getTotalPages());
-    responsePage.setContent(categoriesDTO);
-    return responsePage;
+  public BaseResponse<List<CategoryDto>> getAllCategories() {
+    BaseResponse<List<CategoryDto>> response = new BaseResponse<>();
+    List<CategoryEntity> list = categoryRepository.findAllCategories();
+    List<CategoryDto> categoryDtos = list.stream().map(categoryEntity -> {
+      CategoryDto categoryDto = categoryMapper.toDto(categoryEntity);
+      List<CategoryEntity> categoryEntities = categoryRepository.findByParentCode(
+          categoryDto.getCode());
+      List<CategoryDto> categoryDtoList = categoryEntities.stream().map(categoryMapper::toDto)
+          .toList();
+      categoryDto.setChildren(categoryDtoList);
+      return categoryDto;
+    }).toList();
+    response.setData(categoryDtos);
+    response.setMessage(HTTP_MESSAGE.SUCCESS);
+    response.setCode(HttpStatus.OK.value());
+    return response;
   }
 
   @Override
@@ -44,6 +51,12 @@ public class CategoryImpl implements ICategoryService {
     CategoryEntity categoryEntity = categoryMapper.toEntity(categoryDTO);
     categoryEntity.setDeleted(false);
     categoryEntity.setCode(GenarateCode.generateAccountCode());
+    if (categoryDTO.getParentId() != null) {
+      CategoryEntity parent = categoryRepository.findById(categoryDTO.getParentId()).orElse(null);
+      if (parent != null) {
+        categoryEntity.setParent(parent);
+      }
+    }
     categoryEntity = categoryRepository.save(categoryEntity);
     categoryDTO = categoryMapper.toDto(categoryEntity);
     response.setCode(HttpStatus.OK.value());
@@ -51,6 +64,7 @@ public class CategoryImpl implements ICategoryService {
     response.setData(categoryDTO);
     return response;
   }
+
 
   @Override
   public BaseResponse<CategoryDto> deleteCategory(Long id) {
@@ -106,16 +120,23 @@ public class CategoryImpl implements ICategoryService {
   }
 
   @Override
-  public ResponsePage<List<CategoryDto>> searchCategoriesCondition(String code, String name,
-      Pageable pageable) {
+  public ResponsePage<List<CategoryDto>> searchCategoriesCondition(String name, Pageable pageable) {
     ResponsePage<List<CategoryDto>> responsePage = new ResponsePage<>();
-    Page<CategoryEntity> page = categoryRepository.searchCategories(code,name, pageable);
-    List<CategoryDto> categoryDTOS = page.getContent().stream().map(categoryMapper::toDto).toList();
+    Page<CategoryEntity> page = categoryRepository.searchCategories(name, pageable);
+    List<CategoryDto> categoryDtos = page.stream().map(categoryEntity -> {
+      CategoryDto categoryDto = categoryMapper.toDto(categoryEntity);
+      List<CategoryEntity> categoryEntities = categoryRepository.findByParentCode(
+          categoryDto.getCode());
+      List<CategoryDto> categoryDtoList = categoryEntities.stream().map(categoryMapper::toDto)
+          .toList();
+      categoryDto.setChildren(categoryDtoList);
+      return categoryDto;
+    }).toList();
     responsePage.setPageNumber(pageable.getPageNumber());
     responsePage.setPageSize(pageable.getPageSize());
     responsePage.setTotalElements(page.getTotalElements());
     responsePage.setTotalPages(page.getTotalPages());
-    responsePage.setContent(categoryDTOS);
+    responsePage.setContent(categoryDtos);
     return responsePage;
   }
 
