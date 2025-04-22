@@ -20,4 +20,7 @@ public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
       "AND r.deleted = false")
   Page<RoleEntity> searchRoles(@Param("code") String code, @Param("name") String name,
       Pageable pageable);
+
+  RoleEntity findByName(String name);
+
 }
