@@ -10,21 +10,13 @@ import lombok.Data;
 @Data
 public class AccountEntity extends AbstractEntity {
 
-  @Column(name = "fullname")
   private String fullname;
-  @Column(name = "code")
   private String code;
-  @Column(name = "email")
   private String email;
-  @Column(name = "password")
   private String password;
-  @Column(name = "phone")
   private String phone;
-  @Column(name = "address")
   private String address;
-  @Column(name = "birthday")
   private String birthday;
-  @Column(name = "loyal_customers")
   private Boolean loyalCustomers;
   private boolean enabled;
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)

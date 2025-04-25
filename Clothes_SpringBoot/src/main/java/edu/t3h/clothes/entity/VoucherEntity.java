@@ -1,7 +1,6 @@
 package edu.t3h.clothes.entity;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -18,26 +17,16 @@ import lombok.Data;
 @Table(name = "voucher")
 public class VoucherEntity extends AbstractEntity{
 
-    @Column(name = "code")
     private String code;
-    @Column(name = "name")
-    private String name; //tên voucher
-    @Column(name = "description")
-    private String description; //mô tả voucher
-    @Column(name = "description_type")
-    private String description_type;   //giá trị giảm theo % hay tiền
-    @Column(name = "discount_value")
-    private Float discount_value; //giá trị giảm
-    @Column(name = "min_order_amount")
-    private Float min_order_amount; //giá trị đơn hàng tối thiểu
-    @Column(name = "quantity")
-    private Integer quantity; //số lượng voucher
-    @Column(name = "is_active")
-    private Boolean is_active; //trạng thái voucher
-    @Column(name = "start_date")
-    private Date start_date; //ngày bắt đầu
-    @Column(name = "end_date")
-    private Date end_date; //ngày kết thúc
+    private String name;
+    private String description;
+    private String descriptionType;
+    private Float discountValue;
+    private Float minOrderAmount;
+    private Integer quantity;
+    private Boolean status;
+    private Date startDate;
+    private Date endDate;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "voucher_product", joinColumns = @JoinColumn(name = "voucher_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))

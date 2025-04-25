@@ -25,5 +25,5 @@ public class ProductEntity extends AbstractEntity {
   private BrandEntity brandEntity;
 
   @ManyToMany(mappedBy = "products")
-  private Set<VoucherEntity> voucher_products = new HashSet<>();
+  private Set<VoucherEntity> voucherEntities = new HashSet<>();
 }
