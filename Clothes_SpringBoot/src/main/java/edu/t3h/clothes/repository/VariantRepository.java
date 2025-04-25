@@ -8,7 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface VariantRepository extends JpaRepository<VariantEntity,Long> {
+public interface VariantRepository extends JpaRepository<VariantEntity, Long> {
+
   @Query(value = "SELECT v FROM VariantEntity v WHERE v.deleted=false")
   Page<VariantEntity> findAllByDeletedFalse(Pageable pageable);
+
+  @Query(value = "SELECT v FROM VariantEntity v WHERE v.deleted=false AND (:code IS NULL OR v.code LIKE CONCAT('%', :code, '%') AND (:productName IS NULL OR v.productEntity.name LIKE CONCAT('%', :productName, '%')))")
+  Page<VariantEntity> findAllByCodeAndProductName(String code, String productName,
+      Pageable pageable);
 }

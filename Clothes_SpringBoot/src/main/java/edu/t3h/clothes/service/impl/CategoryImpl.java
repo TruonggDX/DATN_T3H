@@ -46,6 +46,17 @@ public class CategoryImpl implements ICategoryService {
   }
 
   @Override
+  public BaseResponse<List<CategoryDto>> getAllCategoriesByParentId() {
+    BaseResponse<List<CategoryDto>> response = new BaseResponse<>();
+    List<CategoryEntity> list = categoryRepository.findAllCategories();
+    List<CategoryDto> categoryDtos = list.stream().map(categoryMapper::toDto).toList();
+    response.setData(categoryDtos);
+    response.setMessage(HTTP_MESSAGE.SUCCESS);
+    response.setCode(HttpStatus.OK.value());
+    return response;
+  }
+
+  @Override
   public BaseResponse<CategoryDto> creatCategory(CategoryDto categoryDTO) {
     BaseResponse<CategoryDto> response = new BaseResponse<>();
     CategoryEntity categoryEntity = categoryMapper.toEntity(categoryDTO);

@@ -26,6 +26,7 @@ public class VariantEntity extends AbstractEntity {
   @JoinColumn(name = "product_id")
   @EqualsAndHashCode.Exclude
   private ProductEntity productEntity;
+
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
   @JoinTable(name = "variant_attribute_value", joinColumns = @JoinColumn(name = "variant_id"), inverseJoinColumns = @JoinColumn(name = "attribute_value_id"))
   private Set<AttributeValueEntity> attributeValues = new HashSet<>();

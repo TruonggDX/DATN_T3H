@@ -18,6 +18,7 @@ public class AttributeValueEntity extends AbstractEntity {
 
   private String value;
   private String colorCode;
+
   @ManyToOne
   @JoinColumn(name = "attribute_id")
   @EqualsAndHashCode.Exclude

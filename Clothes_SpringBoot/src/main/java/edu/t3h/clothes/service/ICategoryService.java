@@ -10,6 +10,8 @@ public interface ICategoryService {
 
   BaseResponse<List<CategoryDto>> getAllCategories();
 
+  BaseResponse<List<CategoryDto>> getAllCategoriesByParentId();
+
   BaseResponse<CategoryDto> creatCategory(CategoryDto categoryDTO);
 
   BaseResponse<CategoryDto> deleteCategory(Long id);
@@ -18,7 +20,7 @@ public interface ICategoryService {
 
   BaseResponse<CategoryDto> updateCategory(Long id, CategoryDto categoryDTO);
 
-  ResponsePage<List<CategoryDto>> searchCategoriesCondition(String name,Pageable pageable);
+  ResponsePage<List<CategoryDto>> searchCategoriesCondition(String name, Pageable pageable);
 
 
 }

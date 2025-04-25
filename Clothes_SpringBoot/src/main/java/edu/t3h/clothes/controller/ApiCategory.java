@@ -5,9 +5,7 @@ import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.service.ICategoryService;
 import java.util.List;
-import java.util.logging.Logger;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +28,12 @@ public class ApiCategory {
   @GetMapping("/list")
   public ResponseEntity<BaseResponse<List<CategoryDto>>> getAll() {
     BaseResponse<List<CategoryDto>> response = categoryService.getAllCategories();
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/list-parent")
+  public ResponseEntity<BaseResponse<List<CategoryDto>>> loadParentCategories() {
+    BaseResponse<List<CategoryDto>> response = categoryService.getAllCategoriesByParentId();
     return ResponseEntity.ok(response);
   }
 
