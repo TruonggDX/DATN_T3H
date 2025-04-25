@@ -32,8 +32,6 @@ public class VoucherEntity extends AbstractEntity{
     private Float min_order_amount; //giá trị đơn hàng tối thiểu
     @Column(name = "quantity")
     private Integer quantity; //số lượng voucher
-    @Column(name = "used")
-    private Integer used; //số lượng voucher đã sử dụng
     @Column(name = "is_active")
     private Boolean is_active; //trạng thái voucher
     @Column(name = "start_date")
@@ -45,21 +43,4 @@ public class VoucherEntity extends AbstractEntity{
     @JoinTable(name = "voucher_product", joinColumns = @JoinColumn(name = "voucher_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<ProductEntity> products = new HashSet<>();
 
-    public VoucherEntity () {
-
-    }
-
-    public VoucherEntity(String code, String name, String description, String description_type, Float discount_value, Float min_order_amount, Integer quantity, Integer used, Boolean is_active, Date start_date, Date end_date) {
-        this.code = code;
-        this.name = name;
-        this.description = description;
-        this.description_type = description_type;
-        this.discount_value = discount_value;
-        this.min_order_amount = min_order_amount;
-        this.quantity = quantity;
-        this.used = used;
-        this.is_active = is_active;
-        this.start_date = start_date;
-        this.end_date = end_date;
-    }
 }
