@@ -24,7 +24,8 @@ public class AttributeValueEntity extends AbstractEntity {
   @EqualsAndHashCode.Exclude
   private AttributeEntity attribute;
 
-  @ManyToMany(mappedBy = "attributeValues", fetch = FetchType.EAGER)
+  @ManyToMany(mappedBy = "attributeValues", fetch = FetchType.LAZY)
+  @EqualsAndHashCode.Exclude
   private Set<VariantEntity> variantEntities = new HashSet<>();
 
 

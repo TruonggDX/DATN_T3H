@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,12 @@ public class ApiVariant {
   public ResponseEntity<BaseResponse<VariantDto>> createRole(@PathVariable Long id,
       @RequestBody VariantDto variantDto) {
     BaseResponse<VariantDto> response = iVariantService.updateVariant(id, variantDto);
+    return ResponseEntity.ok(response);
+  }
+
+  @DeleteMapping("/delete/{id}")
+  public ResponseEntity<BaseResponse<VariantDto>> deleteVariant(@PathVariable Long id) {
+    BaseResponse<VariantDto> response = iVariantService.deleteVariant(id);
     return ResponseEntity.ok(response);
   }
 

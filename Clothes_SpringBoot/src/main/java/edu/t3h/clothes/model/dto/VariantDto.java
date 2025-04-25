@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class VariantDto {
 
+  private Long id;
   private String code;
   private BigDecimal price;
   private Integer quantity;

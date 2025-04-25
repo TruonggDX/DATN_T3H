@@ -22,7 +22,8 @@ public class VariantEntity extends AbstractEntity {
   private String code;
   private BigDecimal price;
   private Integer quantity;
-  @ManyToOne
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_id")
   @EqualsAndHashCode.Exclude
   private ProductEntity productEntity;
