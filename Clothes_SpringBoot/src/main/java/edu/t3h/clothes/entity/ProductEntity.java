@@ -1,6 +1,8 @@
 package edu.t3h.clothes.entity;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.*;
 
 @Table(name = "product")
@@ -22,4 +24,6 @@ public class ProductEntity extends AbstractEntity {
   @EqualsAndHashCode.Exclude
   private BrandEntity brandEntity;
 
+  @ManyToMany(mappedBy = "products")
+  private Set<VoucherEntity> voucher_products = new HashSet<>();
 }
