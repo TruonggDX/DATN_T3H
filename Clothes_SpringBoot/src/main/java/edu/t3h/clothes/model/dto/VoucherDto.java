@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class VoucherDto {
+
   private Long id;
   private String code;
   private String name;
@@ -17,7 +18,5 @@ public class VoucherDto {
   private Boolean status;
   private Date startDate;
   private Date endDate;
-
   private Set<Long> productIds;
-  private Set<ProductDto> products;
 }

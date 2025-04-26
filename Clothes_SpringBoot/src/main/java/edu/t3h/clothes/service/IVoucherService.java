@@ -8,19 +8,17 @@ import org.springframework.data.domain.Pageable;
 
 public interface IVoucherService {
 
+  ResponsePage<List<VoucherDto>> getVouchers(Pageable pageable);
+
   BaseResponse<VoucherDto> createVoucher(VoucherDto voucherDto);
-
-  BaseResponse<VoucherDto> getVoucherById(Long id);
-
-  ResponsePage<VoucherDto> getVouchers(Pageable pageable);
 
   BaseResponse<VoucherDto> updateVoucher(Long id, VoucherDto voucherDto);
 
+  BaseResponse<VoucherDto> getVoucherById(Long id);
+
   BaseResponse<VoucherDto> deleteVoucher(Long id);
 
-  ResponsePage<VoucherDto> searchVoucherByCode(String code, Pageable pageable);
+  ResponsePage<List<VoucherDto>> searchVoucherByCondition(String code, String name, Boolean status,
+      Pageable pageable);
 
-  ResponsePage<VoucherDto> searchVoucherByName(String name, Pageable pageable);
-
-  ResponsePage<VoucherDto> searchVoucherByStatus(Boolean status, Pageable pageable);
 }

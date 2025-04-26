@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
@@ -28,9 +29,8 @@ public class VoucherEntity extends AbstractEntity{
     private Date startDate;
     private Date endDate;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-    @JoinTable(name = "voucher_product", joinColumns = @JoinColumn(name = "voucher_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private Set<ProductEntity> products = new HashSet<>();
-
+    @ManyToMany(mappedBy = "voucherEntities", fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    private Set<ProductEntity> productEntities = new HashSet<>();
 
 }

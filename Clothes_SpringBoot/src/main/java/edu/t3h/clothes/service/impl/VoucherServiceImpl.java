@@ -11,6 +11,8 @@ import edu.t3h.clothes.repository.VoucherRepository;
 import edu.t3h.clothes.service.IVoucherService;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
 import edu.t3h.clothes.utils.GenarateCode;
+import java.util.HashSet;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,28 +32,39 @@ public class VoucherServiceImpl implements IVoucherService {
   private final ProductRepository productRepository;
 
   @Override
+  public ResponsePage<List<VoucherDto>> getVouchers(Pageable pageable) {
+    ResponsePage<List<VoucherDto>> responsePage = new ResponsePage<>();
+    Page<VoucherEntity> page = voucherRepository.findAllActive(pageable);
+    List<VoucherDto> variantDtos = page.getContent().stream().map(entity -> {
+      VoucherDto variantDto = voucherMapper.toDto(entity);
+      Set<Long> attributeValuesId = entity.getProductEntities().stream()
+          .map(ProductEntity::getId).collect(Collectors.toSet());
+      variantDto.setProductIds(attributeValuesId);
+      return variantDto;
+    }).toList();
+    responsePage.setPageNumber(pageable.getPageNumber());
+    responsePage.setPageSize(pageable.getPageSize());
+    responsePage.setTotalElements(page.getTotalElements());
+    responsePage.setTotalPages(page.getTotalPages());
+    responsePage.setContent(variantDtos);
+    return responsePage;
+  }
+
+  @Override
   public BaseResponse<VoucherDto> createVoucher(VoucherDto voucherDto) {
     BaseResponse<VoucherDto> response = new BaseResponse<>();
     VoucherEntity voucherEntity = voucherMapper.toEntity(voucherDto);
     voucherEntity.setDeleted(false);
     voucherEntity.setCode(GenarateCode.generateAccountCode());
-
-    Set<ProductEntity> products = voucherDto.getProductIds().stream()
-        .map(productRepository::findById)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .collect(Collectors.toSet());
-
-    voucherEntity.setProducts(products);
-    voucherEntity = voucherRepository.save(voucherEntity);
-
-    VoucherDto savedVoucherDto = voucherMapper.toDto(voucherEntity);
-    Set<Long> productIds = voucherEntity.getProducts().stream()
-        .map(ProductEntity::getId)
-        .collect(Collectors.toSet());
-    savedVoucherDto.setProductIds(productIds);
-
-    response.setData(savedVoucherDto);
+    Set<ProductEntity> productEntities = voucherDto.getProductIds().stream()
+        .map(productIds -> productRepository.findById(productIds).orElse(null)).collect(
+            Collectors.toSet());
+    voucherEntity.setProductEntities(productEntities);
+    voucherRepository.save(voucherEntity);
+    voucherDto = voucherMapper.toDto(voucherEntity);
+    Set<Long> productIds = showProductIds(voucherEntity.getProductEntities());
+    voucherDto.setProductIds(productIds);
+    response.setData(voucherDto);
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setCode(HttpStatus.CREATED.value());
     return response;
@@ -60,45 +73,19 @@ public class VoucherServiceImpl implements IVoucherService {
   @Override
   public BaseResponse<VoucherDto> getVoucherById(Long id) {
     BaseResponse<VoucherDto> response = new BaseResponse<>();
-    Optional<VoucherEntity> voucherEntityOpt = voucherRepository.findById(id);
-    if (voucherEntityOpt.isEmpty()) {
+    Optional<VoucherEntity> check = voucherRepository.findById(id);
+    if (check.isEmpty()) {
       response.setCode(HttpStatus.NOT_FOUND.value());
       response.setMessage(HTTP_MESSAGE.FAILED);
       return response;
     }
-
-    VoucherEntity voucherEntity = voucherEntityOpt.get();
+    VoucherEntity voucherEntity = check.get();
     VoucherDto voucherDto = voucherMapper.toDto(voucherEntity);
-    Set<Long> productIds = voucherEntity.getProducts().stream()
-        .map(ProductEntity::getId)
-        .collect(Collectors.toSet());
+    Set<Long> productIds = showProductIds(voucherEntity.getProductEntities());
     voucherDto.setProductIds(productIds);
-
     response.setData(voucherDto);
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setCode(HttpStatus.OK.value());
-    return response;
-  }
-
-  @Override
-  public ResponsePage<VoucherDto> getVouchers(Pageable pageable) {
-    Page<VoucherEntity> page = voucherRepository.findAllActive(pageable);
-
-    ResponsePage<VoucherDto> response = new ResponsePage<>();
-    response.setListContent(page.getContent().stream()
-        .map(entity -> {
-          VoucherDto dto = voucherMapper.toDto(entity);
-          Set<Long> productIds = entity.getProducts().stream()
-              .map(ProductEntity::getId)
-              .collect(Collectors.toSet());
-          dto.setProductIds(productIds);
-          return dto;
-        })
-        .collect(Collectors.toList()));
-    response.setPageNumber(page.getNumber());
-    response.setPageSize(page.getSize());
-    response.setTotalElements(page.getTotalElements());
-    response.setTotalPages(page.getTotalPages());
     return response;
   }
 
@@ -111,36 +98,21 @@ public class VoucherServiceImpl implements IVoucherService {
       response.setMessage(HTTP_MESSAGE.FAILED);
       return response;
     }
-
-    VoucherEntity voucherEntity = voucherEntityOpt.get();
-    voucherEntity.setCode(voucherDto.getCode());
-    voucherEntity.setName(voucherDto.getName());
-    voucherEntity.setDescription(voucherDto.getDescription());
-    voucherEntity.setDescriptionType(voucherDto.getDescriptionType());
-    voucherEntity.setDiscountValue(voucherDto.getDiscountValue());
-    voucherEntity.setMinOrderAmount(voucherDto.getMinOrderAmount());
-    voucherEntity.setQuantity(voucherDto.getQuantity());
-    voucherEntity.setStatus(voucherDto.getStatus());
-    voucherEntity.setStartDate(voucherDto.getStartDate());
-    voucherEntity.setEndDate(voucherDto.getEndDate());
-
-    Set<ProductEntity> products = voucherDto.getProductIds().stream()
-        .map(productRepository::findById)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .collect(Collectors.toSet());
-
-    voucherEntity.getProducts().clear();
-    voucherEntity.getProducts().addAll(products);
+    VoucherEntity voucherEntity = voucherMapper.toEntity(voucherDto);
+    voucherEntity.setId(id);
+    Set<ProductEntity> productEntities = new HashSet<>();
+    for (Long productId : voucherDto.getProductIds()) {
+      ProductEntity productEntity = productRepository.findById(productId).orElse(null);
+      if (productEntity != null) {
+        productEntities.add(productEntity);
+      }
+    }
+    voucherEntity.setProductEntities(productEntities);
     voucherEntity = voucherRepository.save(voucherEntity);
-
-    VoucherDto updatedVoucherDto = voucherMapper.toDto(voucherEntity);
-    Set<Long> productIds = voucherEntity.getProducts().stream()
-        .map(ProductEntity::getId)
-        .collect(Collectors.toSet());
-    updatedVoucherDto.setProductIds(productIds);
-
-    response.setData(updatedVoucherDto);
+    VoucherDto voucher = voucherMapper.toDto(voucherEntity);
+    Set<Long> productIds = showProductIds(voucherEntity.getProductEntities());
+    voucher.setProductIds(productIds);
+    response.setData(voucher);
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setCode(HttpStatus.OK.value());
     return response;
@@ -155,17 +127,12 @@ public class VoucherServiceImpl implements IVoucherService {
       response.setMessage(HTTP_MESSAGE.FAILED);
       return response;
     }
-
     VoucherEntity voucherEntity = voucherEntityOpt.get();
     voucherEntity.setDeleted(true);
     voucherRepository.save(voucherEntity);
-
     VoucherDto voucherDto = voucherMapper.toDto(voucherEntity);
-    Set<Long> productIds = voucherEntity.getProducts().stream()
-        .map(ProductEntity::getId)
-        .collect(Collectors.toSet());
+    Set<Long> productIds = showProductIds(voucherEntity.getProductEntities());
     voucherDto.setProductIds(productIds);
-
     response.setData(voucherDto);
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setCode(HttpStatus.OK.value());
@@ -173,68 +140,25 @@ public class VoucherServiceImpl implements IVoucherService {
   }
 
   @Override
-  public ResponsePage<VoucherDto> searchVoucherByCode(String code, Pageable pageable) {
-    Page<VoucherEntity> page = voucherRepository.findByCode(code, pageable);
-
-    ResponsePage<VoucherDto> response = new ResponsePage<>();
-    response.setListContent(page.getContent().stream()
-        .map(entity -> {
-          VoucherDto dto = voucherMapper.toDto(entity);
-          Set<Long> productIds = entity.getProducts().stream()
-              .map(ProductEntity::getId)
-              .collect(Collectors.toSet());
-          dto.setProductIds(productIds);
-          return dto;
-        })
-        .collect(Collectors.toList()));
-    response.setPageNumber(page.getNumber());
-    response.setPageSize(page.getSize());
-    response.setTotalElements(page.getTotalElements());
-    response.setTotalPages(page.getTotalPages());
-    return response;
+  public ResponsePage<List<VoucherDto>> searchVoucherByCondition(String code, String name,
+      Boolean status, Pageable pageable) {
+    ResponsePage<List<VoucherDto>> responsePage = new ResponsePage<>();
+    Page<VoucherEntity> page = voucherRepository.findByCondition(code, name, status, pageable);
+    List<VoucherDto> voucherDtos = page.getContent().stream().map(voucherEntity -> {
+      VoucherDto voucher = voucherMapper.toDto(voucherEntity);
+      Set<Long> productIds = showProductIds(voucherEntity.getProductEntities());
+      voucher.setProductIds(productIds);
+      return voucher;
+    }).toList();
+    responsePage.setPageNumber(pageable.getPageNumber());
+    responsePage.setPageSize(pageable.getPageSize());
+    responsePage.setTotalElements(page.getTotalElements());
+    responsePage.setTotalPages(page.getTotalPages());
+    responsePage.setContent(voucherDtos);
+    return responsePage;
   }
 
-  @Override
-  public ResponsePage<VoucherDto> searchVoucherByStatus(Boolean status, Pageable pageable) {
-    Page<VoucherEntity> page = voucherRepository.findByStatus(status, pageable);
-
-    ResponsePage<VoucherDto> response = new ResponsePage<>();
-    response.setListContent(page.getContent().stream()
-        .map(entity -> {
-          VoucherDto dto = voucherMapper.toDto(entity);
-          Set<Long> productIds = entity.getProducts().stream()
-              .map(ProductEntity::getId)
-              .collect(Collectors.toSet());
-          dto.setProductIds(productIds);
-          return dto;
-        })
-        .collect(Collectors.toList()));
-    response.setPageNumber(page.getNumber());
-    response.setPageSize(page.getSize());
-    response.setTotalElements(page.getTotalElements());
-    response.setTotalPages(page.getTotalPages());
-    return response;
-  }
-
-  @Override
-  public ResponsePage<VoucherDto> searchVoucherByName(String name, Pageable pageable) {
-    Page<VoucherEntity> page = voucherRepository.findByName(name, pageable);
-
-    ResponsePage<VoucherDto> response = new ResponsePage<>();
-    response.setListContent(page.getContent().stream()
-        .map(entity -> {
-          VoucherDto dto = voucherMapper.toDto(entity);
-          Set<Long> productIds = entity.getProducts().stream()
-              .map(ProductEntity::getId)
-              .collect(Collectors.toSet());
-          dto.setProductIds(productIds);
-          return dto;
-        })
-        .collect(Collectors.toList()));
-    response.setPageNumber(page.getNumber());
-    response.setPageSize(page.getSize());
-    response.setTotalElements(page.getTotalElements());
-    response.setTotalPages(page.getTotalPages());
-    return response;
+  private Set<Long> showProductIds(Set<ProductEntity> productEntities) {
+    return productEntities.stream().map(ProductEntity::getId).collect(Collectors.toSet());
   }
 }
