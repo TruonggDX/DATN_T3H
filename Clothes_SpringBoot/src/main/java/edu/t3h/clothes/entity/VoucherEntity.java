@@ -32,4 +32,5 @@ public class VoucherEntity extends AbstractEntity{
     @JoinTable(name = "voucher_product", joinColumns = @JoinColumn(name = "voucher_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<ProductEntity> products = new HashSet<>();
 
+
 }
