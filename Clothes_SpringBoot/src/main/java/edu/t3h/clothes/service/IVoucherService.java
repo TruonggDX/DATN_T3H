@@ -19,4 +19,8 @@ public interface IVoucherService {
   BaseResponse<VoucherDto> deleteVoucher(Long id);
 
   ResponsePage<VoucherDto> searchVoucherByCode(String code, Pageable pageable);
+
+  ResponsePage<VoucherDto> searchVoucherByName(String name, Pageable pageable);
+
+  ResponsePage<VoucherDto> searchVoucherByStatus(Boolean status, Pageable pageable);
 }
