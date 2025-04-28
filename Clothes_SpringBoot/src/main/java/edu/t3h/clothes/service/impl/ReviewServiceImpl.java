@@ -17,15 +17,14 @@ import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
 import edu.t3h.clothes.utils.GenarateCode;
 import java.util.List;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
-import org.apache.poi.sl.draw.geom.GuideIf.Op;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReviewServiceImpl implements IReviewService {
 
   private final ReviewRepository reviewRepository;
