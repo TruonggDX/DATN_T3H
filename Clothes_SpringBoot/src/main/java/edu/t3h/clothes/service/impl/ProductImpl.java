@@ -49,14 +49,7 @@ public class ProductImpl implements IProductService {
   public ResponsePage<List<ProductDto>> getAllProducts(Pageable pageable) {
     ResponsePage<List<ProductDto>> responsePage = new ResponsePage<>();
     Page<ProductEntity> page = productRepository.findDeletedProducts(pageable);
-    List<ProductDto> list = page.getContent().stream().map(productEntity -> {
-      ProductDto productDto = productMapper.toDto(productEntity);
-      Set<Long> voucherIds = showVoucherIds(productEntity.getVoucherEntities());
-      productDto.setVoucherIds(voucherIds);
-      List<ImageDto> imageDtoList = imageDtosByProductId(productDto.getId());
-      productDto.setImageDtos(imageDtoList);
-      return productDto;
-    }).toList();
+    List<ProductDto> list = page.getContent().stream().map(productMapper::toDto).toList();
     responsePage.setPageNumber(pageable.getPageNumber());
     responsePage.setPageSize(pageable.getPageSize());
     responsePage.setTotalElements(page.getTotalElements());
@@ -106,10 +99,6 @@ public class ProductImpl implements IProductService {
     imageRepository.saveAll(imagesEntityList);
     productDto.setImageDtos(imageDto);
     productDto = productMapper.toDto(productEntity);
-    List<ImageDto> imageDtoList = imageDtosByProductId(productDto.getId());
-    productDto.setImageDtos(imageDtoList);
-    Set<Long> voucherIds = showVoucherIds(productEntity.getVoucherEntities());
-    productDto.setVoucherIds(voucherIds);
     response.setData(productDto);
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setCode(HttpStatus.OK.value());
@@ -170,10 +159,6 @@ public class ProductImpl implements IProductService {
       imageRepository.saveAll(newImagesEntityList);
     }
     productDto = productMapper.toDto(product);
-    List<ImageDto> imageDtoList = imageDtosByProductId(productDto.getId());
-    productDto.setImageDtos(imageDtoList);
-    Set<Long> voucherIds = showVoucherIds(product.getVoucherEntities());
-    productDto.setVoucherIds(voucherIds);
     response.setData(productDto);
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setCode(HttpStatus.OK.value());
@@ -193,10 +178,6 @@ public class ProductImpl implements IProductService {
     productEntity.setDeleted(true);
     productRepository.save(productEntity);
     ProductDto productDto = productMapper.toDto(productEntity);
-    Set<Long> voucherIds = showVoucherIds(productEntity.getVoucherEntities());
-    productDto.setVoucherIds(voucherIds);
-    List<ImageDto> imageDtoList = imageDtosByProductId(productDto.getId());
-    productDto.setImageDtos(imageDtoList);
     response.setData(productDto);
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setCode(HttpStatus.OK.value());
@@ -214,10 +195,6 @@ public class ProductImpl implements IProductService {
     }
     ProductEntity product = check.get();
     ProductDto productDto = productMapper.toDto(product);
-    Set<Long> voucherIds = showVoucherIds(product.getVoucherEntities());
-    productDto.setVoucherIds(voucherIds);
-    List<ImageDto> imageDtoList = imageDtosByProductId(product.getId());
-    productDto.setImageDtos(imageDtoList);
     response.setData(productDto);
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setCode(HttpStatus.OK.value());
@@ -230,28 +207,12 @@ public class ProductImpl implements IProductService {
     ResponsePage<List<ProductDto>> responsePage = new ResponsePage<>();
     Page<ProductEntity> page = productRepository.findProductsByCondition(code, name, cateId,
         brandId, pageable);
-    List<ProductDto> productDtos = page.getContent().stream().map(productEntity -> {
-      ProductDto productDto = productMapper.toDto(productEntity);
-      Set<Long> voucherIds = showVoucherIds(productEntity.getVoucherEntities());
-      productDto.setVoucherIds(voucherIds);
-      List<ImageDto> imageDtoList = imageDtosByProductId(productDto.getId());
-      productDto.setImageDtos(imageDtoList);
-      return productDto;
-    }).toList();
+    List<ProductDto> productDtos = page.getContent().stream().map(productMapper::toDto).toList();
     responsePage.setPageNumber(pageable.getPageNumber());
     responsePage.setPageSize(pageable.getPageSize());
     responsePage.setTotalElements(page.getTotalElements());
     responsePage.setTotalPages(page.getTotalPages());
     responsePage.setContent(productDtos);
     return responsePage;
-  }
-
-  private Set<Long> showVoucherIds(Set<VoucherEntity> voucherEntities) {
-    return voucherEntities.stream().map(VoucherEntity::getId).collect(Collectors.toSet());
-  }
-
-  private List<ImageDto> imageDtosByProductId(Long productId) {
-    List<ImagesEntity> listImage = imageRepository.findByProductId(productId);
-    return listImage.stream().map(imageMapper::toDto).toList();
   }
 }
