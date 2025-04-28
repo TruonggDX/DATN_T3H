@@ -14,10 +14,13 @@ public interface IProductService {
 
   BaseResponse<ProductDto> createProduct(ProductDto productDto, List<MultipartFile> file);
 
-  BaseResponse<ProductDto> updateProduct(Long id, ProductDto productDto, MultipartFile file);
+  BaseResponse<ProductDto> updateProduct(Long id, ProductDto productDto, List<MultipartFile> file);
 
   BaseResponse<ProductDto> deleteProduct(Long id);
 
   BaseResponse<ProductDto> getProductById(Long id);
+
+  ResponsePage<List<ProductDto>> findProductsByCondition(String code, String name, Long cateId,
+      Long brandId, Pageable pageable);
 }
 

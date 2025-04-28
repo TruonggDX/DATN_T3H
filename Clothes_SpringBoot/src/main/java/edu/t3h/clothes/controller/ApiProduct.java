@@ -18,6 +18,12 @@ public class ApiProduct {
 
   private final IProductService productService;
 
+  @GetMapping("/list")
+  public ResponseEntity<ResponsePage<List<ProductDto>>> getAllProducts(Pageable pageable) {
+    ResponsePage<List<ProductDto>> responsePage = productService.getAllProducts(pageable);
+    return ResponseEntity.ok(responsePage);
+  }
+
   @PostMapping("/create")
   public ResponseEntity<BaseResponse<ProductDto>> createProduct(
       @ModelAttribute ProductDto productDto,
@@ -26,10 +32,12 @@ public class ApiProduct {
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/list")
-  public ResponseEntity<ResponsePage<List<ProductDto>>> getAllProducts(Pageable pageable) {
-    ResponsePage<List<ProductDto>> responsePage = productService.getAllProducts(pageable);
-    return ResponseEntity.ok(responsePage);
+  @PutMapping("/update/{id}")
+  public ResponseEntity<BaseResponse<ProductDto>> updateProduct(@PathVariable Long id,
+      @ModelAttribute ProductDto productDto,
+      @RequestParam(value = "file") List<MultipartFile> file) {
+    BaseResponse<ProductDto> response = productService.updateProduct(id, productDto, file);
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping("/findById/{id}")
@@ -42,5 +50,17 @@ public class ApiProduct {
   public ResponseEntity<BaseResponse<ProductDto>> deleteProduct(@PathVariable Long id) {
     BaseResponse<ProductDto> baseResponse = productService.deleteProduct(id);
     return ResponseEntity.ok(baseResponse);
+  }
+
+  @GetMapping("/findCondition")
+  public ResponseEntity<ResponsePage<List<ProductDto>>> findProductByCondition(
+      @RequestParam(value = "code", required = false) String code,
+      @RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = "cateId", required = false) Long cateId,
+      @RequestParam(value = "brandId", required = false) Long brandId,
+      Pageable pageable) {
+    ResponsePage<List<ProductDto>> responsePage = productService.findProductsByCondition(code, name,
+        cateId, brandId, pageable);
+    return ResponseEntity.ok(responsePage);
   }
 }

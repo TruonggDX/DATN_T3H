@@ -13,4 +13,11 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
   @Query(value = "SELECT p FROM ProductEntity p WHERE p.deleted=false")
   Page<ProductEntity> findDeletedProducts(Pageable pageable);
 
+  @Query(value = "SELECT p FROM ProductEntity p WHERE p.deleted=false "
+      + "AND (:code IS NULL OR p.code LIKE CONCAT('%', :code, '%'))"
+      + "AND (:name IS NULL OR p.name LIKE CONCAT('%', :name, '%'))"
+      + "AND (:cateId IS NULL OR p.categoryEntity.id =:cateId)"
+      + "AND (:brandId IS NULL OR p.brandEntity.id =:brandId)")
+  Page<ProductEntity> findProductsByCondition(String code, String name, Long cateId,
+      Long brandId, Pageable pageable);
 }

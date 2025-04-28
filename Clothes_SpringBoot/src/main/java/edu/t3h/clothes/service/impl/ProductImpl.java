@@ -118,7 +118,7 @@ public class ProductImpl implements IProductService {
 
   @Override
   public BaseResponse<ProductDto> updateProduct(Long id, ProductDto productDto,
-      MultipartFile file) {
+      List<MultipartFile> file) {
     BaseResponse<ProductDto> response = new BaseResponse<>();
     Optional<ProductEntity> check = productRepository.findById(id);
     if (check.isEmpty()) {
@@ -138,13 +138,42 @@ public class ProductImpl implements IProductService {
       response.setMessage("Brand not found with id : " + productDto.getBrandId());
       return response;
     }
-    ProductEntity product = productMapper.toEntity(productDto);
+    Set<VoucherEntity> voucherEntities = productDto.getVoucherIds().stream()
+        .map(vocherId -> voucherRepository.findById(vocherId).orElse(null)).collect(
+            Collectors.toSet());
+    ProductEntity product = check.get();
     product.setId(id);
-    product.setCode(GenarateCode.generateAccountCode());
+    product.setName(productDto.getName());
+    product.setDescription(productDto.getDescription());
+    product.setSortDescription(productDto.getSortDescription());
     product.setCategoryEntity(checkCate.get());
     product.setBrandEntity(checkBrand.get());
+    product.setVoucherEntities(voucherEntities);
     productRepository.save(product);
+    if (file != null && !file.isEmpty()) {
+      List<ImagesEntity> imagesEntityList = imageRepository.findByProductId(product.getId());
+      if (!imagesEntityList.isEmpty()) {
+        for (ImagesEntity imagesEntity : imagesEntityList) {
+          iUploadService.deleteImage(imagesEntity.getPublicId());
+          imageRepository.delete(imagesEntity);
+        }
+      }
+      List<ImageDto> uploadedImages = iUploadService.uploadImages(file);
+      final ProductEntity finalProductEntity = product;
+      List<ImagesEntity> newImagesEntityList = uploadedImages.stream()
+          .map(imageDto -> {
+            ImagesEntity imagesEntity = imageMapper.toEntity(imageDto);
+            imagesEntity.setProductEntity(finalProductEntity);
+            return imagesEntity;
+          })
+          .toList();
+      imageRepository.saveAll(newImagesEntityList);
+    }
     productDto = productMapper.toDto(product);
+    List<ImageDto> imageDtoList = imageDtosByProductId(productDto.getId());
+    productDto.setImageDtos(imageDtoList);
+    Set<Long> voucherIds = showVoucherIds(product.getVoucherEntities());
+    productDto.setVoucherIds(voucherIds);
     response.setData(productDto);
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setCode(HttpStatus.OK.value());
@@ -195,11 +224,34 @@ public class ProductImpl implements IProductService {
     return response;
   }
 
+  @Override
+  public ResponsePage<List<ProductDto>> findProductsByCondition(String code, String name,
+      Long cateId, Long brandId, Pageable pageable) {
+    ResponsePage<List<ProductDto>> responsePage = new ResponsePage<>();
+    Page<ProductEntity> page = productRepository.findProductsByCondition(code, name, cateId,
+        brandId, pageable);
+    List<ProductDto> productDtos = page.getContent().stream().map(productEntity -> {
+      ProductDto productDto = productMapper.toDto(productEntity);
+      Set<Long> voucherIds = showVoucherIds(productEntity.getVoucherEntities());
+      productDto.setVoucherIds(voucherIds);
+      List<ImageDto> imageDtoList = imageDtosByProductId(productDto.getId());
+      productDto.setImageDtos(imageDtoList);
+      return productDto;
+    }).toList();
+    responsePage.setPageNumber(pageable.getPageNumber());
+    responsePage.setPageSize(pageable.getPageSize());
+    responsePage.setTotalElements(page.getTotalElements());
+    responsePage.setTotalPages(page.getTotalPages());
+    responsePage.setContent(productDtos);
+    return responsePage;
+  }
+
   private Set<Long> showVoucherIds(Set<VoucherEntity> voucherEntities) {
     return voucherEntities.stream().map(VoucherEntity::getId).collect(Collectors.toSet());
   }
-  private List<ImageDto> imageDtosByProductId(Long productId){
+
+  private List<ImageDto> imageDtosByProductId(Long productId) {
     List<ImagesEntity> listImage = imageRepository.findByProductId(productId);
-    return  listImage.stream().map(imageMapper::toDto).toList();
+    return listImage.stream().map(imageMapper::toDto).toList();
   }
 }
