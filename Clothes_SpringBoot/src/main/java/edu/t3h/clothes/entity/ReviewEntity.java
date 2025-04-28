@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "review")
 public class ReviewEntity extends AbstractEntity {
 
+  private String code;
   private String comment;
   private Integer rating;
   @ManyToOne

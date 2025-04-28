@@ -123,7 +123,7 @@ public class ProductImpl implements IProductService {
     Optional<ProductEntity> check = productRepository.findById(id);
     if (check.isEmpty()) {
       response.setCode(HttpStatus.NOT_FOUND.value());
-      response.setMessage("Product not found with id : " + productDto.getId());
+      response.setMessage("Product not found with id : " + id);
       return response;
     }
     Optional<CategoryEntity> checkCate = categoryRepository.findById(productDto.getCategoryId());
