@@ -5,6 +5,7 @@ import edu.t3h.clothes.entity.CategoryEntity;
 import edu.t3h.clothes.entity.ImagesEntity;
 import edu.t3h.clothes.entity.ProductEntity;
 import edu.t3h.clothes.entity.VoucherEntity;
+import edu.t3h.clothes.exception.HandleUploadFileException;
 import edu.t3h.clothes.mapper.ImageMapper;
 import edu.t3h.clothes.mapper.ProductMapper;
 import edu.t3h.clothes.model.dto.ImageDto;
@@ -15,6 +16,7 @@ import edu.t3h.clothes.repository.BrandRepository;
 import edu.t3h.clothes.repository.CategoryRepository;
 import edu.t3h.clothes.repository.ImageRepository;
 import edu.t3h.clothes.repository.ProductRepository;
+import edu.t3h.clothes.repository.VoucherRepository;
 import edu.t3h.clothes.service.IProductService;
 import edu.t3h.clothes.service.IUploadService;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
@@ -41,6 +43,7 @@ public class ProductImpl implements IProductService {
   private final ImageMapper imageMapper;
   private final CategoryRepository categoryRepository;
   private final BrandRepository brandRepository;
+  private final VoucherRepository voucherRepository;
 
   @Override
   public ResponsePage<List<ProductDto>> getAllProducts(Pageable pageable) {
@@ -50,8 +53,7 @@ public class ProductImpl implements IProductService {
       ProductDto productDto = productMapper.toDto(productEntity);
       Set<Long> voucherIds = showVoucherIds(productEntity.getVoucherEntities());
       productDto.setVoucherIds(voucherIds);
-      List<ImagesEntity> listImage = imageRepository.findByProductId(productEntity.getId());
-      List<ImageDto> imageDtoList = listImage.stream().map(imageMapper::toDto).toList();
+      List<ImageDto> imageDtoList = imageDtosByProductId(productDto.getId());
       productDto.setImageDtos(imageDtoList);
       return productDto;
     }).toList();
@@ -63,39 +65,77 @@ public class ProductImpl implements IProductService {
     return responsePage;
   }
 
-  private Set<Long> showVoucherIds(Set<VoucherEntity> voucherEntities){
-    return voucherEntities.stream().map(VoucherEntity::getId).collect(Collectors.toSet());
-  }
+
   @Override
-  public BaseResponse<ProductDto> createProduct(ProductDto productDto, MultipartFile file) {
+  public BaseResponse<ProductDto> createProduct(ProductDto productDto, List<MultipartFile> file) {
     BaseResponse<ProductDto> response = new BaseResponse<>();
     ProductEntity productEntity = productMapper.toEntity(productDto);
+    productEntity.setCode(GenarateCode.generateAccountCode());
+    productEntity.setDeleted(false);
+    Optional<CategoryEntity> categoryEntity = categoryRepository.findById(
+        productDto.getCategoryId());
+    if (categoryEntity.isEmpty()) {
+      response.setCode(HttpStatus.NOT_FOUND.value());
+      response.setMessage("Category not found with id " + productDto.getCategoryId());
+      return response;
+    }
+    Optional<BrandEntity> brandEntity = brandRepository.findById(productDto.getBrandId());
+    if (brandEntity.isEmpty()) {
+      response.setCode(HttpStatus.NOT_FOUND.value());
+      response.setMessage("Brand not found with id " + productDto.getBrandId());
+      return response;
+    }
+
+    Set<VoucherEntity> voucherEntities = productDto.getVoucherIds().stream().map(
+            voucherId -> voucherRepository.findById(voucherId).orElse(null))
+        .collect(Collectors.toSet());
+    productEntity.setVoucherEntities(voucherEntities);
+    productEntity.setCategoryEntity(categoryEntity.get());
+    productEntity.setBrandEntity(brandEntity.get());
     productEntity = productRepository.save(productEntity);
-    response.setData(productMapper.toDto(productEntity));
+    if (file == null || file.isEmpty()) {
+      throw new HandleUploadFileException("File is null or empty");
+    }
+    List<ImageDto> imageDto = iUploadService.uploadImages(file);
+    final ProductEntity finalProductEntity = productEntity;
+    List<ImagesEntity> imagesEntityList = imageDto.stream().map(imageDto1 -> {
+      ImagesEntity imagesEntity = imageMapper.toEntity(imageDto1);
+      imagesEntity.setProductEntity(finalProductEntity);
+      return imagesEntity;
+    }).toList();
+    imageRepository.saveAll(imagesEntityList);
+    productDto.setImageDtos(imageDto);
+    productDto = productMapper.toDto(productEntity);
+    List<ImageDto> imageDtoList = imageDtosByProductId(productDto.getId());
+    productDto.setImageDtos(imageDtoList);
+    Set<Long> voucherIds = showVoucherIds(productEntity.getVoucherEntities());
+    productDto.setVoucherIds(voucherIds);
+    response.setData(productDto);
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setCode(HttpStatus.OK.value());
     return response;
   }
 
   @Override
-  public BaseResponse<ProductDto> updateProduct(Long id, ProductDto productDto, MultipartFile file) {
+  public BaseResponse<ProductDto> updateProduct(Long id, ProductDto productDto,
+      MultipartFile file) {
     BaseResponse<ProductDto> response = new BaseResponse<>();
     Optional<ProductEntity> check = productRepository.findById(id);
-    if (check.isEmpty()){
+    if (check.isEmpty()) {
       response.setCode(HttpStatus.NOT_FOUND.value());
-      response.setMessage(HTTP_MESSAGE.FAILED);
+      response.setMessage("Product not found with id : " + productDto.getId());
       return response;
     }
     Optional<CategoryEntity> checkCate = categoryRepository.findById(productDto.getCategoryId());
-    if (checkCate.isEmpty()){
+    if (checkCate.isEmpty()) {
       response.setCode(HttpStatus.NOT_FOUND.value());
-      response.setMessage(HTTP_MESSAGE.FAILED);
+      response.setMessage("Category not found with id : " + productDto.getCategoryId());
       return response;
     }
     Optional<BrandEntity> checkBrand = brandRepository.findById(productDto.getBrandId());
-    if (checkBrand.isEmpty()){
+    if (checkBrand.isEmpty()) {
       response.setCode(HttpStatus.NOT_FOUND.value());
-      response.setMessage(HTTP_MESSAGE.FAILED);
+      response.setMessage("Brand not found with id : " + productDto.getBrandId());
       return response;
     }
     ProductEntity product = productMapper.toEntity(productDto);
@@ -115,7 +155,7 @@ public class ProductImpl implements IProductService {
   public BaseResponse<ProductDto> deleteProduct(Long id) {
     BaseResponse<ProductDto> response = new BaseResponse<>();
     Optional<ProductEntity> check = productRepository.findById(id);
-    if (check.isEmpty()){
+    if (check.isEmpty()) {
       response.setCode(HttpStatus.NOT_FOUND.value());
       response.setMessage(HTTP_MESSAGE.FAILED);
       return response;
@@ -124,10 +164,9 @@ public class ProductImpl implements IProductService {
     productEntity.setDeleted(true);
     productRepository.save(productEntity);
     ProductDto productDto = productMapper.toDto(productEntity);
-    Set<Long> voucherIds = productEntity.getVoucherEntities().stream().map(VoucherEntity::getId).collect(Collectors.toSet());
+    Set<Long> voucherIds = showVoucherIds(productEntity.getVoucherEntities());
     productDto.setVoucherIds(voucherIds);
-    List<ImagesEntity> listImage = imageRepository.findByProductId(productEntity.getId());
-    List<ImageDto> imageDtoList = listImage.stream().map(imageMapper::toDto).toList();
+    List<ImageDto> imageDtoList = imageDtosByProductId(productDto.getId());
     productDto.setImageDtos(imageDtoList);
     response.setData(productDto);
     response.setMessage(HTTP_MESSAGE.SUCCESS);
@@ -139,21 +178,28 @@ public class ProductImpl implements IProductService {
   public BaseResponse<ProductDto> getProductById(Long id) {
     BaseResponse<ProductDto> response = new BaseResponse<>();
     Optional<ProductEntity> check = productRepository.findById(id);
-    if (check.isEmpty()){
+    if (check.isEmpty()) {
       response.setCode(HttpStatus.NOT_FOUND.value());
       response.setMessage(HTTP_MESSAGE.FAILED);
       return response;
     }
     ProductEntity product = check.get();
     ProductDto productDto = productMapper.toDto(product);
-    Set<Long> voucherIds = product.getVoucherEntities().stream().map(VoucherEntity::getId).collect(Collectors.toSet());
+    Set<Long> voucherIds = showVoucherIds(product.getVoucherEntities());
     productDto.setVoucherIds(voucherIds);
-    List<ImagesEntity> listImage = imageRepository.findByProductId(product.getId());
-    List<ImageDto> imageDtoList = listImage.stream().map(imageMapper::toDto).toList();
+    List<ImageDto> imageDtoList = imageDtosByProductId(product.getId());
     productDto.setImageDtos(imageDtoList);
     response.setData(productDto);
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setCode(HttpStatus.OK.value());
     return response;
+  }
+
+  private Set<Long> showVoucherIds(Set<VoucherEntity> voucherEntities) {
+    return voucherEntities.stream().map(VoucherEntity::getId).collect(Collectors.toSet());
+  }
+  private List<ImageDto> imageDtosByProductId(Long productId){
+    List<ImagesEntity> listImage = imageRepository.findByProductId(productId);
+    return  listImage.stream().map(imageMapper::toDto).toList();
   }
 }

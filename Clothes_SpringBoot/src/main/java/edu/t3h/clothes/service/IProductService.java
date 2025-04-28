@@ -12,7 +12,7 @@ public interface IProductService {
 
   ResponsePage<List<ProductDto>> getAllProducts(Pageable pageable);
 
-  BaseResponse<ProductDto> createProduct(ProductDto productDto, MultipartFile file);
+  BaseResponse<ProductDto> createProduct(ProductDto productDto, List<MultipartFile> file);
 
   BaseResponse<ProductDto> updateProduct(Long id, ProductDto productDto, MultipartFile file);
 

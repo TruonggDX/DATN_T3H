@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import lombok.Data;
@@ -28,6 +30,7 @@ public class UploadServiceImpl implements IUploadService {
   private final Cloudinary cloudinary;
 
   private String publicId;
+
 
   @Override
   public ImageDto uploadImage(MultipartFile file) throws IOException {
@@ -50,6 +53,37 @@ public class UploadServiceImpl implements IUploadService {
     imageDTO.setType(file.getContentType());
     return imageDTO;
   }
+
+  @Override
+  public List<ImageDto> uploadImages(List<MultipartFile> files) {
+    List<ImageDto> imageDtoList = new ArrayList<>();
+    for (MultipartFile file : files) {
+      try {
+        if (file.getOriginalFilename() == null) {
+          continue;
+        }
+        String publicValue = generatePublicValue(file.getOriginalFilename());
+        File fileUpload = convert(file);
+        var uploadResult = cloudinary.uploader().upload(fileUpload,
+            ObjectUtils.asMap(
+                publicId, publicValue,
+                "width", 290,
+                "height", 210,
+                "crop", "fill"
+            ));
+        cleanDisk(fileUpload);
+        ImageDto imageDTO = new ImageDto();
+        imageDTO.setUrl(uploadResult.get("url").toString());
+        imageDTO.setPublicId(uploadResult.get("public_id").toString());
+        imageDTO.setType(file.getContentType());
+        imageDtoList.add(imageDTO);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    return imageDtoList;
+  }
+
 
   @Override
   public void deleteImage(String publicId) {

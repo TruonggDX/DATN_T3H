@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/product")
@@ -16,6 +17,14 @@ import org.springframework.web.bind.annotation.*;
 public class ApiProduct {
 
   private final IProductService productService;
+
+  @PostMapping("/create")
+  public ResponseEntity<BaseResponse<ProductDto>> createProduct(
+      @ModelAttribute ProductDto productDto,
+      @RequestParam(value = "file", required = false) List<MultipartFile> file) {
+    BaseResponse<ProductDto> response = productService.createProduct(productDto, file);
+    return ResponseEntity.ok(response);
+  }
 
   @GetMapping("/list")
   public ResponseEntity<ResponsePage<List<ProductDto>>> getAllProducts(Pageable pageable) {
@@ -26,6 +35,12 @@ public class ApiProduct {
   @GetMapping("/findById/{id}")
   public ResponseEntity<BaseResponse<ProductDto>> getProductById(@PathVariable Long id) {
     BaseResponse<ProductDto> baseResponse = productService.getProductById(id);
+    return ResponseEntity.ok(baseResponse);
+  }
+
+  @DeleteMapping("/delete/{id}")
+  public ResponseEntity<BaseResponse<ProductDto>> deleteProduct(@PathVariable Long id) {
+    BaseResponse<ProductDto> baseResponse = productService.deleteProduct(id);
     return ResponseEntity.ok(baseResponse);
   }
 }
