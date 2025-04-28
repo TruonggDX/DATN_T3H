@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class IAuthServiceImpl implements IAuthService {
+public class AuthServiceImpl implements IAuthService {
 
   private final AccountRepository accountRepository;
   private final RoleRepository roleRepository;

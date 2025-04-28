@@ -38,7 +38,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class IPaymentServiceImpl implements IPaymentService {
+public class PaymentServiceImpl implements IPaymentService {
 
   private final VNPAYConfig vnPayConfig;
   private final MomoConfig momoConfig;
