@@ -13,7 +13,6 @@ public class AccountDto {
   private String phone;
   private String address;
   private String birthday;
-  private int loyalCustomers;
   private String password;
   private Set<Long> roleIds;
   private Set<RoleDto> roles;

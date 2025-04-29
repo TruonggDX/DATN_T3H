@@ -2,6 +2,7 @@ package edu.t3h.clothes.entity;
 
 import jakarta.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.Data;
 
@@ -17,7 +18,6 @@ public class AccountEntity extends AbstractEntity {
   private String phone;
   private String address;
   private String birthday;
-  private Boolean loyalCustomers;
   private boolean enabled;
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
   @JoinTable(name = "account_role", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

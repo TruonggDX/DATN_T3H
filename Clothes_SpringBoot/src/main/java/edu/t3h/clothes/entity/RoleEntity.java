@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Table(name = "role")
 @Data
@@ -18,6 +19,7 @@ public class RoleEntity extends AbstractEntity {
   @Column(name = "name")
   private String name;
   @ManyToMany(mappedBy = "roles")
+  @EqualsAndHashCode.Exclude
   private Set<AccountEntity> users = new HashSet<>();
 
 }
