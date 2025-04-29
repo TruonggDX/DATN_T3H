@@ -7,14 +7,18 @@ import edu.t3h.clothes.exception.HandleUploadFileException;
 import edu.t3h.clothes.mapper.AccountMapper;
 import edu.t3h.clothes.model.dto.AccountDto;
 import edu.t3h.clothes.model.dto.ImageDto;
+import edu.t3h.clothes.model.dto.auth.AuthDto;
 import edu.t3h.clothes.model.request.AccountRequest;
+import edu.t3h.clothes.model.request.ChangePasswordRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.repository.AccountRepository;
 import edu.t3h.clothes.repository.ImageRepository;
 import edu.t3h.clothes.repository.RoleRepository;
+import edu.t3h.clothes.security.service.JwtService;
 import edu.t3h.clothes.service.IAccountService;
 import edu.t3h.clothes.service.IUploadService;
+import edu.t3h.clothes.utils.Constant;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
 import java.io.IOException;
 import java.util.List;
@@ -25,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +42,8 @@ public class AccountImpl implements IAccountService {
   private final ImageRepository imageRepository;
   private final IUploadService uploadService;
   private final RoleRepository roleRepository;
-
+  private final PasswordEncoder passwordEncoder;
+  private final JwtService jwtService;
 
   @Override
   public ResponsePage<List<AccountDto>> getAllAccounts(Pageable pageable) {
@@ -171,5 +177,67 @@ public class AccountImpl implements IAccountService {
     responsePage.setTotalPages(page.getTotalPages());
     responsePage.setContent(accountDtos);
     return responsePage;
+  }
+
+  @Override
+  public BaseResponse<AccountDto> changePassword(ChangePasswordRequest changePasswordRequest) {
+    BaseResponse<AccountDto> response = new BaseResponse<>();
+    AuthDto authDto = jwtService.decodeToken();
+    String email = authDto.getEmail();
+    Optional<AccountEntity> accountEntity = accountRepository.findByEmail(email);
+    if (accountEntity.isEmpty()) {
+      response.setCode(HttpStatus.NOT_FOUND.value());
+      response.setMessage(HTTP_MESSAGE.ACCOUNT_NOT_FOUND);
+      return response;
+    }
+    AccountEntity account = accountEntity.get();
+    if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), account.getPassword())) {
+      response.setCode(HttpStatus.BAD_REQUEST.value());
+      response.setMessage(Constant.HTTP_MESSAGE.OLDPASSWORD);
+      return response;
+    }
+    String newPassword = changePasswordRequest.getNewPassword();
+    String confirmPassword = changePasswordRequest.getConfirmPassword();
+
+    if (newPassword.equals(changePasswordRequest.getOldPassword())) {
+      response.setCode(HttpStatus.BAD_REQUEST.value());
+      response.setMessage(Constant.HTTP_MESSAGE.NEWPASSWORD);
+      return response;
+    }
+    if (!newPassword.equals(confirmPassword)) {
+      response.setCode(HttpStatus.BAD_REQUEST.value());
+      response.setMessage(Constant.HTTP_MESSAGE.CONFIRMPASSWORD);
+      return response;
+    }
+    account.setPassword(passwordEncoder.encode(newPassword));
+    accountRepository.save(account);
+    AccountDto accountDto = accountMapper.toDto(account);
+    response.setCode(HttpStatus.OK.value());
+    response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+    response.setData(accountDto);
+    return response;
+  }
+
+  @Override
+  public BaseResponse<AccountDto> getAccount() {
+    BaseResponse<AccountDto> response = new BaseResponse<>();
+    AuthDto authDto = jwtService.decodeToken();
+    String email = authDto.getEmail();
+    Optional<AccountEntity> accountEntity = accountRepository.findByEmail(email);
+    if (accountEntity.isEmpty()) {
+      response.setCode(HttpStatus.NOT_FOUND.value());
+      response.setMessage(HTTP_MESSAGE.ACCOUNT_NOT_FOUND);
+      return response;
+    }
+    AccountEntity account = accountEntity.get();
+    AccountDto accountDto = accountMapper.toDto(account);
+    ImagesEntity images = imageRepository.findByAccountId(account.getId());
+    if (images != null) {
+      accountDto.setImageUrl(images.getUrl());
+    }
+    response.setCode(HttpStatus.OK.value());
+    response.setMessage(HTTP_MESSAGE.SUCCESS);
+    response.setData(accountDto);
+    return response;
   }
 }

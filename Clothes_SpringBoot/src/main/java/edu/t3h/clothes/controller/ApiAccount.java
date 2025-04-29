@@ -2,6 +2,7 @@ package edu.t3h.clothes.controller;
 
 import edu.t3h.clothes.model.dto.AccountDto;
 import edu.t3h.clothes.model.request.AccountRequest;
+import edu.t3h.clothes.model.request.ChangePasswordRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.service.IAccountService;
@@ -54,4 +55,16 @@ public class ApiAccount {
     return ResponseEntity.ok(responsePage);
   }
 
+  @PutMapping("/change-password")
+  public ResponseEntity<BaseResponse<AccountDto>> changePassword(
+      @RequestBody ChangePasswordRequest changePasswordRequest) {
+    BaseResponse<AccountDto> response = iAccountService.changePassword(changePasswordRequest);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/get-account")
+  public ResponseEntity<BaseResponse<AccountDto>> getUser() {
+    BaseResponse<AccountDto> response = iAccountService.getAccount();
+    return ResponseEntity.ok(response);
+  }
 }
