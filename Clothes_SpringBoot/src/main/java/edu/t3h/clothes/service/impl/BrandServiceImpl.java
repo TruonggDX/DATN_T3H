@@ -14,6 +14,7 @@ import edu.t3h.clothes.repository.ImageRepository;
 import edu.t3h.clothes.service.IBrandService;
 import edu.t3h.clothes.service.IUploadService;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
+import edu.t3h.clothes.utils.GenarateCode;
 import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,7 @@ public class BrandServiceImpl implements IBrandService {
       throw new HandleUploadFileException("Upload image error");
     }
     brandEntity.setDeleted(false);
+    brandEntity.setCode(GenarateCode.generateAccountCode());
     brandEntity = brandRepository.save(brandEntity);
     response.setData(brandMapper.toDto(brandEntity));
     response.setMessage(HTTP_MESSAGE.SUCCESS);

@@ -18,6 +18,13 @@ import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
+import ListProduct from "./pages/Products/ListProduct.tsx";
+import ListAccount from "./pages/Account/ListAccount.tsx";
+import ListCategories from "./pages/Categories/ListCategories.tsx";
+import ListBrand from "./pages/Brand/ListBrand.tsx";
+import ListReviews from "./pages/Reviews/ListReviews.tsx";
+import ListOrders from "./pages/Orders/ListOrders.tsx";
+import ListRoles from "./pages/Roles/ListRoles.tsx";
 
 export default function App() {
   return (
@@ -33,6 +40,21 @@ export default function App() {
             <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/blank" element={<Blank />} />
+
+            {/* Account */}
+            <Route path="/list-account" element={<ListAccount />} />
+            {/* Roles */}
+            <Route path="/roles" element={<ListRoles />} />
+            {/* Categories */}
+            <Route path="/categories" element={<ListCategories />} />
+            {/* Brand */}
+            <Route path="/brand" element={<ListBrand />} />
+            {/* Product */}
+            <Route path="/list-product" element={<ListProduct />} />
+            {/* Orders */}
+            <Route path="/orders" element={<ListOrders />} />
+            {/* Reviews */}
+            <Route path="/reviews" element={<ListReviews />} />
 
             {/* Forms */}
             <Route path="/form-elements" element={<FormElements />} />
