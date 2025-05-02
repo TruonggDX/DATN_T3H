@@ -26,34 +26,36 @@ public class CategoryImpl implements ICategoryService {
   private final CategoryMapper categoryMapper;
 
 
-  @Override
-  public BaseResponse<List<CategoryDto>> getAllCategories() {
-    BaseResponse<List<CategoryDto>> response = new BaseResponse<>();
-    List<CategoryEntity> list = categoryRepository.findAllCategories();
-    List<CategoryDto> categoryDtos = list.stream().map(categoryEntity -> {
-      CategoryDto categoryDto = categoryMapper.toDto(categoryEntity);
-      List<CategoryEntity> categoryEntities = categoryRepository.findByParentCode(
-          categoryDto.getCode());
-      List<CategoryDto> categoryDtoList = categoryEntities.stream().map(categoryMapper::toDto)
-          .toList();
-      categoryDto.setChildren(categoryDtoList);
-      return categoryDto;
-    }).toList();
-    response.setData(categoryDtos);
-    response.setMessage(HTTP_MESSAGE.SUCCESS);
-    response.setCode(HttpStatus.OK.value());
-    return response;
-  }
+//  @Override
+//  public BaseResponse<List<CategoryDto>> getAllCategories() {
+//    BaseResponse<List<CategoryDto>> response = new BaseResponse<>();
+//    List<CategoryEntity> list = categoryRepository.findAllCategories();
+//    List<CategoryDto> categoryDtos = list.stream().map(categoryEntity -> {
+//      CategoryDto categoryDto = categoryMapper.toDto(categoryEntity);
+//      List<CategoryEntity> categoryEntities = categoryRepository.findByParentCode(
+//          categoryDto.getCode());
+//      List<CategoryDto> categoryDtoList = categoryEntities.stream().map(categoryMapper::toDto)
+//          .toList();
+//      categoryDto.setChildren(categoryDtoList);
+//      return categoryDto;
+//    }).toList();
+//    response.setData(categoryDtos);
+//    response.setMessage(HTTP_MESSAGE.SUCCESS);
+//    response.setCode(HttpStatus.OK.value());
+//    return response;
+//  }
 
   @Override
-  public BaseResponse<List<CategoryDto>> getAllCategoriesByParentId() {
-    BaseResponse<List<CategoryDto>> response = new BaseResponse<>();
-    List<CategoryEntity> list = categoryRepository.findAllCategories();
-    List<CategoryDto> categoryDtos = list.stream().map(categoryMapper::toDto).toList();
-    response.setData(categoryDtos);
-    response.setMessage(HTTP_MESSAGE.SUCCESS);
-    response.setCode(HttpStatus.OK.value());
-    return response;
+  public ResponsePage<List<CategoryDto>> getAllCategoriesByParentId(Pageable pageable) {
+    ResponsePage<List<CategoryDto>> responsePage = new ResponsePage<>();
+    Page<CategoryEntity> page = categoryRepository.findAllCategories(pageable);
+    List<CategoryDto> categoryDtos = page.stream().map(categoryMapper::toDto).toList();
+    responsePage.setPageNumber(pageable.getPageNumber());
+    responsePage.setPageSize(pageable.getPageSize());
+    responsePage.setTotalElements(page.getTotalElements());
+    responsePage.setTotalPages(page.getTotalPages());
+    responsePage.setContent(categoryDtos);
+    return responsePage;
   }
 
   @Override
@@ -149,6 +151,17 @@ public class CategoryImpl implements ICategoryService {
     responsePage.setTotalPages(page.getTotalPages());
     responsePage.setContent(categoryDtos);
     return responsePage;
+  }
+
+  @Override
+  public BaseResponse<List<CategoryDto>> loadCategoriesByParentId(Long parentId) {
+    BaseResponse<List<CategoryDto>> response = new BaseResponse<>();
+    List<CategoryEntity> list = categoryRepository.findAllCategoriesByParentId(parentId);
+    List<CategoryDto> categoryDtos = list.stream().map(categoryMapper::toDto).toList();
+    response.setCode(HttpStatus.OK.value());
+    response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+    response.setData(categoryDtos);
+    return response;
   }
 
 }

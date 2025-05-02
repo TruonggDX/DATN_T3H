@@ -13,7 +13,10 @@ import org.springframework.stereotype.Repository;
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
 
   @Query(value = "SELECT c FROM CategoryEntity c WHERE c.deleted=false AND c.parent IS NULL")
-  List<CategoryEntity> findAllCategories();
+  Page<CategoryEntity> findAllCategories(Pageable pageable);
+
+  @Query(value = "SELECT c FROM CategoryEntity c WHERE c.deleted=false AND c.parent.id=:parentId")
+  List<CategoryEntity> findAllCategoriesByParentId(@Param("parentId") Long parentId);
 
   @Query(value = "SELECT c FROM CategoryEntity c WHERE c.deleted = false AND c.parent.code = :code")
   List<CategoryEntity> findByParentCode(String code);

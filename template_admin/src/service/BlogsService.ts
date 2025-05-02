@@ -13,3 +13,21 @@ export const getAllBlogs = async (page:number,size:number) =>{
         throw error;
     }
 }
+export const getBlogsById = async (id:number) =>{
+    try {
+        const response = await axios.get(`${api}/findById/${id}`)
+        return response.data;
+    }catch (error){
+        console.error(error);
+        throw error;
+    }
+}
+export const deleteBlogs = async (id:number) =>{
+    try {
+        const response = await axios.delete(`${api}/delete/${id}`)
+        return response.data;
+    }catch (error){
+        console.error(error);
+        throw error;
+    }
+}

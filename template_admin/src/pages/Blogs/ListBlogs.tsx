@@ -2,28 +2,48 @@ import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
 import {Table, TableBody, TableCell, TableHeader, TableRow} from "../../components/ui/table";
 import Button from "../../components/ui/button/Button.tsx";
-import {Building, Eye, Pencil, RefreshCcw, Search, Tag, Trash2} from "lucide-react";
+import {Building, Pencil, RefreshCcw, Search, Tag, Trash2} from "lucide-react";
 import {useEffect, useState} from "react";
-import {getAllBlogs} from "../../service/BlogsService.ts";
+import {deleteBlogs, getAllBlogs, getBlogsById} from "../../service/BlogsService.ts";
 import {Blogs} from "../../core/Blogs.ts";
+import Label from "../../components/form/Label.tsx";
+import Input from "../../components/form/input/InputField.tsx";
+import DropzoneComponent from "../../components/form/form-elements/DropZone.tsx";
+import TextArea from "../../components/form/input/TextArea.tsx";
 
 export default function ListBlogs() {
     const [blogs, setBlogs] = useState<Blogs[]>([])
-    useEffect(() => {
+    const [data, setData] = useState<Blogs>()
+    const [openModal, setOpenModal] = useState(false)
+
+    function renderData() {
         getAllBlogs(0, 10).then((res) => {
             setBlogs(res.content)
         })
-    }, []);
-    const handleShow = (id: number) => {
-        console.log("id show : " + id)
-    }
-    const handleUpdate = (id: number) => {
-        console.log("id update : " + id)
-    }
-    const handleDelete = (id: number) => {
-        console.log("id delete : " + id)
     }
 
+    useEffect(() => {
+        renderData()
+    }, []);
+    const handleUpdate = (id: number) => {
+        getBlogsById(id).then((res) => {
+            setData(res.data)
+            setOpenModal(true)
+            console.log(res.data)
+        })
+    }
+    const handleDelete = (id: number) => {
+        const isConfirmed = window.confirm("Bạn có chắc chắn muốn xóa blogs này không?");
+        if (isConfirmed) {
+            console.log("id delete : " + id);
+            deleteBlogs(id).then(() => {
+                renderData()
+                alert("Xóa thành công!");
+            })
+        } else {
+            console.log("Hủy xóa");
+        }
+    };
     return (
         <>
             <PageMeta
@@ -104,12 +124,6 @@ export default function ListBlogs() {
                                         isHeader
                                         className="px-5 py-4 sm:px-6 text-start"
                                     >
-                                        Mô tả ngắn
-                                    </TableCell>
-                                    <TableCell
-                                        isHeader
-                                        className="px-5 py-4 sm:px-6 text-start"
-                                    >
                                         Ảnh
                                     </TableCell>
                                     <TableCell
@@ -151,10 +165,6 @@ export default function ListBlogs() {
                                         </TableCell>
                                         <TableCell
                                             className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                                            {blog.sortDescription}
-                                        </TableCell>
-                                        <TableCell
-                                            className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                                             <img
                                                 width={60}
                                                 height={60}
@@ -173,10 +183,6 @@ export default function ListBlogs() {
                                         <TableCell
                                             className="px-4 py-3 text-start text-theme-sm text-gray-500 dark:text-gray-400">
                                             <div className="flex items-center gap-2">
-                                                <Button size="sm" variant="outline" startIcon={<Eye size={16}/>}
-                                                        onClick={() => handleShow(blog.id)}>
-
-                                                </Button>
                                                 <Button size="sm" variant="outline" startIcon={<Pencil size={16}/>}
                                                         onClick={() => handleUpdate(blog.id)}>
 
@@ -198,6 +204,103 @@ export default function ListBlogs() {
                     </div>
                 </div>
             </div>
+            {openModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm"
+                     style={{marginTop: 70}}>
+                    <div
+                        className="relative bg-white rounded-xl shadow-xl w-full max-w-5xl p-8 animate-fade-in-up transition-all duration-300 max-h-[90vh] overflow-y-auto max-h-[75vh] pr-2 scrollbar-none">
+                        <button
+                            onClick={() => setOpenModal(false)}
+                            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition"
+                            aria-label="Close"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                      d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Chỉnh sửa Blog</h2>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                                <div>
+                                    <Label htmlFor="blogCode">Mã Blog</Label>
+                                    <Input
+                                        id="blogCode"
+                                        type="text"
+                                        value={data?.code}
+                                        placeholder="Nhập mã blog"
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition"
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="title">Tiêu đề</Label>
+                                    <Input
+                                        id="title"
+                                        type="text"
+                                        value={data?.title}
+                                        placeholder="Nhập tiêu đề"
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Danh mục
+                                    </label>
+                                    <select
+                                        className="w-full px-4 py-2 bg-white dark:bg-dark-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 dark:text-gray-100 transition"
+                                        defaultValue=""
+                                    >
+                                        <option value="" disabled>-- Chọn danh mục --</option>
+
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <Label>Mô tả ngắn</Label>
+                                    <TextArea
+                                        rows={4}
+                                        placeholder="Nhập mô tả ngắn về blog"
+                                        value={data?.sortDescription}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition"
+                                    />
+                                </div>
+                                <div>
+                                    <Label>Mô tả chi tiết</Label>
+                                    <TextArea
+                                        rows={6}
+                                        value={data?.description}
+                                        placeholder="Nhập mô tả chi tiết về blog"
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition"
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <Label>Ảnh</Label>
+                                    <div className="max-h-[900px]">
+                                        <DropzoneComponent/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-5 text-right">
+                            <button
+                                type="submit"
+                                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium shadow-lg"
+                            >
+                                Cập nhật
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </>
     );
 }

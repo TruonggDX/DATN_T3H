@@ -8,9 +8,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface ICategoryService {
 
-  BaseResponse<List<CategoryDto>> getAllCategories();
+//  BaseResponse<List<CategoryDto>> getAllCategories();
 
-  BaseResponse<List<CategoryDto>> getAllCategoriesByParentId();
+  ResponsePage<List<CategoryDto>> getAllCategoriesByParentId(Pageable pageable);
 
   BaseResponse<CategoryDto> creatCategory(CategoryDto categoryDTO);
 
@@ -22,5 +22,5 @@ public interface ICategoryService {
 
   ResponsePage<List<CategoryDto>> searchCategoriesCondition(String name, Pageable pageable);
 
-
+  BaseResponse<List<CategoryDto>> loadCategoriesByParentId(Long parentId);
 }

@@ -25,15 +25,22 @@ public class ApiCategory {
 
   private final ICategoryService categoryService;
 
-  @GetMapping("/list")
-  public ResponseEntity<BaseResponse<List<CategoryDto>>> getAll() {
-    BaseResponse<List<CategoryDto>> response = categoryService.getAllCategories();
+//  @GetMapping("/list")
+//  public ResponseEntity<BaseResponse<List<CategoryDto>>> getAll() {
+//    BaseResponse<List<CategoryDto>> response = categoryService.getAllCategories();
+//    return ResponseEntity.ok(response);
+//  }
+
+  @GetMapping("/list-parent")
+  public ResponseEntity<ResponsePage<List<CategoryDto>>> loadParentCategories(Pageable pageable) {
+    ResponsePage<List<CategoryDto>> response = categoryService.getAllCategoriesByParentId(pageable);
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/list-parent")
-  public ResponseEntity<BaseResponse<List<CategoryDto>>> loadParentCategories() {
-    BaseResponse<List<CategoryDto>> response = categoryService.getAllCategoriesByParentId();
+  @GetMapping("/findByParentId/{parentId}")
+  public ResponseEntity<BaseResponse<List<CategoryDto>>> loadParentCategoriesByParentId(
+      @PathVariable Long parentId) {
+    BaseResponse<List<CategoryDto>> response = categoryService.loadCategoriesByParentId(parentId);
     return ResponseEntity.ok(response);
   }
 
