@@ -10,6 +10,8 @@ public interface ReviewMapper {
 
   @Mapping(target = "accountId", source = "account.id")
   @Mapping(target = "productId", source = "productEntity.id")
+  @Mapping(target = "accountName", source = "account.fullname")
+  @Mapping(target = "productName", source = "productEntity.name")
   ReviewDto toDto(ReviewEntity reviewEntity);
 
   ReviewEntity toEntity(ReviewDto dto);

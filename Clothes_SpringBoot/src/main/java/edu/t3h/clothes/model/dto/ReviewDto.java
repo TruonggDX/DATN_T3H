@@ -10,5 +10,7 @@ public class ReviewDto {
   private String comment;
   private Integer rating;
   private Long accountId;
+  private String accountName;
   private Long productId;
+  private String productName;
 }

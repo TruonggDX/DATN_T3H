@@ -14,4 +14,7 @@ public interface ImageRepository extends JpaRepository<ImagesEntity, Long> {
 
   @Query(value = "SELECT i FROM ImagesEntity i WHERE i.productEntity.id =:productId")
   List<ImagesEntity> findByProductId(Long productId);
+
+  @Query(value = "SELECT i FROM ImagesEntity i WHERE i.blogsEntity.id =:blogId")
+  ImagesEntity findByBlogId(Long blogId);
 }

@@ -2,6 +2,7 @@ package edu.t3h.clothes.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "image")
@@ -19,4 +20,9 @@ public class ImagesEntity extends AbstractEntity {
   @ManyToOne
   @JoinColumn(name = "account_id")
   private AccountEntity accountEntity;
+
+  @ManyToOne
+  @JoinColumn(name = "blogs_id")
+  @EqualsAndHashCode.Exclude
+  private BlogsEntity blogsEntity;
 }

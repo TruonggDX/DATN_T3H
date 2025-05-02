@@ -44,6 +44,10 @@ public class WebSecurityConfig {
             .requestMatchers("/api/variant/**").permitAll()
             .requestMatchers("/api/vouchers/**").permitAll()
             .requestMatchers("/api/product/**").permitAll()
+            .requestMatchers("/api/account/**").permitAll()
+            .requestMatchers("/api/brands/**").permitAll()
+            .requestMatchers("/api/role/**").permitAll()
+            .requestMatchers("/api/review/**").permitAll()
             .anyRequest().authenticated()
         );
 
@@ -91,7 +95,7 @@ public class WebSecurityConfig {
   UrlBasedCorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.addAllowedOrigin("http://localhost:3000");
-    configuration.addAllowedOrigin("http://localhost:3001");
+    configuration.addAllowedOrigin("http://localhost:5173");
     configuration.addAllowedMethod("*");
     configuration.addAllowedHeader("*");
     configuration.setAllowCredentials(true);
