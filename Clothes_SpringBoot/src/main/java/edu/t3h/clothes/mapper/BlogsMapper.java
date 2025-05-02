@@ -10,6 +10,8 @@ public interface BlogsMapper {
 
   @Mapping(target = "accountId", source = "account.id")
   @Mapping(target = "categoryId", source = "categoryEntity.id")
+  @Mapping(target = "categoryName", source = "categoryEntity.name")
+  @Mapping(target = "accountName", source = "account.fullname")
   BlogsDto toDto(BlogsEntity blogsEntity);
 
   BlogsEntity toEntity(BlogsDto blogsDto);

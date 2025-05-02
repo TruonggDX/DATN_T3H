@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "blogs")
 public class BlogsEntity extends AbstractEntity {
 
+  private String code;
   private String title;
   private String sortDescription;
   private String description;

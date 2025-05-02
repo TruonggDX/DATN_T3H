@@ -20,6 +20,7 @@ import edu.t3h.clothes.security.service.JwtService;
 import edu.t3h.clothes.service.IBlogsService;
 import edu.t3h.clothes.service.IUploadService;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
+import edu.t3h.clothes.utils.GenarateCode;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -81,6 +82,7 @@ public class BlogsServiceImpl implements IBlogsService {
       return response;
     }
     BlogsEntity blogsEntity = blogsMapper.toEntity(blogsDto);
+    blogsEntity.setCode(GenarateCode.generateAccountCode());
     blogsEntity.setDeleted(false);
     blogsEntity.setCategoryEntity(checkCate.get());
     blogsEntity.setAccount(checkAcc.get());
