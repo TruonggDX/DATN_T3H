@@ -17,4 +17,8 @@ public interface OrderRepository extends JpaRepository<OrdersEntity, Long> {
       + "AND (:code IS NULL OR o.code LIKE CONCAT('%', :code, '%')) "
       + "AND (:status IS NULL OR o.status LIKE CONCAT('%', :status, '%'))")
   Page<OrdersEntity> findOrderByCondition(String code, String status, Pageable pageable);
+
+  @Query("SELECT o FROM OrdersEntity o WHERE o.deleted = false AND o.account.id = :accountId")
+  Page<OrdersEntity> findAllByAccountIdAndDeletedFalse(Long accountId, Pageable pageable);
+
 }

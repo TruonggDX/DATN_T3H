@@ -1,6 +1,5 @@
 package edu.t3h.clothes.controller;
 
-import edu.t3h.clothes.model.dto.CategoryDto;
 import edu.t3h.clothes.model.dto.OrderDto;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
@@ -21,25 +20,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/oder")
+@RequestMapping("/api/order")
 public class ApiOrder {
 
   private final IOrderService orderService;
 
   @GetMapping("/list")
-  public ResponseEntity<ResponsePage<List<OrderDto>>> getAllOder(Pageable pageable) {
+  public ResponseEntity<ResponsePage<List<OrderDto>>> getAllOrders(Pageable pageable) {
     ResponsePage<List<OrderDto>> responsePage = orderService.getAllOrders(pageable);
     return ResponseEntity.ok(responsePage);
   }
 
   @GetMapping("/get-oder-account")
-  public ResponseEntity<ResponsePage<List<OrderDto>>> getAllOderByAccount(Pageable pageable) {
+  public ResponseEntity<ResponsePage<List<OrderDto>>> getOrdersByAccount(Pageable pageable) {
     ResponsePage<List<OrderDto>> responsePage = orderService.getOderByAccount(pageable);
     return ResponseEntity.ok(responsePage);
   }
 
   @PostMapping("/create")
-  public ResponseEntity<BaseResponse<OrderDto>> createAttribute(
+  public ResponseEntity<BaseResponse<OrderDto>> createOrder(
       @RequestBody OrderDto oderDto) {
     BaseResponse<OrderDto> response = orderService.createOrder(oderDto);
     return ResponseEntity.ok(response);
