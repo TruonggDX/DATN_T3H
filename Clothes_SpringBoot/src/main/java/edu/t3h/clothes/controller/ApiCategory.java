@@ -71,7 +71,7 @@ public class ApiCategory {
   }
 
   @GetMapping("/searchByCondition")
-  public ResponseEntity<ResponsePage<List<CategoryDto>>> searchUsersByCondition(
+  public ResponseEntity<ResponsePage<List<CategoryDto>>> searchByCondition(
       @RequestParam(value = "name") String name,
       Pageable pageable) {
     ResponsePage<List<CategoryDto>> cateDto = categoryService.searchCategoriesCondition(name,
