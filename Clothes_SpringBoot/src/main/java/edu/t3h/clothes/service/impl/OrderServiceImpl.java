@@ -57,13 +57,11 @@ public class OrderServiceImpl implements IOrderService {
       response.setMessage("Không tìm thấy accountId: " + account);
       return response;
     }
-
     OrdersEntity entity = orderMapper.toEntity(orderDto);
     entity.setDeleted(false);
     entity.setCode(GenarateCode.generateAccountCode());
     entity.setAccount(account.get());
     orderRepository.save(entity);
-
     response.setCode(HttpStatus.OK.value());
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setData(orderMapper.toDto(entity));
@@ -80,19 +78,12 @@ public class OrderServiceImpl implements IOrderService {
       response.setMessage(ORDER_NOT_FOUND_MESSAGE + id);
       return response;
     }
-
     OrdersEntity order = optionalOrder.get();
-    order.setCode(orderDto.getCode());
+    order.setDeleted(false);
     order.setStatus(orderDto.getStatus());
     order.setAddress(orderDto.getAddress());
     order.setNotes(orderDto.getNotes());
     order.setShip(orderDto.getShip());
-
-    if (orderDto.getAccountId() != null) {
-      Optional<AccountEntity> acc = accountRepository.findById(orderDto.getAccountId());
-      acc.ifPresent(order::setAccount);
-    }
-
     orderRepository.save(order);
     response.setCode(HttpStatus.OK.value());
     response.setMessage(HTTP_MESSAGE.SUCCESS);
@@ -110,11 +101,9 @@ public class OrderServiceImpl implements IOrderService {
       response.setMessage("Không tìm thấy đơn hàng: " + id);
       return response;
     }
-
     OrdersEntity entity = order.get();
     entity.setDeleted(true);
     orderRepository.save(entity);
-
     response.setCode(HttpStatus.OK.value());
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setData(orderMapper.toDto(entity));
@@ -125,12 +114,11 @@ public class OrderServiceImpl implements IOrderService {
   public BaseResponse<OrderDto> getOrderById(Long id) {
     BaseResponse<OrderDto> response = new BaseResponse<>();
     Optional<OrdersEntity> order = orderRepository.findById(id);
-    if (order.filter(o -> !o.getDeleted()).isEmpty()) {
+    if (order.isEmpty()){
       response.setCode(HttpStatus.NOT_FOUND.value());
-      response.setMessage(ORDER_NOT_FOUND_MESSAGE + id);
+      response.setMessage("Không tìm thấy đơn hàng: " + id);
       return response;
     }
-
     response.setCode(HttpStatus.OK.value());
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setData(orderMapper.toDto(order.get()));
@@ -147,11 +135,9 @@ public class OrderServiceImpl implements IOrderService {
       response.setMessage(ORDER_NOT_FOUND_MESSAGE + id);
       return response;
     }
-
     OrdersEntity entity = order.get();
     entity.setStatus(status);
     orderRepository.save(entity);
-
     response.setCode(HttpStatus.OK.value());
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setData(orderMapper.toDto(entity));
@@ -163,7 +149,6 @@ public class OrderServiceImpl implements IOrderService {
       Pageable pageable) {
     Page<OrdersEntity> page = orderRepository.findOrderByCondition(code, status, pageable);
     List<OrderDto> dtos = page.getContent().stream().map(orderMapper::toDto).toList();
-
     ResponsePage<List<OrderDto>> response = new ResponsePage<>();
     response.setContent(dtos);
     response.setPageNumber(pageable.getPageNumber());
@@ -175,20 +160,14 @@ public class OrderServiceImpl implements IOrderService {
 
   @Override
   public ResponsePage<List<OrderDto>> getOderByAccount(Pageable pageable) {
+    ResponsePage<List<OrderDto>> response = new ResponsePage<>();
     AuthDto authDto = jwtService.decodeToken();
     String email = authDto.getEmail();
     Optional<AccountEntity> account = accountRepository.findByEmail(email);
-    ResponsePage<List<OrderDto>> response = new ResponsePage<>();
-
     if (account.isEmpty()) {
-      response.setContent(List.of());
-      response.setTotalElements(0);
-      response.setTotalPages(0);
-      return response;
+      return null;
     }
-
-    Page<OrdersEntity> page = orderRepository.findAllByAccountIdAndDeletedFalse(
-        account.get().getId(), pageable);
+    Page<OrdersEntity> page = orderRepository.findAllByAccount(email, pageable);
     List<OrderDto> dtos = page.getContent().stream().map(orderMapper::toDto).toList();
     response.setContent(dtos);
     response.setPageNumber(pageable.getPageNumber());

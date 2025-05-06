@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetailsEntity, Long> {
 
-  @Query(value = "SELECT o FROM OrderDetailsEntity o WHERE o.deleted=false")
-  List<OrderDetailsEntity> findAllOrderDetails();
+  @Query(value = "SELECT o FROM OrderDetailsEntity o WHERE o.deleted=false AND o.order.id =:orderId")
+  List<OrderDetailsEntity> findAllOrderDetails(Long orderId);
 }
