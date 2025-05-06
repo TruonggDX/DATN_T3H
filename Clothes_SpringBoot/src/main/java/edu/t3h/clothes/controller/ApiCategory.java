@@ -25,11 +25,11 @@ public class ApiCategory {
 
   private final ICategoryService categoryService;
 
-//  @GetMapping("/list")
-//  public ResponseEntity<BaseResponse<List<CategoryDto>>> getAll() {
-//    BaseResponse<List<CategoryDto>> response = categoryService.getAllCategories();
-//    return ResponseEntity.ok(response);
-//  }
+  @GetMapping("/list")
+  public ResponseEntity<BaseResponse<List<CategoryDto>>> getAll(Pageable pageable) {
+    BaseResponse<List<CategoryDto>> response = categoryService.getAllCategories(pageable);
+    return ResponseEntity.ok(response);
+  }
 
   @GetMapping("/list-parent")
   public ResponseEntity<ResponsePage<List<CategoryDto>>> loadParentCategories(Pageable pageable) {

@@ -10,10 +10,21 @@ import Label from "../../components/form/Label.tsx";
 import Input from "../../components/form/input/InputField.tsx";
 import DropzoneComponent from "../../components/form/form-elements/DropZone.tsx";
 import TextArea from "../../components/form/input/TextArea.tsx";
+import {getAllCategories} from "../../service/CategoriesService.ts";
+import {Categories} from "../../core/Categories.ts";
 
 export default function ListBlogs() {
     const [blogs, setBlogs] = useState<Blogs[]>([])
-    const [data, setData] = useState<Blogs>()
+    const [category, setCategory] = useState<Categories[]>([])
+    const [data, setData] = useState({
+        id:0,
+        code:'',
+        title:'',
+        sortDescription:'',
+        description:'',
+        categoryId:0,
+        imageUrl:''
+    })
     const [openModal, setOpenModal] = useState(false)
 
     function renderData() {
@@ -24,6 +35,9 @@ export default function ListBlogs() {
 
     useEffect(() => {
         renderData()
+        getAllCategories(0,100).then((res) =>{
+            setCategory(res.data)
+        })
     }, []);
     const handleUpdate = (id: number) => {
         getBlogsById(id).then((res) => {
@@ -206,7 +220,7 @@ export default function ListBlogs() {
             </div>
             {openModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm"
-                     style={{marginTop: 70}}>
+                     style={{marginTop: 80}}>
                     <div
                         className="relative bg-white rounded-xl shadow-xl w-full max-w-5xl p-8 animate-fade-in-up transition-all duration-300 max-h-[90vh] overflow-y-auto max-h-[75vh] pr-2 scrollbar-none">
                         <button
@@ -229,7 +243,7 @@ export default function ListBlogs() {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div className="space-y-4">
                                 <div>
-                                    <Label htmlFor="blogCode">Mã Blog</Label>
+                                    <Label htmlFor="blogCode">Mã</Label>
                                     <Input
                                         id="blogCode"
                                         type="text"
@@ -244,6 +258,7 @@ export default function ListBlogs() {
                                         id="title"
                                         type="text"
                                         value={data?.title}
+                                        onChange={(e) => setData({...data, title: e.target.value})}
                                         placeholder="Nhập tiêu đề"
                                         className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition"
                                     />
@@ -255,9 +270,16 @@ export default function ListBlogs() {
                                     <select
                                         className="w-full px-4 py-2 bg-white dark:bg-dark-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 dark:text-gray-100 transition"
                                         defaultValue=""
+                                        value={data?.categoryId}
+                                        onChange={(e) => setData({...data, categoryId: Number(e.target.value)})}
+
                                     >
                                         <option value="" disabled>-- Chọn danh mục --</option>
-
+                                        {
+                                            category.map((category) => (
+                                                <option key={category.id} value={category.id}>{category.name}</option>
+                                            ))
+                                        }
                                     </select>
                                 </div>
 
@@ -267,6 +289,7 @@ export default function ListBlogs() {
                                         rows={4}
                                         placeholder="Nhập mô tả ngắn về blog"
                                         value={data?.sortDescription}
+                                        onChange={(value: string) => setData({...data, sortDescription: value})}
                                         className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition"
                                     />
                                 </div>
@@ -275,19 +298,24 @@ export default function ListBlogs() {
                                     <TextArea
                                         rows={6}
                                         value={data?.description}
+                                        onChange={(value: string) =>
+                                            setData({...data, description: value})
+                                        }
                                         placeholder="Nhập mô tả chi tiết về blog"
                                         className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 transition"
                                     />
+
                                 </div>
                             </div>
                             <div className="space-y-4">
                                 <div>
                                     <Label>Ảnh</Label>
                                     <div className="max-h-[900px]">
-                                        <DropzoneComponent/>
+                                        <DropzoneComponent defaultImageUrl={data?.imageUrl}/>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                         <div className="mt-5 text-right">
                             <button

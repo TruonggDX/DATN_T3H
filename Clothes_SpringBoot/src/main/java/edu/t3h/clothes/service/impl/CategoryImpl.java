@@ -26,24 +26,16 @@ public class CategoryImpl implements ICategoryService {
   private final CategoryMapper categoryMapper;
 
 
-//  @Override
-//  public BaseResponse<List<CategoryDto>> getAllCategories() {
-//    BaseResponse<List<CategoryDto>> response = new BaseResponse<>();
-//    List<CategoryEntity> list = categoryRepository.findAllCategories();
-//    List<CategoryDto> categoryDtos = list.stream().map(categoryEntity -> {
-//      CategoryDto categoryDto = categoryMapper.toDto(categoryEntity);
-//      List<CategoryEntity> categoryEntities = categoryRepository.findByParentCode(
-//          categoryDto.getCode());
-//      List<CategoryDto> categoryDtoList = categoryEntities.stream().map(categoryMapper::toDto)
-//          .toList();
-//      categoryDto.setChildren(categoryDtoList);
-//      return categoryDto;
-//    }).toList();
-//    response.setData(categoryDtos);
-//    response.setMessage(HTTP_MESSAGE.SUCCESS);
-//    response.setCode(HttpStatus.OK.value());
-//    return response;
-//  }
+  @Override
+  public BaseResponse<List<CategoryDto>> getAllCategories(Pageable pageable) {
+    BaseResponse<List<CategoryDto>> response = new BaseResponse<>();
+    Page<CategoryEntity> list = categoryRepository.getAll(pageable);
+    List<CategoryDto> categoryDtos = list.stream().map(categoryMapper::toDto).toList();
+    response.setData(categoryDtos);
+    response.setMessage(HTTP_MESSAGE.SUCCESS);
+    response.setCode(HttpStatus.OK.value());
+    return response;
+  }
 
   @Override
   public ResponsePage<List<CategoryDto>> getAllCategoriesByParentId(Pageable pageable) {

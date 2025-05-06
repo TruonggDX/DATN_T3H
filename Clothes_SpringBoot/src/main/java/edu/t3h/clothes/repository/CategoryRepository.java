@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
+  @Query(value = "SELECT c FROM CategoryEntity c WHERE c.deleted=false")
+  Page<CategoryEntity> getAll(Pageable pageable);
 
   @Query(value = "SELECT c FROM CategoryEntity c WHERE c.deleted=false AND c.parent IS NULL")
   Page<CategoryEntity> findAllCategories(Pageable pageable);
