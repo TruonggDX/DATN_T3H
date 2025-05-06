@@ -12,4 +12,5 @@ public class OrderDto {
   private String notes;
   private Integer ship;
   private Long accountId;
+  private String accountName;
 }

@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 public interface OrderMapper {
 
   @Mapping(target = "accountId", source = "account.id")
+  @Mapping(target = "accountName", source = "account.fullname")
   OrderDto toDto(OrdersEntity ordersEntity);
 
   OrdersEntity toEntity(OrderDto orderDto);

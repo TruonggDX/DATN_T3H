@@ -17,13 +17,13 @@ export default function ListBlogs() {
     const [blogs, setBlogs] = useState<Blogs[]>([])
     const [category, setCategory] = useState<Categories[]>([])
     const [data, setData] = useState({
-        id:0,
-        code:'',
-        title:'',
-        sortDescription:'',
-        description:'',
-        categoryId:0,
-        imageUrl:''
+        id: 0,
+        code: '',
+        title: '',
+        sortDescription: '',
+        description: '',
+        categoryId: 0,
+        imageUrl: ''
     })
     const [openModal, setOpenModal] = useState(false)
 
@@ -35,7 +35,7 @@ export default function ListBlogs() {
 
     useEffect(() => {
         renderData()
-        getAllCategories(0,100).then((res) =>{
+        getAllCategories(0, 100).then((res) => {
             setCategory(res.data)
         })
     }, []);
@@ -49,13 +49,10 @@ export default function ListBlogs() {
     const handleDelete = (id: number) => {
         const isConfirmed = window.confirm("Bạn có chắc chắn muốn xóa blogs này không?");
         if (isConfirmed) {
-            console.log("id delete : " + id);
             deleteBlogs(id).then(() => {
                 renderData()
                 alert("Xóa thành công!");
             })
-        } else {
-            console.log("Hủy xóa");
         }
     };
     return (

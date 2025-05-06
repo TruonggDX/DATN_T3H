@@ -13,7 +13,9 @@ public class ProductDto {
   private String sortDescription;
   private String description;
   private Long categoryId;
+  private String categoryName;
   private Long brandId;
+  private String brandName;
   private Set<Long> voucherIds;
   private List<ImageDto> imageDtos;
 }

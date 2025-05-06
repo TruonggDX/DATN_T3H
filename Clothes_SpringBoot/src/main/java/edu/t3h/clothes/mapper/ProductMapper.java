@@ -15,7 +15,9 @@ import org.mapstruct.Mapping;
 public interface ProductMapper {
 
   @Mapping(target = "categoryId", source = "categoryEntity.id")
+  @Mapping(target = "categoryName", source = "categoryEntity.name")
   @Mapping(target = "brandId", source = "brandEntity.id")
+  @Mapping(target = "brandName", source = "brandEntity.name")
   @Mapping(target = "voucherIds", source = "voucherEntities")
   @Mapping(target = "imageDtos", source = "imagesEntities")
   ProductDto toDto(ProductEntity productEntity);
