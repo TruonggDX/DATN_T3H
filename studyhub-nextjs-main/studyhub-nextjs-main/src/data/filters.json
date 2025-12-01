@@ -1,0 +1,37 @@
+[
+  {
+    "type": "search",
+    "title": "Search",
+    "placeholder": "Search Course..."
+  },
+  {
+    "type": "checkbox",
+    "title": "Category",
+    "items": [
+      { "id": "web-development", "label": "Web Development", "count": 130 },
+      { "id": "blockchain", "label": "Blockchain", "count": 130 },
+      { "id": "data-science", "label": "Data Science", "count": 85 },
+      { "id": "machine-learning", "label": "Machine Learning", "count": 210 },
+      { "id": "cloud-computing", "label": "Cloud Computing", "count": 45 },
+      { "id": "cybersecurity", "label": "Cybersecurity", "count": 35 },
+      { "id": "devops", "label": "DevOps", "count": 66 },
+      { "id": "programming", "label": "Programming", "count": 95 },
+      {
+        "id": "artificial-intelligence",
+        "label": "Artificial Intelligence",
+        "count": 150
+      }
+    ]
+  },
+
+  {
+    "type": "checkbox",
+    "title": "Tags",
+    "items": [
+      { "id": "marketing", "label": "Marketing", "count": 10 },
+      { "id": "business", "label": "Business", "count": 85 },
+      { "id": "design", "label": "Design", "count": 21 },
+      { "id": "music", "label": "Music", "count": 21 }
+    ]
+  }
+]

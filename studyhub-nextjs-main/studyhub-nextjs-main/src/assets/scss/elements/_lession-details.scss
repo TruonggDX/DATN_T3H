@@ -1,0 +1,206 @@
+// lession details area
+
+.rts-lession-content-wrapper {
+  display: flex;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  @media #{$md-layout} {
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  @media #{$sm-layout} {
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  .rts-lession-left {
+    background: #f9f8ff;
+    width: 455px;
+    @media #{$md-layout} {
+      width: 100%;
+    }
+    @media #{$sm-layout} {
+      width: 100%;
+    }
+    &.sibebar-none {
+      display: none;
+    }
+    .content-wrapper {
+      margin-top: 100px;
+      @media #{$md-layout} {
+        margin-top: 30px;
+      }
+      @media #{$sm-layout} {
+        margin-top: 30px;
+      }
+      .inner-content {
+        position: relative;
+        padding: 0 10px;
+        input {
+          height: 56px;
+          border-radius: 4px;
+          border: 1px solid #ddd8f9;
+          &:focus {
+            border-color: var(--color-primary);
+          }
+        }
+        i {
+          position: absolute;
+          right: 60px;
+          top: 50%;
+          transform: translateY(-50%);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .course-content-wrapper-main {
+    padding: 0px 10px;
+    .accordion-item {
+      background: transparent;
+      .accordion-header {
+        position: relative;
+        .accordion-button {
+          padding: 15px 5px 15px 30px;
+          position: relative;
+          &::before {
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            content: "\f078" !important;
+            font-size: 12px !important;
+            font-family: var(--font-3);
+            font-size: 16px;
+          }
+          &[aria-expanded="true"] {
+            &::before {
+              content: "\f077" !important;
+            }
+          }
+        }
+      }
+    }
+  }
+  .rts-lession-right {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    iframe {
+      height: 700px;
+    }
+    .lesson-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 30px;
+      background: var(--color-primary);
+      .left-area {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        .toggle-class {
+          width: 30px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #7763e5;
+          border-radius: 50%;
+          cursor: pointer;
+          &.sidebar-hide {
+            i {
+              &::before {
+                content: "\f054";
+              }
+            }
+          }
+          i {
+            color: #fff;
+          }
+        }
+        span {
+          color: #fff;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: 26px;
+        }
+      }
+      .right {
+        a {
+          height: 30px;
+          width: 30px;
+          background: #7763e5;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          font-size: 16px;
+        }
+      }
+    }
+    .lesson-bottom-area {
+      padding: 40px;
+      @media #{$large-mobile} {
+        padding: 20px;
+      }
+    }
+    .next-prev-area {
+      display: flex;
+      align-items: center;
+      padding: 20px 40px;
+      justify-content: space-between;
+      border-top: 1px solid #ddd8f9;
+      .prev {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        &:hover {
+          color: var(--color-primary);
+        }
+        i {
+          transform: rotate(62deg);
+        }
+      }
+      .next {
+        padding-right: 150px;
+        gap: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        @media #{$large-mobile} {
+          padding-right: 0;
+        }
+        &:hover {
+          color: var(--color-primary);
+        }
+      }
+      .disable {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.default-exp-expand {
+  display: none;
+}
+
+.default-exp-expand.open {
+  display: block;
+}
+
+.discover-filter-activation {
+  background: var(--color-primary) !important;
+  i {
+    color: #fff !important;
+  }
+  span {
+    color: #fff !important;
+  }
+}

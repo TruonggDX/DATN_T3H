@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "slug": "development",
+    "title": "Development",
+    "img": "/images/category/01.svg",
+    "categoryCount": "130"
+  },
+  {
+    "id": 2,
+    "slug": "business",
+    "title": "Business",
+    "img": "/images/category/02.svg",
+    "categoryCount": "144"
+  },
+  {
+    "id": 3,
+    "slug": "design-art",
+    "title": "Design & Art",
+    "img": "/images/category/03.svg",
+    "categoryCount": "120"
+  },
+  {
+    "id": 4,
+    "slug": "marketing",
+    "title": "Marketing",
+    "img": "/images/category/04.svg",
+    "categoryCount": "118"
+  },
+  {
+    "id": 5,
+    "slug": "music",
+    "title": "Music",
+    "img": "/images/category/05.svg",
+    "categoryCount": "123"
+  },
+  {
+    "id": 6,
+    "slug": "development",
+    "title": "Development",
+    "img": "/images/category/06.svg",
+    "categoryCount": "143"
+  },
+  {
+    "id": 7,
+    "slug": "accounting",
+    "title": "Accounting",
+    "img": "/images/category/07.svg",
+    "categoryCount": "152"
+  },
+  {
+    "id": 8,
+    "slug": "business",
+    "title": "Business",
+    "img": "/images/category/02.svg",
+    "categoryCount": "144"
+  },
+  {
+    "id": 9,
+    "slug": "design-art",
+    "title": "Design & Art",
+    "img": "/images/category/03.svg",
+    "categoryCount": "120"
+  },
+  {
+    "id": 10,
+    "slug": "marketing",
+    "title": "Marketing",
+    "img": "/images/category/04.svg",
+    "categoryCount": "118"
+  }
+]

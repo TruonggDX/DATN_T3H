@@ -1,0 +1,94 @@
+
+// brand area start
+.brand-style-one{
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 140px;
+    @media #{$sm-layout} {
+        padding: 0 31px;
+    }
+    @media screen and (max-width:575px) {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .title{
+        margin: 0;
+        color: #221859;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 34px;
+        width: max-content;
+    }
+    .brand-area{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 100px;    
+        img{
+            cursor: pointer;
+            transition: 0.3s;
+            max-width: 120px;
+            max-height: 51px;
+        }
+    }
+    .mySwiper-category-1{
+        padding: 10px 0;
+    }
+}
+
+
+.rts-brand-style-two{
+    .title{
+        text-align: center;
+        color: #221859;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 34px;
+    }
+
+}
+
+.brand-area-main-wrapper-2{
+    padding: 48px 112px;
+    border-radius: 6px;
+    border: 1px solid #DDD8F9;
+    @media #{$large-mobile} {
+        padding: 40px;
+    }
+    @media #{$small-mobile} {
+        padding: 20px;
+    }
+    img{
+        cursor: pointer;
+    }
+}
+.justify-content-sm-center{
+    @media #{$sm-layout} {
+        justify-content: center !important;
+    }
+}
+
+
+.brand-main-wrapper-nine{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .single-brand{
+        cursor: pointer;
+        img{
+            min-width: max-content;
+            transition: .3s;
+            max-width: max-content;
+        }
+        &:hover{
+            img{
+                transform: scale(1.1);
+            }
+        }
+    }
+}

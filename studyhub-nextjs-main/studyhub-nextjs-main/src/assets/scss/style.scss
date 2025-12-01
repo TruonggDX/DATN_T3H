@@ -1,0 +1,110 @@
+/*=== Scss File indexing Here===========
+
+1. variables
+2.typography
+3.spacing
+4.reset
+5.forms
+6.mixins
+7.shortcode
+8.animations
+9.text-animation'
+10.header
+11.nav
+12.button
+13.banner-one
+14.breadcrumb
+15.brand
+16.about
+17.category
+18.course
+19.why-choose-us
+20.events
+21.fun-facts
+22.instructor
+23.testimonials
+24.blog
+25.cta
+26.footer
+27.filter
+28.search-input
+29.cart-bar
+30.nice-select
+31.backto-top
+32.benefits
+33.common
+34.zoom
+35.lession-details
+36.course-single
+37.dashboard
+38.modal-over
+39calender
+40.side-bar
+41.mobile-menu.scss
+42.create-course
+43.date-picker
+44.contact
+45.pricing
+46.shop
+
+========================================*/
+
+/* Default  */
+
+@import "default/variables";
+@import "default/typography";
+@import "default/spacing";
+@import "default/reset";
+@import "default/forms";
+@import "default/mixins";
+@import "default/shortcode";
+@import "default/animations";
+@import "default/text-animation";
+
+/* Header */
+@import "header/header";
+@import "header/nav";
+
+/* Banner */
+@import "elements/button";
+@import "banner/banner-one";
+@import "elements/breadcrumb";
+
+/* elements */
+@import "elements/brand";
+@import "elements/about";
+@import "elements/category";
+@import "elements/course";
+@import "elements/why-choose-us";
+@import "elements/events";
+@import "elements/fun-facts";
+@import "elements/instructor";
+@import "elements/testimonials";
+@import "elements/blog";
+@import "elements/cta";
+@import "elements/footer";
+@import "elements/filter";
+@import "elements/search-input";
+@import "elements/cart-bar";
+@import "elements/nice-select";
+@import "elements/backto-top";
+@import "elements/benefits";
+@import "elements/common";
+@import "elements/zoom";
+@import "elements/video";
+@import "elements/lession-details";
+@import "elements/course-single";
+@import "elements/dashboard";
+@import "elements/modal-over";
+@import "elements/calender";
+@import "elements/side-bar";
+@import "elements/mobile-menu.scss";
+@import "elements/create-course";
+@import "elements/date-picker";
+@import "elements/contact";
+@import "elements/pricing";
+@import "elements/shop";
+
+// Default Style CSS
+
+@import "../css/style.css";

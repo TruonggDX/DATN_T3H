@@ -1,0 +1,138 @@
+
+// pricing area style
+
+.toggle-tab-area-main{
+    .plan-toggle-wrap {
+        text-align: center;
+        padding: 10px;
+        position:sticky;
+        top:0;
+    }
+    .toggle-inner input {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      border-radius: 25px;
+      right: 0;
+      z-index: 1;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .custom-toggle {
+      position: absolute;
+      height: 25px;
+      width: 25px;
+      background-color: #ffffff;
+      top: 4px;
+      left: 5px;
+      border-radius: 50%;
+      transition: 300ms all;
+    }
+    .toggle-inner .t-month, .toggle-inner .t-year {
+      position: absolute;
+      left: -70px;
+      top: 5px;
+      color: #110C2D;
+      transition: 300ms all;
+    }
+    .toggle-inner .t-year {
+      left: unset;
+      right: -85px;
+      opacity: 0.5;
+    }
+    .active > .toggle-inner .t-month {
+      opacity: 0.5;
+    }
+    .active > .toggle-inner .t-year {
+      opacity: 1;
+    }
+    .toggle-inner input:checked + span {
+      left: 43px;
+    }
+    .toggle-inner {
+      width: 75px;
+      margin: 0 auto;
+      height: 35px;
+      border: 1px solid #ffffff;
+      border-radius: 25px;
+      position: relative;
+      
+      background: var(--color-primary);
+    }
+    
+
+    .plan-toggle-wrap{
+        #monthly{
+            display: none !important;
+        }
+        #yearly{
+            display: flex !important;
+        }
+    }
+    .plan-toggle-wrap.active{
+        #monthly{
+            display: flex !important;
+        }
+        #yearly{
+            display: none !important;
+        }
+    }
+
+}
+
+
+.single--pricing-area{
+    padding: 35px;
+    border: 1px solid #DDD8F9;
+    border-radius: 10px;
+    .top-area{
+        .type{
+            color: #553CDF;
+            display: block;
+            margin-bottom: 20px;
+        }
+        .price-area{
+            .title{
+                font-size: 36px;
+                line-height: 44px;
+                span{
+                    font-size: 16px;
+                    line-height: 26px;
+                    color: #737477;
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+    &.active{
+        .rts-btn{
+            background: var(--color-primary);
+            color: #fff;
+        }
+    }
+    .rts-btn{
+        padding: 8px 20px;
+        max-width: 100%;
+        border-radius: 100px;
+    }
+    .access-area{
+        margin-top: 40px;
+        .single-access{
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            gap: 15px;
+            span{
+                color: #110C2D;
+                font-size: 15px;
+            }
+            i{
+                color: #110C2D;
+            }
+        }
+    }
+}
+

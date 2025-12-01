@@ -1,0 +1,191 @@
+
+// filter area start
+
+.rts-course-filter-area{
+    padding: 30px;
+    border-radius: 6px;
+    border: 1px solid #DDD8F9;
+    
+    a.rts-btn{
+        margin: auto;
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 18px;
+    }
+}
+
+.single-filter-left-wrapper{
+    .title{
+        color: #110C2D;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 28px;
+    }
+    .filter-body{
+        margin-top: 25px;
+        margin-bottom: 40px;
+        padding-bottom: 40px;
+        border-bottom: 1px solid #EBEBEB;
+        &.last{
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border: none;
+        }
+    }
+    .search-filter{
+        .input-wrapper{
+            position: relative;
+        }
+        input{
+            border-radius: 3px;
+            border: 1px solid  #DDD8F9;
+            background: #F9F8FF;
+            height: 46px;
+            font-size: 14px;
+            &:focus{
+                border: 1px solid var(--color-primary);
+            }
+        }
+        i{
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    }
+}
+
+.single-checkbox-filter{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+    .check-box{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        label{
+            color:  #110C2D;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 26px;
+            @media #{$smlg-device} {
+                font-size: 14px;
+            }
+            &::before{
+                top: 5px;
+                background: transparent;
+                border: 1px solid #737477;
+            }
+            &::after{
+                top: 31%;
+            }
+        }
+        input{
+            max-width: max-content;
+        }
+        input[type=checkbox]:checked ~ label::before{
+            background: var(--color-primary);
+        }
+    }
+    span.number{
+        color:  #737477;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 26px;
+    }
+}
+
+input[type=checkbox]:checked ~ label::after, input[type=radio]:checked ~ label::after {
+    opacity: 1;
+}
+
+
+.filter-small-top-full{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @media #{$sm-layout} {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    .left-filter{
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        span{
+            min-width: max-content;
+        }
+        .nice-select-wrap{
+            height: auto;
+            padding: 10px 20px;
+            border: 1px solid #DDD8F9;
+            border-radius: 6px;
+            .drop{
+                color:  #110C2D;
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 26px;
+                padding: 0px 40px 10px 10px;
+            }
+            ul#price{
+                border: 1px solid #DDD8F9 !important;
+                border-radius: 6px;
+                top: 100%;
+                right: 0;
+            }
+        }
+    }
+    .right-filter{
+        display: flex;
+        align-items: center;
+        gap: 40px;
+        @media #{$large-mobile} {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        span{
+            color:  #110C2D;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 26px;
+        }
+        .nav-tabs{
+            border: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            li{
+                margin: 0;
+                padding: 0;
+                button{
+                    display: flex;
+                    gap: 6px;
+                    align-items: center;
+                    border: 1px solid #DDD8F9;
+                    padding: 6px 12px;
+                    border-radius: 4px;
+                    &.active{
+                        background: var(--color-primary);
+                        color: #fff;
+                        span{
+                            color: #fff;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

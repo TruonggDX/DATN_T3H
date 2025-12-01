@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "img": "/images/students-feedback/01.jpg",
+    "avatar": "/images/students-feedback/02.png",
+    "quoteIcon": "/images/students-feedback/19.png",
+    "content": "I can't recommend The Gourmet Haven enough. It's a place for special occasions, date nights, or whenever you're in the mood for a culinary adventure. The combination of exceptional.",
+    "author": "Emma Elizabeth",
+    "position": "Assistant Teacher"
+  },
+  {
+    "id": 2,
+    "img": "/images/students-feedback/02.jpg",
+    "avatar": "/images/students-feedback/02.png",
+    "quoteIcon": "/images/students-feedback/19.png",
+    "content": "The atmosphere at The Gourmet Haven is absolutely stunning. Perfect for a relaxing evening with friends or family.",
+    "author": "John Doe",
+    "position": "Software Engineer"
+  },
+  {
+    "id": 3,
+    "img": "/images/students-feedback/04.jpg",
+    "avatar": "/images/students-feedback/03.png",
+    "quoteIcon": "/images/students-feedback/19.png",
+    "content": "The food is exquisite and the service is top-notch. A must-visit for any food enthusiast.",
+    "author": "Jane Smith",
+    "position": "Graphic Designer"
+  },
+  {
+    "id": 4,
+    "img": "/images/students-feedback/06.jpg",
+    "avatar": "/images/students-feedback/04.png",
+    "quoteIcon": "/images/students-feedback/19.png",
+    "content": "A hidden gem! The flavors are unique and the presentation is beautiful.",
+    "author": "Michael Brown",
+    "position": "Marketing Manager"
+  },
+  {
+    "id": 5,
+    "img": "/images/students-feedback/02.jpg",
+    "avatar": "/images/students-feedback/05.png",
+    "quoteIcon": "/images/students-feedback/19.png",
+    "content": "An unforgettable dining experience with a cozy and welcoming ambiance.",
+    "author": "Emily White",
+    "position": "Event Planner"
+  },
+  {
+    "id": 6,
+    "img": "/images/students-feedback/06.jpg",
+    "avatar": "/images/students-feedback/06.png",
+    "quoteIcon": "/images/students-feedback/19.png",
+    "content": "A delightful place for a culinary journey. The staff is friendly and attentive.",
+    "author": "Robert Wilson",
+    "position": "Architect"
+  },
+  {
+    "id": 7,
+    "img": "/images/students-feedback/01.jpg",
+    "avatar": "/images/students-feedback/07.png",
+    "quoteIcon": "/images/students-feedback/19.png",
+    "content": "The Gourmet Haven never disappoints. The dishes are creative and full of flavor.",
+    "author": "Jessica Lee",
+    "position": "Photographer"
+  },
+  {
+    "id": 8,
+    "img": "/images/students-feedback/02.jpg",
+    "avatar": "/images/students-feedback/08.png",
+    "quoteIcon": "/images/students-feedback/19.png",
+    "content": "Perfect for foodies looking for an extraordinary dining experience.",
+    "author": "David Taylor",
+    "position": "Chef"
+  },
+  {
+    "id": 9,
+    "img": "/images/students-feedback/04.jpg",
+    "avatar": "/images/students-feedback/09.png",
+    "quoteIcon": "/images/students-feedback/19.png",
+    "content": "The perfect blend of elegance and comfort. Highly recommend!",
+    "author": "Laura Martin",
+    "position": "Interior Designer"
+  },
+  {
+    "id": 10,
+    "img": "/images/students-feedback/06.jpg",
+    "avatar": "/images/students-feedback/10.png",
+    "quoteIcon": "/images/students-feedback/19.png",
+    "content": "A wonderful place to celebrate special moments. The attention to detail is impeccable.",
+    "author": "Daniel Jackson",
+    "position": "Lawyer"
+  }
+]

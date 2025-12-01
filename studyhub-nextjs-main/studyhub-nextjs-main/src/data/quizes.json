@@ -1,0 +1,698 @@
+[
+  {
+    "quizId": 1,
+    "quizName": "Math Fundamentals Quiz",
+    "slug": "math-fundamentals-quiz",
+    "date": "October 1, 2023",
+    "totalQuestions": 10,
+    "totalMarks": 10,
+    "obtainedMarks": 7,
+    "correctAnswers": 7,
+    "incorrectAnswers": 3,
+    "studentsParticipated": 20,
+    "passMarks": 5,
+    "description": "This quiz covers fundamental math concepts such as arithmetic, algebra, and geometry.",
+    "successRatio": 0.65,
+    "questions": [
+      {
+        "questionId": 1,
+        "questionText": "What is 2 + 2?",
+        "correctAnswer": "4",
+        "answered": "4",
+        "isCorrect": true
+      },
+      {
+        "questionId": 2,
+        "questionText": "Solve for x: 5x = 25",
+        "correctAnswer": "5",
+        "answered": "5",
+        "isCorrect": true
+      },
+      {
+        "questionId": 3,
+        "questionText": "What is the area of a circle with radius 3?",
+        "correctAnswer": "28.27",
+        "answered": "28.27",
+        "isCorrect": true
+      },
+      {
+        "questionId": 4,
+        "questionText": "What is the square root of 16?",
+        "correctAnswer": "4",
+        "answered": "4",
+        "isCorrect": true
+      },
+      {
+        "questionId": 5,
+        "questionText": "Solve: 7 x 8",
+        "correctAnswer": "56",
+        "answered": "54",
+        "isCorrect": false
+      },
+      {
+        "questionId": 6,
+        "questionText": "What is 15% of 200?",
+        "correctAnswer": "30",
+        "answered": "25",
+        "isCorrect": false
+      },
+      {
+        "questionId": 7,
+        "questionText": "What is the hypotenuse of a triangle with sides 3 and 4?",
+        "correctAnswer": "5",
+        "answered": "5",
+        "isCorrect": true
+      },
+      {
+        "questionId": 8,
+        "questionText": "What is the volume of a cube with sides of length 3?",
+        "correctAnswer": "27",
+        "answered": "27",
+        "isCorrect": true
+      },
+      {
+        "questionId": 9,
+        "questionText": "What is 9^2?",
+        "correctAnswer": "81",
+        "answered": "81",
+        "isCorrect": true
+      },
+      {
+        "questionId": 10,
+        "questionText": "What is the derivative of x^2?",
+        "correctAnswer": "2x",
+        "answered": "2x",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "quizId": 2,
+    "quizName": "Science Basics Quiz",
+    "slug": "science-basics-quiz",
+    "date": "October 8, 2023",
+    "totalQuestions": 10,
+    "totalMarks": 10,
+    "obtainedMarks": 8,
+    "correctAnswers": 8,
+    "incorrectAnswers": 2,
+    "studentsParticipated": 18,
+    "passMarks": 6,
+    "description": "A general quiz on science basics including physics, biology, and chemistry.",
+    "successRatio": 0.75,
+    "questions": [
+      {
+        "questionId": 1,
+        "questionText": "What is the chemical symbol for water?",
+        "correctAnswer": "H2O",
+        "answered": "H2O",
+        "isCorrect": true
+      },
+      {
+        "questionId": 2,
+        "questionText": "What is the powerhouse of the cell?",
+        "correctAnswer": "Mitochondria",
+        "answered": "Mitochondria",
+        "isCorrect": true
+      },
+      {
+        "questionId": 3,
+        "questionText": "What is the speed of light?",
+        "correctAnswer": "299,792 km/s",
+        "answered": "299,792 km/s",
+        "isCorrect": true
+      },
+      {
+        "questionId": 4,
+        "questionText": "What gas do plants absorb during photosynthesis?",
+        "correctAnswer": "Carbon Dioxide",
+        "answered": "Oxygen",
+        "isCorrect": false
+      },
+      {
+        "questionId": 5,
+        "questionText": "What force keeps planets in orbit?",
+        "correctAnswer": "Gravity",
+        "answered": "Gravity",
+        "isCorrect": true
+      },
+      {
+        "questionId": 6,
+        "questionText": "Who developed the theory of relativity?",
+        "correctAnswer": "Einstein",
+        "answered": "Einstein",
+        "isCorrect": true
+      },
+      {
+        "questionId": 7,
+        "questionText": "What is the main organ in the circulatory system?",
+        "correctAnswer": "Heart",
+        "answered": "Heart",
+        "isCorrect": true
+      },
+      {
+        "questionId": 8,
+        "questionText": "What is the atomic number of oxygen?",
+        "correctAnswer": "8",
+        "answered": "8",
+        "isCorrect": true
+      },
+      {
+        "questionId": 9,
+        "questionText": "What element is represented by the symbol Na?",
+        "correctAnswer": "Sodium",
+        "answered": "Sodium",
+        "isCorrect": true
+      },
+      {
+        "questionId": 10,
+        "questionText": "What planet is closest to the sun?",
+        "correctAnswer": "Mercury",
+        "answered": "Venus",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "quizId": 3,
+    "quizName": "History Quiz",
+    "slug": "history-quiz",
+    "date": "October 15, 2023",
+    "totalQuestions": 10,
+    "totalMarks": 10,
+    "obtainedMarks": 6,
+    "correctAnswers": 6,
+    "incorrectAnswers": 4,
+    "studentsParticipated": 15,
+    "passMarks": 5,
+    "description": "A quiz covering key historical events and figures.",
+    "successRatio": 0.67,
+    "questions": [
+      {
+        "questionId": 1,
+        "questionText": "Who was the first president of the United States?",
+        "correctAnswer": "George Washington",
+        "answered": "George Washington",
+        "isCorrect": true
+      },
+      {
+        "questionId": 2,
+        "questionText": "When did World War II end?",
+        "correctAnswer": "1945",
+        "answered": "1945",
+        "isCorrect": true
+      },
+      {
+        "questionId": 3,
+        "questionText": "Who was the first man to walk on the moon?",
+        "correctAnswer": "Neil Armstrong",
+        "answered": "Buzz Aldrin",
+        "isCorrect": false
+      },
+      {
+        "questionId": 4,
+        "questionText": "Which country built the Great Wall?",
+        "correctAnswer": "China",
+        "answered": "China",
+        "isCorrect": true
+      },
+      {
+        "questionId": 5,
+        "questionText": "What was the name of the ship that carried the Pilgrims to America?",
+        "correctAnswer": "Mayflower",
+        "answered": "Mayflower",
+        "isCorrect": true
+      },
+      {
+        "questionId": 6,
+        "questionText": "Who discovered America?",
+        "correctAnswer": "Christopher Columbus",
+        "answered": "Christopher Columbus",
+        "isCorrect": true
+      },
+      {
+        "questionId": 7,
+        "questionText": "What was the main cause of World War I?",
+        "correctAnswer": "Assassination of Archduke Ferdinand",
+        "answered": "Treaty of Versailles",
+        "isCorrect": false
+      },
+      {
+        "questionId": 8,
+        "questionText": "What year did the Titanic sink?",
+        "correctAnswer": "1912",
+        "answered": "1912",
+        "isCorrect": true
+      },
+      {
+        "questionId": 9,
+        "questionText": "Who wrote the Declaration of Independence?",
+        "correctAnswer": "Thomas Jefferson",
+        "answered": "Thomas Jefferson",
+        "isCorrect": true
+      },
+      {
+        "questionId": 10,
+        "questionText": "What was the Renaissance?",
+        "correctAnswer": "A cultural movement in Europe",
+        "answered": "A cultural movement in Europe",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "quizId": 4,
+    "quizName": "Geography Quiz",
+    "slug": "geography-quiz",
+    "date": "October 20, 2023",
+    "totalQuestions": 10,
+    "totalMarks": 10,
+    "obtainedMarks": 9,
+    "correctAnswers": 9,
+    "incorrectAnswers": 1,
+    "studentsParticipated": 17,
+    "passMarks": 5,
+    "description": "A quiz on basic geography including continents, countries, and capitals.",
+    "successRatio": 0.9,
+    "questions": [
+      {
+        "questionId": 1,
+        "questionText": "What is the largest continent?",
+        "correctAnswer": "Asia",
+        "answered": "Asia",
+        "isCorrect": true
+      },
+      {
+        "questionId": 2,
+        "questionText": "What is the capital of Australia?",
+        "correctAnswer": "Canberra",
+        "answered": "Sydney",
+        "isCorrect": false
+      },
+      {
+        "questionId": 3,
+        "questionText": "What is the longest river in the world?",
+        "correctAnswer": "Nile",
+        "answered": "Nile",
+        "isCorrect": true
+      },
+      {
+        "questionId": 4,
+        "questionText": "Which desert is the largest in the world?",
+        "correctAnswer": "Sahara",
+        "answered": "Sahara",
+        "isCorrect": true
+      },
+      {
+        "questionId": 5,
+        "questionText": "Which ocean is the largest?",
+        "correctAnswer": "Pacific",
+        "answered": "Pacific",
+        "isCorrect": true
+      },
+      {
+        "questionId": 6,
+        "questionText": "What is the smallest country in the world?",
+        "correctAnswer": "Vatican City",
+        "answered": "Vatican City",
+        "isCorrect": true
+      },
+      {
+        "questionId": 7,
+        "questionText": "Which country has the most population?",
+        "correctAnswer": "China",
+        "answered": "China",
+        "isCorrect": true
+      },
+      {
+        "questionId": 8,
+        "questionText": "Which continent is home to the Amazon rainforest?",
+        "correctAnswer": "South America",
+        "answered": "South America",
+        "isCorrect": true
+      },
+      {
+        "questionId": 9,
+        "questionText": "What is the capital of Japan?",
+        "correctAnswer": "Tokyo",
+        "answered": "Tokyo",
+        "isCorrect": true
+      },
+      {
+        "questionId": 10,
+        "questionText": "What is the tallest mountain in the world?",
+        "correctAnswer": "Mount Everest",
+        "answered": "Mount Everest",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "quizId": 5,
+    "quizName": "English Grammar Quiz",
+    "slug": "english-grammar-quiz",
+    "date": "October 22, 2023",
+    "totalQuestions": 10,
+    "totalMarks": 10,
+    "obtainedMarks": 8,
+    "correctAnswers": 8,
+    "incorrectAnswers": 2,
+    "studentsParticipated": 23,
+    "passMarks": 6,
+    "description": "A quiz focused on basic grammar rules including tenses, punctuation, and sentence structure.",
+    "successRatio": 0.8,
+    "questions": [
+      {
+        "questionId": 1,
+        "questionText": "What is the plural form of 'child'?",
+        "correctAnswer": "Children",
+        "answered": "Children",
+        "isCorrect": true
+      },
+      {
+        "questionId": 2,
+        "questionText": "Choose the correct sentence: 'He go to school.' or 'He goes to school.'",
+        "correctAnswer": "'He goes to school.'",
+        "answered": "'He goes to school.'",
+        "isCorrect": true
+      },
+      {
+        "questionId": 3,
+        "questionText": "Identify the verb: 'She runs every morning.'",
+        "correctAnswer": "Runs",
+        "answered": "Runs",
+        "isCorrect": true
+      },
+      {
+        "questionId": 4,
+        "questionText": "What is the past tense of 'write'?",
+        "correctAnswer": "Wrote",
+        "answered": "Written",
+        "isCorrect": false
+      },
+      {
+        "questionId": 5,
+        "questionText": "Which word is an adverb: quickly, dog, happy?",
+        "correctAnswer": "Quickly",
+        "answered": "Quickly",
+        "isCorrect": true
+      },
+      {
+        "questionId": 6,
+        "questionText": "Choose the correct punctuation: 'Its raining outside.' or 'It’s raining outside.'",
+        "correctAnswer": "It’s",
+        "answered": "Its",
+        "isCorrect": false
+      },
+      {
+        "questionId": 7,
+        "questionText": "What is the comparative form of 'big'?",
+        "correctAnswer": "Bigger",
+        "answered": "Bigger",
+        "isCorrect": true
+      },
+      {
+        "questionId": 8,
+        "questionText": "Which sentence is in the present continuous tense?",
+        "correctAnswer": "'She is studying.'",
+        "answered": "'She studies.'",
+        "isCorrect": false
+      },
+      {
+        "questionId": 9,
+        "questionText": "What is a synonym for 'happy'?",
+        "correctAnswer": "Joyful",
+        "answered": "Joyful",
+        "isCorrect": true
+      },
+      {
+        "questionId": 10,
+        "questionText": "Identify the subject: 'The cat slept on the couch.'",
+        "correctAnswer": "The cat",
+        "answered": "The cat",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "quizId": 6,
+    "quizName": "World Capitals Quiz",
+    "slug": "world-capitals-quiz",
+    "date": "October 24, 2023",
+    "totalQuestions": 10,
+    "totalMarks": 10,
+    "obtainedMarks": 9,
+    "correctAnswers": 9,
+    "incorrectAnswers": 1,
+    "studentsParticipated": 19,
+    "passMarks": 6,
+    "description": "This quiz covers the capitals of major countries around the world.",
+    "successRatio": 0.89,
+    "questions": [
+      {
+        "questionId": 1,
+        "questionText": "What is the capital of France?",
+        "correctAnswer": "Paris",
+        "answered": "Paris",
+        "isCorrect": true
+      },
+      {
+        "questionId": 2,
+        "questionText": "What is the capital of Brazil?",
+        "correctAnswer": "Brasília",
+        "answered": "Brasília",
+        "isCorrect": true
+      },
+      {
+        "questionId": 3,
+        "questionText": "What is the capital of Japan?",
+        "correctAnswer": "Tokyo",
+        "answered": "Tokyo",
+        "isCorrect": true
+      },
+      {
+        "questionId": 4,
+        "questionText": "What is the capital of Australia?",
+        "correctAnswer": "Canberra",
+        "answered": "Sydney",
+        "isCorrect": false
+      },
+      {
+        "questionId": 5,
+        "questionText": "What is the capital of Canada?",
+        "correctAnswer": "Ottawa",
+        "answered": "Ottawa",
+        "isCorrect": true
+      },
+      {
+        "questionId": 6,
+        "questionText": "What is the capital of India?",
+        "correctAnswer": "New Delhi",
+        "answered": "New Delhi",
+        "isCorrect": true
+      },
+      {
+        "questionId": 7,
+        "questionText": "What is the capital of South Africa?",
+        "correctAnswer": "Pretoria",
+        "answered": "Pretoria",
+        "isCorrect": true
+      },
+      {
+        "questionId": 8,
+        "questionText": "What is the capital of Egypt?",
+        "correctAnswer": "Cairo",
+        "answered": "Cairo",
+        "isCorrect": true
+      },
+      {
+        "questionId": 9,
+        "questionText": "What is the capital of the United Kingdom?",
+        "correctAnswer": "London",
+        "answered": "London",
+        "isCorrect": true
+      },
+      {
+        "questionId": 10,
+        "questionText": "What is the capital of Russia?",
+        "correctAnswer": "Moscow",
+        "answered": "Moscow",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "quizId": 7,
+    "quizName": "Basic Chemistry Quiz",
+    "slug": "basic-chemistry-quiz",
+    "date": "October 26, 2023",
+    "totalQuestions": 10,
+    "totalMarks": 10,
+    "obtainedMarks": 6,
+    "correctAnswers": 6,
+    "incorrectAnswers": 4,
+    "studentsParticipated": 15,
+    "passMarks": 5,
+    "description": "A quiz on fundamental chemistry concepts including atoms, molecules, and reactions.",
+    "successRatio": 0.67,
+    "questions": [
+      {
+        "questionId": 1,
+        "questionText": "What is the atomic number of hydrogen?",
+        "correctAnswer": "1",
+        "answered": "1",
+        "isCorrect": true
+      },
+      {
+        "questionId": 2,
+        "questionText": "What is the chemical formula for water?",
+        "correctAnswer": "H2O",
+        "answered": "H2O",
+        "isCorrect": true
+      },
+      {
+        "questionId": 3,
+        "questionText": "What is the pH of pure water?",
+        "correctAnswer": "7",
+        "answered": "7",
+        "isCorrect": true
+      },
+      {
+        "questionId": 4,
+        "questionText": "What gas is released during photosynthesis?",
+        "correctAnswer": "Oxygen",
+        "answered": "Oxygen",
+        "isCorrect": true
+      },
+      {
+        "questionId": 5,
+        "questionText": "What is the chemical symbol for sodium?",
+        "correctAnswer": "Na",
+        "answered": "Na",
+        "isCorrect": true
+      },
+      {
+        "questionId": 6,
+        "questionText": "What is the chemical formula for methane?",
+        "correctAnswer": "CH4",
+        "answered": "CO2",
+        "isCorrect": false
+      },
+      {
+        "questionId": 7,
+        "questionText": "What type of bond is formed between hydrogen and oxygen in water?",
+        "correctAnswer": "Covalent",
+        "answered": "Ionic",
+        "isCorrect": false
+      },
+      {
+        "questionId": 8,
+        "questionText": "What is the most abundant gas in Earth's atmosphere?",
+        "correctAnswer": "Nitrogen",
+        "answered": "Oxygen",
+        "isCorrect": false
+      },
+      {
+        "questionId": 9,
+        "questionText": "What is the chemical formula for carbon dioxide?",
+        "correctAnswer": "CO2",
+        "answered": "CO2",
+        "isCorrect": true
+      },
+      {
+        "questionId": 10,
+        "questionText": "What is the molar mass of carbon?",
+        "correctAnswer": "12 g/mol",
+        "answered": "12 g/mol",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "quizId": 8,
+    "quizName": "Computer Science Basics Quiz",
+    "slug": "computer-science-basics-quiz",
+    "date": "October 28, 2023",
+    "totalQuestions": 10,
+    "totalMarks": 10,
+    "obtainedMarks": 7,
+    "correctAnswers": 7,
+    "incorrectAnswers": 3,
+    "studentsParticipated": 22,
+    "passMarks": 6,
+    "description": "This quiz tests basic knowledge of computer science including algorithms, data structures, and programming languages.",
+    "successRatio": 0.75,
+    "questions": [
+      {
+        "questionId": 1,
+        "questionText": "What does HTML stand for?",
+        "correctAnswer": "HyperText Markup Language",
+        "answered": "HyperText Markup Language",
+        "isCorrect": true
+      },
+      {
+        "questionId": 2,
+        "questionText": "What is the time complexity of binary search?",
+        "correctAnswer": "O(log n)",
+        "answered": "O(log n)",
+        "isCorrect": true
+      },
+      {
+        "questionId": 3,
+        "questionText": "What data structure is used in a stack?",
+        "correctAnswer": "LIFO",
+        "answered": "FIFO",
+        "isCorrect": false
+      },
+      {
+        "questionId": 4,
+        "questionText": "What is the output of 2 + 3 * 4?",
+        "correctAnswer": "14",
+        "answered": "20",
+        "isCorrect": false
+      },
+      {
+        "questionId": 5,
+        "questionText": "Which programming language is known for its high performance and use in scientific computing?",
+        "correctAnswer": "Python",
+        "answered": "Python",
+        "isCorrect": true
+      },
+      {
+        "questionId": 6,
+        "questionText": "What is the purpose of a compiler?",
+        "correctAnswer": "Translate code to machine language",
+        "answered": "Optimize code",
+        "isCorrect": false
+      },
+      {
+        "questionId": 7,
+        "questionText": "What is the binary representation of 10?",
+        "correctAnswer": "1010",
+        "answered": "1010",
+        "isCorrect": true
+      },
+      {
+        "questionId": 8,
+        "questionText": "What is the difference between an interpreter and a compiler?",
+        "correctAnswer": "Interpreters execute code line by line, while compilers translate the entire code at once.",
+        "answered": "Interpreters execute code line by line, while compilers translate the entire code at once.",
+        "isCorrect": true
+      },
+      {
+        "questionId": 9,
+        "questionText": "What is the purpose of a loop in programming?",
+        "correctAnswer": "Repeat a block of code",
+        "answered": "Repeat a block of code",
+        "isCorrect": true
+      },
+      {
+        "questionId": 10,
+        "questionText": "What is the output of 2^3?",
+        "correctAnswer": "8",
+        "answered": "6",
+        "isCorrect": false
+      }
+    ]
+  }
+]

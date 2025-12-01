@@ -1,0 +1,279 @@
+// cta style here
+.call-to-sction {
+  background-image: url(/images/cta/cta-bg.png);
+  padding: 70px;
+  border-radius: 6px;
+  margin-top: -130px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1;
+  position: relative;
+  overflow: hidden;
+  @media #{$sm-layout} {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+    @media #{$large-mobile} {
+      padding: 50px 20px;
+    }
+  }
+  .title {
+    margin-left: 25%;
+    margin-bottom: 0;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 58px;
+    color: #fff;
+    br {
+      @media #{$large-mobile} {
+        display: none;
+      }
+    }
+    @media (max-width: 1200px) {
+      margin-left: 10%;
+    }
+    @media #{$md-layout} {
+      margin-left: 0;
+      font-size: 36px;
+      line-height: 1.2;
+    }
+    @media #{$sm-layout} {
+      font-size: 26px;
+      margin-left: 0;
+      line-height: 1.2;
+    }
+  }
+  .cta-image {
+    position: absolute;
+    bottom: 0;
+    left: 8%;
+    z-index: -1;
+    @media (max-width: 991px) {
+      opacity: 0.5;
+    }
+    @media (max-width: 768px) {
+      left: unset;
+      right: 10%;
+      height: 100%;
+    }
+  }
+  .shape-image {
+    display: contents;
+  }
+  .shape {
+    position: absolute;
+    z-index: -1;
+    &.one {
+      left: 2%;
+      top: 30%;
+      @media #{$large-mobile} {
+        display: none;
+      }
+    }
+    &.two {
+      right: 30%;
+      top: 45%;
+      @media #{$large-mobile} {
+        display: none;
+      }
+    }
+  }
+  &.style-seven {
+    background-image: url(/images/cta/cta-bg-7.png);
+    margin-top: 0;
+    position: relative;
+    overflow: hidden;
+    justify-content: space-between;
+    z-index: 1;
+    @media (max-width: 991px) {
+      padding: 70px 50px;
+    }
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 30px;
+      padding: 60px 30px;
+    }
+    .title {
+      margin-left: 300px;
+      font-family: "Teko", sans-serif;
+      font-size: 64px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 65px;
+      text-transform: uppercase;
+      @media (max-width: 1200px) and (min-width: 992px) {
+        margin-left: 250px;
+        font-size: 38px;
+        line-height: 40px;
+      }
+      @media (max-width: 991px) and (min-width: 768px) {
+        margin-left: 150px;
+        font-size: 32px;
+        line-height: 36px;
+      }
+      @media (max-width: 768px) {
+        margin-left: 0;
+        font-size: 60px;
+        line-height: 60px;
+      }
+      @media (max-width: 576px) {
+        font-size: 42px;
+        line-height: 42px;
+      }
+      @media (max-width: 450px) {
+        font-size: 32px;
+        line-height: 32px;
+      }
+    }
+    .cta-button-area {
+      .rts-btn {
+        background: #ffffff;
+        color: var(--color-primary-gym);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-radius: 0;
+        font-weight: 600;
+      }
+    }
+    .cta-image {
+      position: absolute;
+      bottom: 0;
+      left: 8%;
+      z-index: -1;
+      opacity: 1;
+      @media (max-width: 991px) {
+        left: 2%;
+      }
+      @media (max-width: 768px) {
+        position: unset;
+        z-index: 1;
+      }
+    }
+    .shape-image {
+      display: contents;
+    }
+    .shape {
+      position: absolute;
+      z-index: -1;
+      &.one {
+        left: 6%;
+        top: 30%;
+      }
+      &.two {
+        right: 30%;
+        top: 45%;
+      }
+    }
+  }
+  &.style-eight {
+    background-image: url(/images/cta/cta-bg-8.png);
+    margin-top: 0;
+    position: relative;
+    overflow: hidden;
+    justify-content: space-between;
+    z-index: 1;
+    padding: 90px;
+    @media (max-width: 991px) {
+      padding: 70px 50px;
+    }
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 30px;
+      padding: 60px 30px;
+    }
+    .title {
+      margin-left: 300px;
+      font-size: 40px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 56px;
+      text-transform: uppercase;
+      @media (max-width: 1200px) and (min-width: 992px) {
+        margin-left: 200px;
+        font-size: 32px;
+        line-height: 36px;
+      }
+      @media (max-width: 991px) and (min-width: 768px) {
+        margin-left: 150px;
+        font-size: 28px;
+        line-height: 36px;
+      }
+      @media (max-width: 768px) {
+        margin-left: 0;
+        font-size: 50px;
+        line-height: 50px;
+      }
+      @media (max-width: 576px) {
+        font-size: 36px;
+        line-height: 36px;
+      }
+      @media (max-width: 450px) {
+        font-size: 24px;
+        line-height: 24px;
+      }
+    }
+    .cta-button-area {
+      .rts-btn {
+        background: #ffffff;
+        color: var(--color-primary-kitchen);
+        border: 1px solid #ffffff;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-radius: 4px;
+        font-weight: 600;
+        transition: all 0.3s;
+        &:hover {
+          background: none;
+          color: #ffffff;
+        }
+      }
+    }
+    .cta-image {
+      position: absolute;
+      bottom: 0;
+      left: 8%;
+      z-index: -1;
+      opacity: 1;
+      @media (max-width: 991px) {
+        left: 2%;
+      }
+      @media (max-width: 768px) {
+        position: unset;
+        z-index: 1;
+      }
+    }
+    .shape-image {
+      display: contents;
+    }
+    .shape {
+      position: absolute;
+      z-index: -1;
+      &.one {
+        left: 5%;
+        top: 15%;
+      }
+      &.two {
+        right: 45%;
+        bottom: 10%;
+      }
+      &.three {
+        right: 30%;
+        bottom: 45%;
+      }
+    }
+  }
+}
+
+.call-to-sction.style-three.with-full-width {
+  .cta-form {
+    width: 46%;
+    @media #{$large-mobile} {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,91 @@
+// modal over style here
+
+#myModal-1 {
+  top: 50%;
+  padding-right: 0 !important;
+  transform: translateY(-30%);
+  .modal-dialog {
+    max-width: 1064px !important;
+    height: 530px !important;
+    background-image: url(/images/popover/01.jpg);
+    border-radius: 10px;
+  }
+  .modal-content {
+    height: 100%;
+    background: transparent;
+    border-radius: 10px;
+    .modal-header {
+      max-width: max-content;
+      color: #fff;
+      margin-left: auto;
+      color: #fff;
+      border: none;
+      button {
+        border: none;
+      }
+      i {
+        font-size: 18px;
+        color: #fff;
+      }
+    }
+  }
+  .modal-body {
+    .inner-content {
+      max-width: 42%;
+      margin-left: auto;
+      margin-top: 70px;
+      margin-right: 70px;
+      @media #{$sm-layout} {
+        max-width: 100%;
+        width: 100%;
+        margin-top: 40px;
+      }
+      .title-area {
+        .pre {
+          font-size: 14px;
+          color: #ffffff;
+        }
+        .title {
+          font-size: 36px;
+          color: #fff;
+          margin-top: 10px;
+          margin-bottom: 20px;
+        }
+      }
+      form {
+        input {
+          height: 56px;
+          background: #fff;
+          border-radius: 4px;
+          border: 1px solid transparent;
+          &:focus {
+            border-color: #ffd335;
+          }
+        }
+        button {
+          background: #ffd335;
+          color: #110c2d;
+          display: block;
+          padding: 12px 25px;
+          height: 56px;
+          border-radius: 4px;
+          margin-top: 15px;
+          border: 1px solid transparent;
+          transition: 0.3s;
+          font-weight: 600;
+          &:hover {
+            background: transparent;
+            color: #fff;
+            border: 1px solid #ffd335;
+          }
+        }
+        span {
+          color: #fff;
+          display: block;
+          margin-top: 20px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
