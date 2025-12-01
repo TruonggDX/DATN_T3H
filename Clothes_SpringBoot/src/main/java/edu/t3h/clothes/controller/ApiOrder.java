@@ -1,7 +1,10 @@
 package edu.t3h.clothes.controller;
 
 import edu.t3h.clothes.model.dto.OrderDto;
+import edu.t3h.clothes.model.request.OrderRequest;
+import edu.t3h.clothes.model.request.UpdateStatusRequest;
 import edu.t3h.clothes.model.response.BaseResponse;
+import edu.t3h.clothes.model.response.OrderResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.service.IOrderService;
 import java.util.List;
@@ -26,12 +29,14 @@ public class ApiOrder {
   private final IOrderService orderService;
 
   @GetMapping("/list")
-  public ResponseEntity<ResponsePage<List<OrderDto>>> getAllOrders(Pageable pageable) {
-    ResponsePage<List<OrderDto>> responsePage = orderService.getAllOrders(pageable);
+  public ResponseEntity<ResponsePage<List<OrderDto>>> getAllOrders(
+      @RequestParam(value = "code", required = false) String code,
+      @RequestParam(value = "status", required = false) String status, Pageable pageable) {
+    ResponsePage<List<OrderDto>> responsePage = orderService.getAllOrders(code,status,pageable);
     return ResponseEntity.ok(responsePage);
   }
 
-  @GetMapping("/get-oder-account")
+  @GetMapping("/get-order-account")
   public ResponseEntity<ResponsePage<List<OrderDto>>> getOrdersByAccount(Pageable pageable) {
     ResponsePage<List<OrderDto>> responsePage = orderService.getOderByAccount(pageable);
     return ResponseEntity.ok(responsePage);
@@ -53,8 +58,8 @@ public class ApiOrder {
 
   @PutMapping("/update-status/{id}")
   public ResponseEntity<BaseResponse<OrderDto>> updateStatusOrder(@PathVariable Long id,
-      String status) {
-    BaseResponse<OrderDto> response = orderService.updateStatus(id, status);
+      @RequestBody UpdateStatusRequest request) {
+    BaseResponse<OrderDto> response = orderService.updateStatus(id, request);
     return ResponseEntity.ok(response);
   }
 
@@ -70,13 +75,34 @@ public class ApiOrder {
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/searchByCondition")
-  public ResponseEntity<ResponsePage<List<OrderDto>>> searchByCondition(
-      @RequestParam(value = "code") String code,
-      @RequestParam(value = "status") String status,
-      Pageable pageable) {
-    ResponsePage<List<OrderDto>> order = orderService.findByCondition(code, status, pageable);
-    return ResponseEntity.ok(order);
+  @GetMapping("/get-total-order")
+  public ResponseEntity<BaseResponse<Long>> totalOrder() {
+    BaseResponse<Long> response = orderService.getTotalOrder();
+    return ResponseEntity.ok(response);
   }
 
+  @PutMapping("/update-customer/{id}")
+  public ResponseEntity<BaseResponse<OrderDto>> updateCustomerOrders(@PathVariable Long id,
+      @RequestBody OrderRequest request) {
+    BaseResponse<OrderDto> response = orderService.updateOrderByCustomer(id, request);
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/cancel-order/{id}")
+  public ResponseEntity<BaseResponse<OrderDto>> cancelOrders(@PathVariable Long id) {
+    BaseResponse<OrderDto> response = orderService.cancelOrder(id);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/check-account/{productId}")
+  public ResponseEntity<BaseResponse<Boolean>> checkProductSellByAccount(@PathVariable Long productId) {
+    BaseResponse<Boolean> response = orderService.checkProductSoldByAccount(productId);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/get-order-recent")
+  public ResponseEntity<BaseResponse<List<OrderResponse>>> getOrderRecent() {
+    BaseResponse<List<OrderResponse>> response = orderService.getOrderRecent();
+    return ResponseEntity.ok(response);
+  }
 }

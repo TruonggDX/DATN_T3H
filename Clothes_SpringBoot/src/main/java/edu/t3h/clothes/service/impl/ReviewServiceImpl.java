@@ -1,6 +1,7 @@
 package edu.t3h.clothes.service.impl;
 
 import edu.t3h.clothes.entity.AccountEntity;
+import edu.t3h.clothes.entity.ImagesEntity;
 import edu.t3h.clothes.entity.ProductEntity;
 import edu.t3h.clothes.entity.ReviewEntity;
 import edu.t3h.clothes.mapper.ReviewMapper;
@@ -9,6 +10,7 @@ import edu.t3h.clothes.model.dto.auth.AuthDto;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.repository.AccountRepository;
+import edu.t3h.clothes.repository.ImageRepository;
 import edu.t3h.clothes.repository.ProductRepository;
 import edu.t3h.clothes.repository.ReviewRepository;
 import edu.t3h.clothes.security.service.JwtService;
@@ -32,11 +34,12 @@ public class ReviewServiceImpl implements IReviewService {
   private final ProductRepository productRepository;
   private final JwtService jwtService;
   private final AccountRepository accountRepository;
+  private final ImageRepository imageRepository;
 
   @Override
-  public ResponsePage<List<ReviewDto>> getAllReviews(Pageable pageable) {
+  public ResponsePage<List<ReviewDto>> getAllReviews(String code, String nameProduct, Pageable pageable) {
     ResponsePage<List<ReviewDto>> responsePage = new ResponsePage<>();
-    Page<ReviewEntity> page = reviewRepository.getDeletedReviews(pageable);
+    Page<ReviewEntity> page = reviewRepository.getDeletedReviews(code,nameProduct,pageable);
     List<ReviewDto> reviewDtos = page.getContent().stream().map(reviewMapper::toDto).toList();
     responsePage.setPageNumber(pageable.getPageNumber());
     responsePage.setPageSize(pageable.getPageSize());
@@ -141,7 +144,14 @@ public class ReviewServiceImpl implements IReviewService {
   public ResponsePage<List<ReviewDto>> getReviewsByProductId(Long productId, Pageable pageable) {
     ResponsePage<List<ReviewDto>> responsePage = new ResponsePage<>();
     Page<ReviewEntity> page = reviewRepository.getDeletedReviewsByProductId(productId, pageable);
-    List<ReviewDto> reviewDtos = page.getContent().stream().map(reviewMapper::toDto).toList();
+    List<ReviewDto> reviewDtos = page.getContent().stream().map(e -> {
+      ReviewDto reviewDto = reviewMapper.toDto(e);
+      ImagesEntity images = imageRepository.findByAccountId(reviewDto.getAccountId());
+      if (images != null) {
+        reviewDto.setAccountUrl(images.getUrl());
+      }
+      return reviewDto;
+    }).toList();
     responsePage.setPageNumber(pageable.getPageNumber());
     responsePage.setPageSize(pageable.getPageSize());
     responsePage.setTotalElements(page.getTotalElements());

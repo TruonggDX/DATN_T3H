@@ -13,4 +13,5 @@ public class ReviewDto {
   private String accountName;
   private Long productId;
   private String productName;
+  private String accountUrl;
 }

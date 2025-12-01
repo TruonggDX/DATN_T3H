@@ -15,4 +15,8 @@ public class CartEntity extends AbstractEntity {
   @ManyToOne
   @JoinColumn(name = "product_id")
   private ProductEntity product;
+
+  @ManyToOne
+  @JoinColumn(name = "variant_id")
+  private VariantEntity variant;
 }

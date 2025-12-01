@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,8 +26,11 @@ public class ApiReview {
   private final IReviewService reviewService;
 
   @GetMapping("/list")
-  public ResponseEntity<ResponsePage<List<ReviewDto>>> getAllReviews(Pageable pageable) {
-    ResponsePage<List<ReviewDto>> reviews = reviewService.getAllReviews(pageable);
+  public ResponseEntity<ResponsePage<List<ReviewDto>>> getAllReviews(
+      @RequestParam(value = "code" , required = false) String code,
+      @RequestParam(value = "nameProduct", required = false) String nameProduct,
+      Pageable pageable) {
+    ResponsePage<List<ReviewDto>> reviews = reviewService.getAllReviews(code,nameProduct, pageable);
     return ResponseEntity.ok(reviews);
   }
 

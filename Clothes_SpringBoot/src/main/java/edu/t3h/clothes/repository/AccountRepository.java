@@ -23,4 +23,6 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
   Page<AccountEntity> findByCondition(String code, String email, String roleCode,
       Pageable pageable);
 
+  @Query(value = "SELECT count(*) FROM AccountEntity a WHERE a.deleted=false")
+  Long countAccounts();
 }

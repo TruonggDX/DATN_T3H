@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface IAttributeValueService {
 
-  ResponsePage<List<AttributeValueDto>> getAllAttributeValues(Pageable pageable);
+  ResponsePage<List<AttributeValueDto>> getAllAttributeValues(String value,Pageable pageable);
 
   BaseResponse<AttributeValueDto> createAttributeValue(AttributeValueDto attributeValueDto);
 
@@ -21,4 +21,6 @@ public interface IAttributeValueService {
 
   ResponsePage<List<AttributeValueDto>> findByCondition(String value, Long attributeId,
       Pageable pageable);
+
+  BaseResponse<List<AttributeValueDto>> getAttributeValueByVariantId(Long variantId);
 }

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface IAttributeService {
 
-  ResponsePage<List<AttributeDto>> getAllAttributes(Pageable pageable);
+  ResponsePage<List<AttributeDto>> getAllAttributes(String name,Pageable pageable);
 
   BaseResponse<AttributeDto> createAttribute(AttributeDto attributeDto);
 

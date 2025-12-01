@@ -10,7 +10,5 @@ public class CategoryDto {
   private String code;
   private String name;
   private String description;
-  private List<CategoryDto> children;
-  private Long parentId;
 }
 

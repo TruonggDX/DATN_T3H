@@ -1,6 +1,7 @@
 package edu.t3h.clothes.controller;
 
 import edu.t3h.clothes.model.dto.CategoryDto;
+import edu.t3h.clothes.model.dto.CategoryRevenueDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.service.ICategoryService;
@@ -26,23 +27,15 @@ public class ApiCategory {
   private final ICategoryService categoryService;
 
   @GetMapping("/list")
-  public ResponseEntity<BaseResponse<List<CategoryDto>>> getAll(Pageable pageable) {
-    BaseResponse<List<CategoryDto>> response = categoryService.getAllCategories(pageable);
+  public ResponseEntity<ResponsePage<List<CategoryDto>>> getAll(
+      @RequestParam(value = "code", required = false) String code,
+      @RequestParam(value = "name", required = false) String name,
+      Pageable pageable) {
+    ResponsePage<List<CategoryDto>> response = categoryService.getAllCategories(code, name,
+        pageable);
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/list-parent")
-  public ResponseEntity<ResponsePage<List<CategoryDto>>> loadParentCategories(Pageable pageable) {
-    ResponsePage<List<CategoryDto>> response = categoryService.getAllCategoriesByParentId(pageable);
-    return ResponseEntity.ok(response);
-  }
-
-  @GetMapping("/findByParentId/{parentId}")
-  public ResponseEntity<BaseResponse<List<CategoryDto>>> loadParentCategoriesByParentId(
-      @PathVariable Long parentId) {
-    BaseResponse<List<CategoryDto>> response = categoryService.loadCategoriesByParentId(parentId);
-    return ResponseEntity.ok(response);
-  }
 
   @PostMapping("/create")
   public ResponseEntity<BaseResponse<CategoryDto>> createCategory(
@@ -70,13 +63,9 @@ public class ApiCategory {
     return ResponseEntity.ok(categoryDTO);
   }
 
-  @GetMapping("/searchByCondition")
-  public ResponseEntity<ResponsePage<List<CategoryDto>>> searchByCondition(
-      @RequestParam(value = "name") String name,
-      Pageable pageable) {
-    ResponsePage<List<CategoryDto>> cateDto = categoryService.searchCategoriesCondition(name,
-        pageable);
-    return ResponseEntity.ok(cateDto);
+  @GetMapping("/revenue-category")
+  public ResponseEntity<BaseResponse<List<CategoryRevenueDTO>>> getRevenue() {
+    BaseResponse<List<CategoryRevenueDTO>> categoryDTO = categoryService.getCategoryRevenue();
+    return ResponseEntity.ok(categoryDTO);
   }
-
 }

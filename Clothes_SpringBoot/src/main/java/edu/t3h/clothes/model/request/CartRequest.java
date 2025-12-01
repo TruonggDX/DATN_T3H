@@ -7,4 +7,5 @@ public class CartRequest {
 
   private Long number;
   private Long productId;
+  private Long variantId;
 }

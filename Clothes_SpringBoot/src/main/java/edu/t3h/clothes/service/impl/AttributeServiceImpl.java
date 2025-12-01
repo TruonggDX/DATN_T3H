@@ -24,9 +24,9 @@ public class AttributeServiceImpl implements IAttributeService {
   private final AttributeMapper attributeMapper;
 
   @Override
-  public ResponsePage<List<AttributeDto>> getAllAttributes(Pageable pageable) {
+  public ResponsePage<List<AttributeDto>> getAllAttributes(String name, Pageable pageable) {
     ResponsePage<List<AttributeDto>> responsePage = new ResponsePage<>();
-    Page<AttributeEntity> page = attributeRepository.findAllByDeletedFalse(pageable);
+    Page<AttributeEntity> page = attributeRepository.findAllByDeletedFalse(name,pageable);
     List<AttributeDto> attributeDtos = page.getContent().stream().map(attributeMapper::toDto)
         .toList();
     responsePage.setPageNumber(pageable.getPageNumber());

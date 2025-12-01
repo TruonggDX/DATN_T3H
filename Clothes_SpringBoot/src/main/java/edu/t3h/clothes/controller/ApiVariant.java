@@ -3,6 +3,7 @@ package edu.t3h.clothes.controller;
 import edu.t3h.clothes.model.dto.VariantDto;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
+import edu.t3h.clothes.model.response.VariantResponse;
 import edu.t3h.clothes.service.IVariantService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -63,5 +64,17 @@ public class ApiVariant {
     ResponsePage<List<VariantDto>> responsePage = iVariantService.getAllVariantsByCodeAndProductName(
         code, productName, pageable);
     return ResponseEntity.ok(responsePage);
+  }
+
+  @GetMapping("/get-by-product/{productId}")
+  public ResponseEntity<BaseResponse<List<VariantDto>>> getByProduct(@PathVariable Long productId) {
+    BaseResponse<List<VariantDto>> response = iVariantService.getVarianByProduct(productId);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/get-all-by-product/{productId}")
+  public ResponseEntity<BaseResponse<List<VariantResponse>>> getAllByProduct(@PathVariable Long productId) {
+    BaseResponse<List<VariantResponse>> response = iVariantService.getAllVarianByProduct(productId);
+    return ResponseEntity.ok(response);
   }
 }

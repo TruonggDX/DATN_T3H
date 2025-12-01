@@ -6,6 +6,8 @@ import edu.t3h.clothes.exception.HandleUploadFileException;
 import edu.t3h.clothes.mapper.BrandMapper;
 import edu.t3h.clothes.mapper.ImageMapper;
 import edu.t3h.clothes.model.dto.BrandDto;
+import edu.t3h.clothes.model.dto.BrandRevenueDTO;
+import edu.t3h.clothes.model.dto.CategoryRevenueDTO;
 import edu.t3h.clothes.model.dto.ImageDto;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
@@ -13,6 +15,7 @@ import edu.t3h.clothes.repository.BrandRepository;
 import edu.t3h.clothes.repository.ImageRepository;
 import edu.t3h.clothes.service.IBrandService;
 import edu.t3h.clothes.service.IUploadService;
+import edu.t3h.clothes.utils.Constant;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
 import edu.t3h.clothes.utils.GenarateCode;
 import java.io.IOException;
@@ -77,8 +80,8 @@ public class BrandServiceImpl implements IBrandService {
   }
 
   @Override
-  public ResponsePage<List<BrandDto>> getBrands(Pageable pageable) {
-    Page<BrandEntity> page = brandRepository.findDeletedBrands(pageable);
+  public ResponsePage<List<BrandDto>> getBrands(String code, String name, Pageable pageable) {
+    Page<BrandEntity> page = brandRepository.findDeletedBrands(code, name, pageable);
     List<BrandDto> dtos = page.stream().map(brandMapper::toDto).toList();
     ResponsePage<List<BrandDto>> resp = new ResponsePage<>();
     resp.setContent(dtos);
@@ -161,6 +164,16 @@ public class BrandServiceImpl implements IBrandService {
     response.setPageSize(page.getSize());
     response.setTotalElements(page.getTotalElements());
     response.setTotalPages(page.getTotalPages());
+    return response;
+  }
+
+  @Override
+  public BaseResponse<List<BrandRevenueDTO>> getBrandRevenue() {
+    BaseResponse<List<BrandRevenueDTO>> response = new BaseResponse<>();
+    List<BrandRevenueDTO> list = brandRepository.getTotalRevenueByBrand();
+    response.setCode(HttpStatus.OK.value());
+    response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+    response.setData(list);
     return response;
   }
 }

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface IReviewService {
 
-  ResponsePage<List<ReviewDto>> getAllReviews(Pageable pageable);
+  ResponsePage<List<ReviewDto>> getAllReviews(String code, String nameProduct,Pageable pageable);
 
   BaseResponse<ReviewDto> addReview(ReviewDto reviewDto);
 

@@ -20,6 +20,7 @@ import edu.t3h.clothes.service.IAccountService;
 import edu.t3h.clothes.service.IUploadService;
 import edu.t3h.clothes.utils.Constant;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
+import edu.t3h.clothes.utils.GenarateCode;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -46,9 +47,10 @@ public class AccountImpl implements IAccountService {
   private final JwtService jwtService;
 
   @Override
-  public ResponsePage<List<AccountDto>> getAllAccounts(Pageable pageable) {
+  public ResponsePage<List<AccountDto>> getAllAccounts(String code, String email, String roleCode,
+      Pageable pageable) {
     ResponsePage<List<AccountDto>> responsePage = new ResponsePage<>();
-    Page<AccountEntity> page = accountRepository.getAllAccounts(pageable);
+    Page<AccountEntity> page = accountRepository.findByCondition(code, email, roleCode, pageable);
     List<AccountDto> accountDtos = page.getContent().stream().map(accountEntity -> {
       AccountDto accountDto = accountMapper.toDto(accountEntity);
       ImagesEntity images = imageRepository.findByAccountId(accountDto.getId());
@@ -64,6 +66,45 @@ public class AccountImpl implements IAccountService {
     responsePage.setContent(accountDtos);
     return responsePage;
   }
+
+  @Override
+  public BaseResponse<AccountDto> createAccount(AccountDto accountDto, MultipartFile file) {
+    BaseResponse<AccountDto> response = new BaseResponse<>();
+    AccountEntity accountEntity = accountMapper.toEntity(accountDto);
+    Set<RoleEntity> roles = accountDto.getRoleIds().stream()
+        .map(roleId -> roleRepository.findById(roleId).orElse(null))
+        .collect(Collectors.toSet());
+    accountEntity.setRoles(roles);
+    accountEntity.setCode(GenarateCode.generateAccountCode());
+    accountEntity.setEnabled(true);
+    accountEntity.setDeleted(false);
+    accountEntity.setPassword(passwordEncoder.encode(accountDto.getPassword()));
+    accountRepository.save(accountEntity);
+    ImagesEntity images = null;
+    if (file != null && !file.isEmpty()) {
+      images = new ImagesEntity();
+      images.setAccountEntity(accountEntity);
+      try {
+        ImageDto imageDTO = uploadService.uploadImage(file);
+        images.setUrl(imageDTO.getUrl());
+        images.setType(file.getContentType());
+        images.setPublicId(imageDTO.getPublicId());
+        imageRepository.save(images);
+        accountDto.setImageUrl(images.getUrl());
+      } catch (IOException e) {
+        throw new HandleUploadFileException("Upload image error");
+      }
+    }
+    accountDto = accountMapper.toDto(accountEntity);
+    if (images != null) {
+      accountDto.setImageUrl(images.getUrl());
+    }
+    response.setCode(HttpStatus.OK.value());
+    response.setMessage(HTTP_MESSAGE.SUCCESS);
+    response.setData(accountDto);
+    return response;
+  }
+
 
   @Override
   public BaseResponse<AccountDto> updateAccountById(Long id, AccountRequest accountRequest,
@@ -180,14 +221,12 @@ public class AccountImpl implements IAccountService {
   }
 
   @Override
-  public BaseResponse<AccountDto> changePassword(ChangePasswordRequest changePasswordRequest) {
+  public BaseResponse<AccountDto> changePassword(Long id, ChangePasswordRequest changePasswordRequest) {
     BaseResponse<AccountDto> response = new BaseResponse<>();
-    AuthDto authDto = jwtService.decodeToken();
-    String email = authDto.getEmail();
-    Optional<AccountEntity> accountEntity = accountRepository.findByEmail(email);
+    Optional<AccountEntity> accountEntity = accountRepository.findById(id);
     if (accountEntity.isEmpty()) {
       response.setCode(HttpStatus.NOT_FOUND.value());
-      response.setMessage(HTTP_MESSAGE.ACCOUNT_NOT_FOUND);
+      response.setMessage(HTTP_MESSAGE.FAILED);
       return response;
     }
     AccountEntity account = accountEntity.get();
@@ -211,10 +250,9 @@ public class AccountImpl implements IAccountService {
     }
     account.setPassword(passwordEncoder.encode(newPassword));
     accountRepository.save(account);
-    AccountDto accountDto = accountMapper.toDto(account);
     response.setCode(HttpStatus.OK.value());
     response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-    response.setData(accountDto);
+    response.setData(accountMapper.toDto(account));
     return response;
   }
 
@@ -240,4 +278,15 @@ public class AccountImpl implements IAccountService {
     response.setData(accountDto);
     return response;
   }
+
+  @Override
+  public BaseResponse<Long> totalAccount() {
+    BaseResponse<Long> response = new BaseResponse<>();
+    Long total = accountRepository.countAccounts();
+    response.setCode(HttpStatus.OK.value());
+    response.setMessage(HTTP_MESSAGE.SUCCESS);
+    response.setData(total);
+    return response;
+  }
+
 }

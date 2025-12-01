@@ -3,6 +3,7 @@ package edu.t3h.clothes.service.impl;
 import edu.t3h.clothes.entity.CategoryEntity;
 import edu.t3h.clothes.mapper.CategoryMapper;
 import edu.t3h.clothes.model.dto.CategoryDto;
+import edu.t3h.clothes.model.dto.CategoryRevenueDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.repository.CategoryRepository;
@@ -27,20 +28,10 @@ public class CategoryImpl implements ICategoryService {
 
 
   @Override
-  public BaseResponse<List<CategoryDto>> getAllCategories(Pageable pageable) {
-    BaseResponse<List<CategoryDto>> response = new BaseResponse<>();
-    Page<CategoryEntity> list = categoryRepository.getAll(pageable);
-    List<CategoryDto> categoryDtos = list.stream().map(categoryMapper::toDto).toList();
-    response.setData(categoryDtos);
-    response.setMessage(HTTP_MESSAGE.SUCCESS);
-    response.setCode(HttpStatus.OK.value());
-    return response;
-  }
-
-  @Override
-  public ResponsePage<List<CategoryDto>> getAllCategoriesByParentId(Pageable pageable) {
+  public ResponsePage<List<CategoryDto>> getAllCategories(String code, String name,
+      Pageable pageable) {
     ResponsePage<List<CategoryDto>> responsePage = new ResponsePage<>();
-    Page<CategoryEntity> page = categoryRepository.findAllCategories(pageable);
+    Page<CategoryEntity> page = categoryRepository.getAll(code, name, pageable);
     List<CategoryDto> categoryDtos = page.stream().map(categoryMapper::toDto).toList();
     responsePage.setPageNumber(pageable.getPageNumber());
     responsePage.setPageSize(pageable.getPageSize());
@@ -50,18 +41,13 @@ public class CategoryImpl implements ICategoryService {
     return responsePage;
   }
 
+
   @Override
   public BaseResponse<CategoryDto> creatCategory(CategoryDto categoryDTO) {
     BaseResponse<CategoryDto> response = new BaseResponse<>();
     CategoryEntity categoryEntity = categoryMapper.toEntity(categoryDTO);
     categoryEntity.setDeleted(false);
     categoryEntity.setCode(GenarateCode.generateAccountCode());
-    if (categoryDTO.getParentId() != null) {
-      CategoryEntity parent = categoryRepository.findById(categoryDTO.getParentId()).orElse(null);
-      if (parent != null) {
-        categoryEntity.setParent(parent);
-      }
-    }
     categoryEntity = categoryRepository.save(categoryEntity);
     categoryDTO = categoryMapper.toDto(categoryEntity);
     response.setCode(HttpStatus.OK.value());
@@ -125,35 +111,12 @@ public class CategoryImpl implements ICategoryService {
   }
 
   @Override
-  public ResponsePage<List<CategoryDto>> searchCategoriesCondition(String name, Pageable pageable) {
-    ResponsePage<List<CategoryDto>> responsePage = new ResponsePage<>();
-    Page<CategoryEntity> page = categoryRepository.searchCategories(name, pageable);
-    List<CategoryDto> categoryDtos = page.stream().map(categoryEntity -> {
-      CategoryDto categoryDto = categoryMapper.toDto(categoryEntity);
-      List<CategoryEntity> categoryEntities = categoryRepository.findByParentCode(
-          categoryDto.getCode());
-      List<CategoryDto> categoryDtoList = categoryEntities.stream().map(categoryMapper::toDto)
-          .toList();
-      categoryDto.setChildren(categoryDtoList);
-      return categoryDto;
-    }).toList();
-    responsePage.setPageNumber(pageable.getPageNumber());
-    responsePage.setPageSize(pageable.getPageSize());
-    responsePage.setTotalElements(page.getTotalElements());
-    responsePage.setTotalPages(page.getTotalPages());
-    responsePage.setContent(categoryDtos);
-    return responsePage;
-  }
-
-  @Override
-  public BaseResponse<List<CategoryDto>> loadCategoriesByParentId(Long parentId) {
-    BaseResponse<List<CategoryDto>> response = new BaseResponse<>();
-    List<CategoryEntity> list = categoryRepository.findAllCategoriesByParentId(parentId);
-    List<CategoryDto> categoryDtos = list.stream().map(categoryMapper::toDto).toList();
+  public BaseResponse<List<CategoryRevenueDTO>> getCategoryRevenue() {
+    BaseResponse<List<CategoryRevenueDTO>> response = new BaseResponse<>();
+    List<CategoryRevenueDTO> list = categoryRepository.getTotalRevenueByCategory();
     response.setCode(HttpStatus.OK.value());
     response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
-    response.setData(categoryDtos);
+    response.setData(list);
     return response;
   }
-
 }

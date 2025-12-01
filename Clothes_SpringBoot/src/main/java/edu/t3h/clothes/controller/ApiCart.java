@@ -44,4 +44,10 @@ public class ApiCart {
     BaseResponse<CartDto> response = iCartService.deleteCart(id);
     return ResponseEntity.ok(response);
   }
+
+  @DeleteMapping("/deleteCart")
+  public ResponseEntity<BaseResponse<Long>> delete(@RequestBody List<Long> ids) {
+    BaseResponse<Long> response = iCartService.deleteCartByEmail(ids);
+    return ResponseEntity.ok(response);
+  }
 }

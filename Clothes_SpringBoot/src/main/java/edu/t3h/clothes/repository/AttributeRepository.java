@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AttributeRepository extends JpaRepository<AttributeEntity, Long> {
 
-  @Query(value = "SELECT a FROM AttributeEntity a WHERE a.deleted=false ")
-  Page<AttributeEntity> findAllByDeletedFalse(Pageable pageable);
+  @Query(value = "SELECT a FROM AttributeEntity a WHERE a.deleted=false AND (:name IS NULL OR a.name LIKE CONCAT('%', :name, '%'))")
+  Page<AttributeEntity> findAllByDeletedFalse(String name, Pageable pageable);
 
   @Query(value = "SELECT a FROM AttributeEntity a WHERE a.deleted=false AND (:name IS NULL OR a.name LIKE CONCAT('%', :name, '%'))")
   List<AttributeEntity> findByName(String name);

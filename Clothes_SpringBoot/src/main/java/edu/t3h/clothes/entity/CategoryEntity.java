@@ -17,8 +17,4 @@ public class CategoryEntity extends AbstractEntity {
   @Column(name = "name")
   private String name;
   private String description;
-
-  @ManyToOne
-  @JoinColumn(name = "parent_id")
-  private CategoryEntity parent;
 }

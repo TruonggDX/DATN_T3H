@@ -1,6 +1,7 @@
 package edu.t3h.clothes.controller;
 
 import edu.t3h.clothes.model.dto.BlogsDto;
+import edu.t3h.clothes.model.dto.ProductDto;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.service.IBlogsService;
@@ -27,8 +28,13 @@ public class ApiBlogs {
   private final IBlogsService iBlogsService;
 
   @GetMapping("/list")
-  public ResponseEntity<ResponsePage<List<BlogsDto>>> getAllBlogs(Pageable pageable) {
-    ResponsePage<List<BlogsDto>> respPage = iBlogsService.getAllBlogs(pageable);
+  public ResponseEntity<ResponsePage<List<BlogsDto>>> getAllBlogs(
+      @RequestParam(value = "code", required = false) String code,
+      @RequestParam(value = "title", required = false) String title,
+      @RequestParam(value = "nameCate", required = false) String nameCate,
+      Pageable pageable) {
+    ResponsePage<List<BlogsDto>> respPage = iBlogsService.getAllBlogs(code, title, nameCate,
+        pageable);
     return ResponseEntity.ok(respPage);
   }
 
@@ -58,4 +64,11 @@ public class ApiBlogs {
     BaseResponse<BlogsDto> response = iBlogsService.deleteBlog(id);
     return ResponseEntity.ok(response);
   }
+
+  @GetMapping("/new-arrived")
+  public ResponseEntity<BaseResponse<List<BlogsDto>>> newArrivedBook(){
+    BaseResponse<List<BlogsDto>> response = iBlogsService.newArrivedBlogs();
+    return ResponseEntity.ok(response);
+  }
+
 }

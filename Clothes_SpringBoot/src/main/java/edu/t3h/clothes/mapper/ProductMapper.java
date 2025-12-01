@@ -2,9 +2,10 @@ package edu.t3h.clothes.mapper;
 
 import edu.t3h.clothes.entity.ImagesEntity;
 import edu.t3h.clothes.entity.ProductEntity;
-import edu.t3h.clothes.entity.VoucherEntity;
 import edu.t3h.clothes.model.dto.ImageDto;
 import edu.t3h.clothes.model.dto.ProductDto;
+import edu.t3h.clothes.model.dto.ProductIndex;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,19 +19,28 @@ public interface ProductMapper {
   @Mapping(target = "categoryName", source = "categoryEntity.name")
   @Mapping(target = "brandId", source = "brandEntity.id")
   @Mapping(target = "brandName", source = "brandEntity.name")
-  @Mapping(target = "voucherIds", source = "voucherEntities")
   @Mapping(target = "imageDtos", source = "imagesEntities")
   ProductDto toDto(ProductEntity productEntity);
 
+  @Mapping(target = "categoryId", source = "categoryEntity.id")
+  @Mapping(target = "categoryName", source = "categoryEntity.name")
+  @Mapping(target = "brandId", source = "brandEntity.id")
+  @Mapping(target = "brandName", source = "brandEntity.name")
+  @Mapping(target = "imageDtos", source = "imagesEntities")
+  ProductIndex toIndex(ProductEntity productEntity);
+
   ProductEntity toEntity(ProductDto productDto);
 
-  default Set<Long> voucherIds(Set<VoucherEntity> voucherEntities) {
-    return voucherEntities.stream().map(VoucherEntity::getId).collect(Collectors.toSet());
-  }
+  ProductDto toDto2(ProductIndex productIndex);
 
   default List<ImageDto> imagesToDto(List<ImagesEntity> imagesEntities) {
-    return imagesEntities.stream().map(
-            image -> new ImageDto(image.getId(), image.getUrl(), image.getPublicId(), image.getType()))
-        .toList();
+    if (imagesEntities == null) {
+      return new ArrayList<>();
+    }
+
+    return imagesEntities.stream()
+        .map(image -> new ImageDto(image.getId(), image.getUrl(), image.getPublicId(), image.getType()))
+        .collect(Collectors.toList());
   }
+
 }

@@ -1,6 +1,8 @@
 package edu.t3h.clothes.service;
 
 import edu.t3h.clothes.model.dto.BrandDto;
+import edu.t3h.clothes.model.dto.BrandRevenueDTO;
+import edu.t3h.clothes.model.dto.CategoryRevenueDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import java.util.List;
@@ -9,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IBrandService {
 
-  ResponsePage<List<BrandDto>> getBrands(Pageable pageable);
+  ResponsePage<List<BrandDto>> getBrands(String code, String name,Pageable pageable);
 
   BaseResponse<BrandDto> createBrand(BrandDto brandDto, MultipartFile file);
 
@@ -20,4 +22,7 @@ public interface IBrandService {
   BaseResponse<BrandDto> deleteBrand(Long id);
 
   ResponsePage<List<BrandDto>> findByName(String name,Pageable pageable);
+
+  BaseResponse<List<BrandRevenueDTO>> getBrandRevenue();
+
 }

@@ -10,6 +10,7 @@ public interface OrderMapper {
 
   @Mapping(target = "accountId", source = "account.id")
   @Mapping(target = "accountName", source = "account.fullname")
+  @Mapping(target = "phone", source = "account.phone")
   OrderDto toDto(OrdersEntity ordersEntity);
 
   OrdersEntity toEntity(OrderDto orderDto);

@@ -7,11 +7,13 @@ import edu.t3h.clothes.mapper.VariantMapper;
 import edu.t3h.clothes.model.dto.VariantDto;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
+import edu.t3h.clothes.model.response.VariantResponse;
 import edu.t3h.clothes.repository.AttributeValueRepository;
 import edu.t3h.clothes.repository.ProductRepository;
 import edu.t3h.clothes.repository.VariantRepository;
 import edu.t3h.clothes.service.IVariantService;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
+import edu.t3h.clothes.utils.GenarateCode;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -68,6 +70,7 @@ public class VariantServiceImpl implements IVariantService {
             () -> new RuntimeException("Attribute value not found with ID: " + paramId)))
         .collect(Collectors.toSet());
     variantEntity.setAttributeValues(attributeValueEntities);
+    variantEntity.setCode(GenarateCode.generateAccountCode());
     variantRepository.save(variantEntity);
     variantDto = variantMapper.toDto(variantEntity);
     Set<Long> attributeValuesId = showAttributeValueId(attributeValueEntities);
@@ -174,6 +177,34 @@ public class VariantServiceImpl implements IVariantService {
     responsePage.setTotalPages(page.getTotalPages());
     responsePage.setContent(variantDtos);
     return responsePage;
+  }
+
+  @Override
+  public BaseResponse<List<VariantDto>> getVarianByProduct(Long productId) {
+    BaseResponse<List<VariantDto>> response = new BaseResponse<>();
+    List<VariantEntity> variantEntities = variantRepository.getVariantByProduct(productId);
+    List<VariantDto> variantDtos = variantEntities.stream().map(e -> {
+      VariantDto variantDto = variantMapper.toDto(e);
+      Set<Long> attributeValuesId = showAttributeValueId(e.getAttributeValues());
+      variantDto.setAttributeValuesId(attributeValuesId);
+      return variantDto;
+    }).toList();
+
+    response.setMessage(HTTP_MESSAGE.SUCCESS);
+    response.setCode(HttpStatus.OK.value());
+    response.setData(variantDtos);
+    return response;
+  }
+
+  @Override
+  public BaseResponse<List<VariantResponse>> getAllVarianByProduct(Long productId) {
+    BaseResponse<List<VariantResponse>> response = new BaseResponse<>();
+    List<VariantEntity> variantEntities = variantRepository.getVariantByProduct(productId);
+    List<VariantResponse> variantDtos = variantEntities.stream().map(variantMapper::toResponse).toList();
+    response.setMessage(HTTP_MESSAGE.SUCCESS);
+    response.setCode(HttpStatus.OK.value());
+    response.setData(variantDtos);
+    return response;
   }
 
   private Set<Long> showAttributeValueId(Set<AttributeValueEntity> attributeValues) {

@@ -10,4 +10,6 @@ public class OrderDetailDto {
   private Double price;
   private Long orderId;
   private Long productId;
+  private Long variantId;
+  private String productName;
 }

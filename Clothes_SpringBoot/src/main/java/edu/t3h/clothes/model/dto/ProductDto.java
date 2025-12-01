@@ -16,6 +16,5 @@ public class ProductDto {
   private String categoryName;
   private Long brandId;
   private String brandName;
-  private Set<Long> voucherIds;
   private List<ImageDto> imageDtos;
 }

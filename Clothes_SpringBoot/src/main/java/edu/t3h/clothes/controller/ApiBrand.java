@@ -1,6 +1,8 @@
 package edu.t3h.clothes.controller;
 
 import edu.t3h.clothes.model.dto.BrandDto;
+import edu.t3h.clothes.model.dto.BrandRevenueDTO;
+import edu.t3h.clothes.model.dto.CategoryRevenueDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.service.IBrandService;
@@ -19,8 +21,11 @@ public class ApiBrand {
   private final IBrandService brandService;
 
   @GetMapping("/list")
-  public ResponseEntity<ResponsePage<List<BrandDto>>> getAllBrands(Pageable pageable) {
-    ResponsePage<List<BrandDto>> respPage = brandService.getBrands(pageable);
+  public ResponseEntity<ResponsePage<List<BrandDto>>> getAllBrands(
+      @RequestParam(value = "code", required = false) String code,
+      @RequestParam(value = "name", required = false) String name,
+      Pageable pageable) {
+    ResponsePage<List<BrandDto>> respPage = brandService.getBrands(code, name, pageable);
     return ResponseEntity.ok(respPage);
   }
 
@@ -56,5 +61,11 @@ public class ApiBrand {
       Pageable pageable) {
     ResponsePage<List<BrandDto>> responsePage = brandService.findByName(name, pageable);
     return ResponseEntity.ok(responsePage);
+  }
+
+  @GetMapping("/revenue-brand")
+  public ResponseEntity<BaseResponse<List<BrandRevenueDTO>>> getRevenue() {
+    BaseResponse<List<BrandRevenueDTO>> categoryDTO = brandService.getBrandRevenue();
+    return ResponseEntity.ok(categoryDTO);
   }
 }

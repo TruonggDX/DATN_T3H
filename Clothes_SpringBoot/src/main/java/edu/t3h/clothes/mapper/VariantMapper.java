@@ -2,6 +2,7 @@ package edu.t3h.clothes.mapper;
 
 import edu.t3h.clothes.entity.VariantEntity;
 import edu.t3h.clothes.model.dto.VariantDto;
+import edu.t3h.clothes.model.response.VariantResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -13,5 +14,5 @@ public interface VariantMapper {
 
   VariantEntity toEntity(VariantDto dto);
 
-
+  VariantResponse toResponse(VariantEntity variantEntity);
 }

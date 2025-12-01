@@ -3,6 +3,7 @@ package edu.t3h.clothes.service;
 import edu.t3h.clothes.model.dto.VariantDto;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
+import edu.t3h.clothes.model.response.VariantResponse;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
@@ -20,4 +21,9 @@ public interface IVariantService {
 
   ResponsePage<List<VariantDto>> getAllVariantsByCodeAndProductName(String code, String productName,
       Pageable pageable);
+
+  BaseResponse<List<VariantDto>> getVarianByProduct(Long productId);
+  //user
+  BaseResponse<List<VariantResponse>> getAllVarianByProduct(Long productId);
+
 }

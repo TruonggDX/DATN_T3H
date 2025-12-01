@@ -23,9 +23,10 @@ public class ProductEntity extends AbstractEntity {
   @JoinColumn(name = "brand_id")
   @EqualsAndHashCode.Exclude
   private BrandEntity brandEntity;
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-  @JoinTable(name = "voucher_product", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "voucher_id"))
-  private Set<VoucherEntity> voucherEntities = new HashSet<>();
   @OneToMany(mappedBy = "productEntity")
   private List<ImagesEntity> imagesEntities;
+
+  @OneToMany(mappedBy = "product")
+  private List<OrderDetailsEntity> orderDetails;
+
 }

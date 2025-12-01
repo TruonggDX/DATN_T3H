@@ -19,8 +19,13 @@ public class ApiProduct {
   private final IProductService productService;
 
   @GetMapping("/list")
-  public ResponseEntity<ResponsePage<List<ProductDto>>> getAllProducts(Pageable pageable) {
-    ResponsePage<List<ProductDto>> responsePage = productService.getAllProducts(pageable);
+  public ResponseEntity<ResponsePage<List<ProductDto>>> getAllProducts(
+      @RequestParam(value = "code", required = false) String code,
+      @RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = "cateId", required = false) Long cateId,
+      @RequestParam(value = "brandId", required = false) Long brandId,
+      Pageable pageable) {
+    ResponsePage<List<ProductDto>> responsePage = productService.getAllProducts(code,name,cateId,brandId,pageable);
     return ResponseEntity.ok(responsePage);
   }
 
@@ -35,7 +40,7 @@ public class ApiProduct {
   @PutMapping("/update/{id}")
   public ResponseEntity<BaseResponse<ProductDto>> updateProduct(@PathVariable Long id,
       @ModelAttribute ProductDto productDto,
-      @RequestParam(value = "file") List<MultipartFile> file) {
+      @RequestParam(value = "file", required = false) List<MultipartFile> file) {
     BaseResponse<ProductDto> response = productService.updateProduct(id, productDto, file);
     return ResponseEntity.ok(response);
   }
@@ -62,5 +67,22 @@ public class ApiProduct {
     ResponsePage<List<ProductDto>> responsePage = productService.findProductsByCondition(code, name,
         cateId, brandId, pageable);
     return ResponseEntity.ok(responsePage);
+  }
+
+  @GetMapping("/best-seller")
+  public ResponseEntity<BaseResponse<List<ProductDto>>> bestSellerBook(){
+    BaseResponse<List<ProductDto>> response = productService.bestSellerBook();
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/new-arrived")
+  public ResponseEntity<BaseResponse<List<ProductDto>>> newArrivedBook(){
+    BaseResponse<List<ProductDto>> response = productService.newArrivedBook();
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/get-name")
+  public ResponseEntity<List<ProductDto>> search(@RequestParam String keyword) {
+    return ResponseEntity.ok(productService.searchByName(keyword));
   }
 }

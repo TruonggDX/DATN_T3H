@@ -1,5 +1,6 @@
 package edu.t3h.clothes.model.dto;
 
+import edu.t3h.clothes.model.response.VariantResponse;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,4 +13,5 @@ public class CartDto {
   private Long accountId;
   private Long productId;
   private ProductDto product;
+  private VariantResponse variant;
 }

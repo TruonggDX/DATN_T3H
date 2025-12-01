@@ -10,7 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IProductService {
 
-  ResponsePage<List<ProductDto>> getAllProducts(Pageable pageable);
+  ResponsePage<List<ProductDto>> getAllProducts(String code, String name, Long cateId, Long brandId,
+      Pageable pageable);
 
   BaseResponse<ProductDto> createProduct(ProductDto productDto, List<MultipartFile> file);
 
@@ -22,5 +23,11 @@ public interface IProductService {
 
   ResponsePage<List<ProductDto>> findProductsByCondition(String code, String name, Long cateId,
       Long brandId, Pageable pageable);
+
+  BaseResponse<List<ProductDto>> bestSellerBook();
+
+  BaseResponse<List<ProductDto>> newArrivedBook();
+
+  List<ProductDto> searchByName(String name);
 }
 

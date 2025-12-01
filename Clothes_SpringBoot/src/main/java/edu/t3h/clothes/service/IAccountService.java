@@ -12,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IAccountService {
 
-  ResponsePage<List<AccountDto>> getAllAccounts(Pageable pageable);
+  ResponsePage<List<AccountDto>> getAllAccounts(String code, String email, String roleCode,Pageable pageable);
+
+  BaseResponse<AccountDto> createAccount(AccountDto accountDto, MultipartFile file);
 
   BaseResponse<AccountDto> updateAccountById(Long id, AccountRequest accountRequest,
       MultipartFile file);
@@ -24,7 +26,9 @@ public interface IAccountService {
   ResponsePage<List<AccountDto>> findByCondition(String code, String email, String roleCode,
       Pageable pageable);
 
-  BaseResponse<AccountDto> changePassword(ChangePasswordRequest changePasswordRequest);
+  BaseResponse<AccountDto> changePassword(Long id,ChangePasswordRequest changePasswordRequest);
 
   BaseResponse<AccountDto> getAccount();
+
+  BaseResponse<Long> totalAccount();
 }

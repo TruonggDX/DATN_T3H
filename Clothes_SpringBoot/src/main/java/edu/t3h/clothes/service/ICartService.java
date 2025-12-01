@@ -18,4 +18,6 @@ public interface ICartService {
   BaseResponse<CartDto> updateCart(Long id, UpdateCartRequest updateCartRequest);
 
   BaseResponse<CartDto> deleteCart(Long id);
+
+  BaseResponse<Long> deleteCartByEmail(List<Long> cartIds);
 }

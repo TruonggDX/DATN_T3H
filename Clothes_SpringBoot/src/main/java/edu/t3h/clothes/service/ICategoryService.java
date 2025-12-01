@@ -1,6 +1,7 @@
 package edu.t3h.clothes.service;
 
 import edu.t3h.clothes.model.dto.CategoryDto;
+import edu.t3h.clothes.model.dto.CategoryRevenueDTO;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import java.util.List;
@@ -8,9 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ICategoryService {
 
-  BaseResponse<List<CategoryDto>> getAllCategories(Pageable pageable);
-
-  ResponsePage<List<CategoryDto>> getAllCategoriesByParentId(Pageable pageable);
+  ResponsePage<List<CategoryDto>> getAllCategories(String code, String name, Pageable pageable);
 
   BaseResponse<CategoryDto> creatCategory(CategoryDto categoryDTO);
 
@@ -20,7 +19,5 @@ public interface ICategoryService {
 
   BaseResponse<CategoryDto> updateCategory(Long id, CategoryDto categoryDTO);
 
-  ResponsePage<List<CategoryDto>> searchCategoriesCondition(String name, Pageable pageable);
-
-  BaseResponse<List<CategoryDto>> loadCategoriesByParentId(Long parentId);
+  BaseResponse<List<CategoryRevenueDTO>> getCategoryRevenue();
 }

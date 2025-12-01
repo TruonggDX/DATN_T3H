@@ -1,6 +1,7 @@
 package edu.t3h.clothes.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -16,5 +17,6 @@ public class OrdersEntity extends AbstractEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "account_id")
   private AccountEntity account;
-
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<OrderDetailsEntity> orderDetails;
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,8 +26,11 @@ public class ApiAttribute {
   private final IAttributeService attributeService;
 
   @GetMapping("/list")
-  public ResponseEntity<ResponsePage<List<AttributeDto>>> getAllAttributes(Pageable pageable) {
-    ResponsePage<List<AttributeDto>> responsePage = attributeService.getAllAttributes(pageable);
+  public ResponseEntity<ResponsePage<List<AttributeDto>>> getAllAttributes(
+      @RequestParam(value = "name", required = false) String name,
+      Pageable pageable) {
+    ResponsePage<List<AttributeDto>> responsePage = attributeService.getAllAttributes(name,
+        pageable);
     return ResponseEntity.ok(responsePage);
   }
 

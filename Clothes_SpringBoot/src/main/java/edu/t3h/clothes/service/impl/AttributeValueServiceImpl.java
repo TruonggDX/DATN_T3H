@@ -11,6 +11,7 @@ import edu.t3h.clothes.repository.AttributeValueRepository;
 import edu.t3h.clothes.service.IAttributeValueService;
 import edu.t3h.clothes.utils.Constant;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +29,9 @@ public class AttributeValueServiceImpl implements IAttributeValueService {
   private final AttributeRepository attributeRepository;
 
   @Override
-  public ResponsePage<List<AttributeValueDto>> getAllAttributeValues(Pageable pageable) {
+  public ResponsePage<List<AttributeValueDto>> getAllAttributeValues(String value, Pageable pageable) {
     ResponsePage<List<AttributeValueDto>> responsePage = new ResponsePage<>();
-    Page<AttributeValueEntity> page = attributeValueRepository.findAllDeletedAttributes(pageable);
+    Page<AttributeValueEntity> page = attributeValueRepository.findAllDeletedAttributes(value,pageable);
     List<AttributeValueDto> attributeValueDtos = page.getContent().stream()
         .map(attributeValueMapper::toDto).toList();
     responsePage.setPageNumber(pageable.getPageNumber());
@@ -45,7 +46,7 @@ public class AttributeValueServiceImpl implements IAttributeValueService {
   public BaseResponse<AttributeValueDto> createAttributeValue(AttributeValueDto attributeValueDto) {
     BaseResponse<AttributeValueDto> response = new BaseResponse<>();
     Optional<AttributeEntity> check = attributeRepository.findById(
-        attributeValueDto.getAttribute().getId());
+        attributeValueDto.getAttributeId());
     if (check.isEmpty()) {
       response.setCode(HttpStatus.NOT_FOUND.value());
       response.setMessage(Constant.HTTP_MESSAGE.FAILED);
@@ -72,7 +73,7 @@ public class AttributeValueServiceImpl implements IAttributeValueService {
       return response;
     }
     Optional<AttributeEntity> checkAttr = attributeRepository.findById(
-        attributeValueDto.getAttribute().getId());
+        attributeValueDto.getAttributeId());
     if (checkAttr.isEmpty()) {
       response.setCode(HttpStatus.NOT_FOUND.value());
       response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
@@ -137,5 +138,16 @@ public class AttributeValueServiceImpl implements IAttributeValueService {
     responsePage.setTotalPages(page.getTotalPages());
     responsePage.setContent(attributeValueDtos);
     return responsePage;
+  }
+
+  @Override
+  public BaseResponse<List<AttributeValueDto>> getAttributeValueByVariantId(Long variantId) {
+    BaseResponse<List<AttributeValueDto>> response = new BaseResponse<>();
+    List<AttributeValueEntity> attributeValueEntities = attributeValueRepository.searchByVariant(variantId);
+    List<AttributeValueDto> attributeValueDtos = attributeValueEntities.stream().map(attributeValueMapper::toDto).toList();
+    response.setCode(HttpStatus.OK.value());
+    response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+    response.setData(attributeValueDtos);
+    return response;
   }
 }

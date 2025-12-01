@@ -7,5 +7,5 @@ public class AttributeValueDto {
   private Long id;
   private String value;
   private String colorCode;
-  private AttributeDto attribute;
+  private Long attributeId;
 }

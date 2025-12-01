@@ -21,4 +21,8 @@ public class OrderDetailsEntity extends AbstractEntity {
   @JoinColumn(name = "product_id")
   @ToString.Exclude
   private ProductEntity product;
+
+  @ManyToOne
+  @JoinColumn(name = "variant_id")
+  private VariantEntity variant;
 }

@@ -1,5 +1,6 @@
 package edu.t3h.clothes.model.dto;
 
+import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
@@ -15,4 +16,6 @@ public class BlogsDto {
   private Long categoryId;
   private String categoryName;
   private String imageUrl;
+  private LocalDateTime createdDate;
+
 }

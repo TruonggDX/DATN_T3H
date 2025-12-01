@@ -21,8 +21,12 @@ public class ApiAccount {
   private final IAccountService iAccountService;
 
   @GetMapping("/list")
-  public ResponseEntity<ResponsePage<List<AccountDto>>> getAllAccounts(Pageable pageable) {
-    ResponsePage<List<AccountDto>> responsePage = iAccountService.getAllAccounts(pageable);
+  public ResponseEntity<ResponsePage<List<AccountDto>>> getAllAccounts(
+      @RequestParam(value = "code") String code,
+      @RequestParam(value = "email") String email,
+      @RequestParam(value = "roleCode") String roleCode,
+      Pageable pageable) {
+    ResponsePage<List<AccountDto>> responsePage = iAccountService.getAllAccounts(code,email,roleCode,pageable);
     return ResponseEntity.ok(responsePage);
   }
 
@@ -30,6 +34,14 @@ public class ApiAccount {
   public ResponseEntity<BaseResponse<AccountDto>> getAccountById(@PathVariable Long id) {
     BaseResponse<AccountDto> baseResponse = iAccountService.getAccountById(id);
     return ResponseEntity.ok(baseResponse);
+  }
+
+  @PostMapping("/create")
+  public ResponseEntity<BaseResponse<AccountDto>> createAccount(
+      @ModelAttribute AccountDto accountDto,
+      @RequestParam(value = "file", required = false) MultipartFile file) {
+    BaseResponse<AccountDto> response = iAccountService.createAccount(accountDto, file);
+    return ResponseEntity.ok(response);
   }
 
   @PutMapping("/update/{id}")
@@ -47,24 +59,30 @@ public class ApiAccount {
   }
 
   @GetMapping("/findByCondition")
-  public ResponseEntity<ResponsePage<List<AccountDto>>> getAllAccounts(
-      @RequestParam(value = "code") String code, @RequestParam(value = "email") String email,
-      @RequestParam(value = "roleCode") String roleCode, Pageable pageable) {
+  public ResponseEntity<ResponsePage<List<AccountDto>>> getByCondition(
+      @RequestParam(value = "code") String code,
+      @RequestParam(value = "email") String email,
+      @RequestParam(value = "roleCode") String roleCode,
+      Pageable pageable) {
     ResponsePage<List<AccountDto>> responsePage = iAccountService.findByCondition(code, email,
         roleCode, pageable);
     return ResponseEntity.ok(responsePage);
   }
 
-  @PutMapping("/change-password")
-  public ResponseEntity<BaseResponse<AccountDto>> changePassword(
-      @RequestBody ChangePasswordRequest changePasswordRequest) {
-    BaseResponse<AccountDto> response = iAccountService.changePassword(changePasswordRequest);
+  @PutMapping("/change-password/{id}")
+  public ResponseEntity<BaseResponse<?>> updatePass(@PathVariable Long id, @RequestBody ChangePasswordRequest chagePasswordRequest) {
+    BaseResponse<?> response = iAccountService.changePassword(id, chagePasswordRequest);
     return ResponseEntity.ok(response);
   }
-
   @GetMapping("/get-account")
   public ResponseEntity<BaseResponse<AccountDto>> getUser() {
     BaseResponse<AccountDto> response = iAccountService.getAccount();
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/total-account")
+  public ResponseEntity<BaseResponse<Long>> getTotalAccount() {
+    BaseResponse<Long> response = iAccountService.totalAccount();
     return ResponseEntity.ok(response);
   }
 }

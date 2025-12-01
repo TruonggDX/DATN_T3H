@@ -27,8 +27,10 @@ public class ApiAttributeValue {
 
   @GetMapping("/list")
   public ResponseEntity<ResponsePage<List<AttributeValueDto>>> getAllAttributesValue(
+      @RequestParam(value = "value", required = false) String value,
       Pageable pageable) {
     ResponsePage<List<AttributeValueDto>> responsePage = iAttributeValueService.getAllAttributeValues(
+        value,
         pageable);
     return ResponseEntity.ok(responsePage);
   }
@@ -67,6 +69,13 @@ public class ApiAttributeValue {
       @RequestParam(value = "attributeId", required = false) Long attributeId, Pageable pageable) {
     ResponsePage<List<AttributeValueDto>> response = iAttributeValueService.findByCondition(value,
         attributeId, pageable);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/get-attribute-value-variant/{variantId}")
+  public ResponseEntity<BaseResponse<List<AttributeValueDto>>> findByVariantById(@PathVariable Long variantId) {
+    BaseResponse<List<AttributeValueDto>> response = iAttributeValueService.getAttributeValueByVariantId(
+        variantId);
     return ResponseEntity.ok(response);
   }
 }

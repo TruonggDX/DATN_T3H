@@ -42,7 +42,6 @@ public class WebSecurityConfig {
             .requestMatchers("/auth/**").permitAll()
             .requestMatchers("/api/category/**").permitAll()
             .requestMatchers("/api/variant/**").permitAll()
-            .requestMatchers("/api/vouchers/**").permitAll()
             .requestMatchers("/api/product/**").permitAll()
             .requestMatchers("/api/account/**").permitAll()
             .requestMatchers("/api/brands/**").permitAll()
@@ -52,6 +51,7 @@ public class WebSecurityConfig {
             .requestMatchers("/api/order/**").permitAll()
             .requestMatchers("/api/oder-details/**").permitAll()
             .requestMatchers("/api/attribute/**").permitAll()
+            .requestMatchers("/api/attribute-value/**").permitAll()
             .anyRequest().authenticated()
         );
 

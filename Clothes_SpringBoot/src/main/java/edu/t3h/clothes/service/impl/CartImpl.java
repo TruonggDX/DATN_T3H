@@ -3,6 +3,7 @@ package edu.t3h.clothes.service.impl;
 import edu.t3h.clothes.entity.AccountEntity;
 import edu.t3h.clothes.entity.CartEntity;
 import edu.t3h.clothes.entity.ProductEntity;
+import edu.t3h.clothes.entity.VariantEntity;
 import edu.t3h.clothes.mapper.CartMapper;
 import edu.t3h.clothes.model.dto.CartDto;
 import edu.t3h.clothes.model.dto.auth.AuthDto;
@@ -13,8 +14,10 @@ import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.repository.AccountRepository;
 import edu.t3h.clothes.repository.CartRepository;
 import edu.t3h.clothes.repository.ProductRepository;
+import edu.t3h.clothes.repository.VariantRepository;
 import edu.t3h.clothes.security.service.JwtService;
 import edu.t3h.clothes.service.ICartService;
+import edu.t3h.clothes.utils.Constant;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +36,7 @@ public class CartImpl implements ICartService {
   private final AccountRepository accountRepository;
   private final CartMapper cartMapper;
   private final JwtService jwtService;
+  private final VariantRepository variantRepository;
 
   @Override
   public ResponsePage<List<CartDto>> getAllCarts(Pageable pageable) {
@@ -60,17 +64,34 @@ public class CartImpl implements ICartService {
       response.setMessage("Product not found with id: " + cartRequest.getProductId());
       return response;
     }
+
+    Optional<VariantEntity> checkVariant = variantRepository.findById(cartRequest.getVariantId());
+    if (checkVariant.isEmpty()) {
+      response.setCode(HttpStatus.NOT_FOUND.value());
+      response.setMessage("Variant not found with id: " + cartRequest.getVariantId());
+      return response;
+    }
     Optional<AccountEntity> checkAccount = accountRepository.findByEmail(email);
     if (checkAccount.isEmpty()) {
       response.setCode(HttpStatus.NOT_FOUND.value());
       response.setMessage(HTTP_MESSAGE.ACCOUNT_NOT_FOUND + email);
       return response;
     }
-    CartEntity cartEntity = cartMapper.toEntity(cartRequest);
-    cartEntity.setAccount(checkAccount.get());
-    cartEntity.setDeleted(false);
-    cartEntity.setNumber(cartRequest.getNumber());
-    cartEntity.setProduct(checkProduct.get());
+    AccountEntity account = checkAccount.get();
+    ProductEntity product = checkProduct.get();
+    VariantEntity variant = checkVariant.get();
+    Optional<CartEntity> existingCartOpt = cartRepository.findExistingCart(account, product, variant);
+    CartEntity cartEntity;
+    if (existingCartOpt.isPresent()) {
+      cartEntity = existingCartOpt.get();
+      cartEntity.setNumber(cartEntity.getNumber() + cartRequest.getNumber());
+    } else {
+      cartEntity = cartMapper.toEntity(cartRequest);
+      cartEntity.setAccount(account);
+      cartEntity.setProduct(product);
+      cartEntity.setVariant(variant);
+      cartEntity.setDeleted(false);
+    }
     cartRepository.save(cartEntity);
     response.setCode(HttpStatus.OK.value());
     response.setMessage(HTTP_MESSAGE.SUCCESS);
@@ -98,6 +119,7 @@ public class CartImpl implements ICartService {
     CartEntity cartEntity = checkCart.get();
     cartEntity.setNumber(updateCartRequest.getNumber());
     cartEntity.setDeleted(false);
+    cartRepository.save(cartEntity);
     response.setCode(HttpStatus.OK.value());
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setData(cartMapper.toDto(cartEntity));
@@ -127,6 +149,34 @@ public class CartImpl implements ICartService {
     response.setCode(HttpStatus.OK.value());
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setData(cartDto);
+    return response;
+  }
+
+  @Override
+  public BaseResponse<Long> deleteCartByEmail(List<Long> cartIds) {
+    AuthDto authDto = jwtService.decodeToken();
+    String email = authDto.getEmail();
+    BaseResponse<Long> response = new BaseResponse<>();
+
+    for (Long cartId : cartIds) {
+      Optional<CartEntity> check = cartRepository.findByEmailAndCartId(email,cartId);
+      if (check.isEmpty()){
+        response.setCode(HttpStatus.BAD_REQUEST.value());
+        response.setMessage(HTTP_MESSAGE.FAILED);
+        return response;
+      }
+
+      CartEntity cartEntity = check.get();
+      cartRepository.delete(cartEntity);
+      VariantEntity variant = cartEntity.getVariant();
+      if (variant != null){
+        variant.setQuantity(variant.getQuantity() - cartEntity.getNumber());
+        variantRepository.save(variant);
+      }
+    }
+    response.setCode(HttpStatus.OK.value());
+    response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+    response.setData(null);
     return response;
   }
 }

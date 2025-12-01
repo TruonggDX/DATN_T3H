@@ -4,23 +4,25 @@ import edu.t3h.clothes.entity.BrandEntity;
 import edu.t3h.clothes.entity.CategoryEntity;
 import edu.t3h.clothes.entity.ImagesEntity;
 import edu.t3h.clothes.entity.ProductEntity;
-import edu.t3h.clothes.entity.VoucherEntity;
 import edu.t3h.clothes.exception.HandleUploadFileException;
 import edu.t3h.clothes.mapper.ImageMapper;
 import edu.t3h.clothes.mapper.ProductMapper;
 import edu.t3h.clothes.model.dto.ImageDto;
 import edu.t3h.clothes.model.dto.ProductDto;
+import edu.t3h.clothes.model.dto.ProductIndex;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
 import edu.t3h.clothes.repository.BrandRepository;
 import edu.t3h.clothes.repository.CategoryRepository;
 import edu.t3h.clothes.repository.ImageRepository;
+import edu.t3h.clothes.repository.ProductElasticsearchRepository;
 import edu.t3h.clothes.repository.ProductRepository;
-import edu.t3h.clothes.repository.VoucherRepository;
 import edu.t3h.clothes.service.IProductService;
 import edu.t3h.clothes.service.IUploadService;
+import edu.t3h.clothes.utils.Constant;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
 import edu.t3h.clothes.utils.GenarateCode;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,12 +46,14 @@ public class ProductImpl implements IProductService {
   private final ImageMapper imageMapper;
   private final CategoryRepository categoryRepository;
   private final BrandRepository brandRepository;
-  private final VoucherRepository voucherRepository;
+  private final ProductElasticsearchRepository elasticsearchRepository;
 
   @Override
-  public ResponsePage<List<ProductDto>> getAllProducts(Pageable pageable) {
+  public ResponsePage<List<ProductDto>> getAllProducts(String code, String name, Long cateId,
+      Long brandId, Pageable pageable) {
     ResponsePage<List<ProductDto>> responsePage = new ResponsePage<>();
-    Page<ProductEntity> page = productRepository.findDeletedProducts(pageable);
+    Page<ProductEntity> page = productRepository.findDeletedProducts(code, name, cateId, brandId,
+        pageable);
     List<ProductDto> list = page.getContent().stream().map(productMapper::toDto).toList();
     responsePage.setPageNumber(pageable.getPageNumber());
     responsePage.setPageSize(pageable.getPageSize());
@@ -79,10 +84,6 @@ public class ProductImpl implements IProductService {
       return response;
     }
 
-    Set<VoucherEntity> voucherEntities = productDto.getVoucherIds().stream().map(
-            voucherId -> voucherRepository.findById(voucherId).orElse(null))
-        .collect(Collectors.toSet());
-    productEntity.setVoucherEntities(voucherEntities);
     productEntity.setCategoryEntity(categoryEntity.get());
     productEntity.setBrandEntity(brandEntity.get());
     productEntity = productRepository.save(productEntity);
@@ -127,9 +128,7 @@ public class ProductImpl implements IProductService {
       response.setMessage("Brand not found with id : " + productDto.getBrandId());
       return response;
     }
-    Set<VoucherEntity> voucherEntities = productDto.getVoucherIds().stream()
-        .map(vocherId -> voucherRepository.findById(vocherId).orElse(null)).collect(
-            Collectors.toSet());
+
     ProductEntity product = check.get();
     product.setId(id);
     product.setName(productDto.getName());
@@ -137,7 +136,6 @@ public class ProductImpl implements IProductService {
     product.setSortDescription(productDto.getSortDescription());
     product.setCategoryEntity(checkCate.get());
     product.setBrandEntity(checkBrand.get());
-    product.setVoucherEntities(voucherEntities);
     productRepository.save(product);
     if (file != null && !file.isEmpty()) {
       List<ImagesEntity> imagesEntityList = imageRepository.findByProductId(product.getId());
@@ -214,5 +212,36 @@ public class ProductImpl implements IProductService {
     responsePage.setTotalPages(page.getTotalPages());
     responsePage.setContent(productDtos);
     return responsePage;
+  }
+
+  @Override
+  public BaseResponse<List<ProductDto>> bestSellerBook() {
+    BaseResponse<List<ProductDto>> baseResponse = new BaseResponse<>();
+    List<ProductEntity> bookEntities = productRepository.bestSellerProduct();
+    List<ProductDto> bookDtos = bookEntities.stream().map(productMapper::toDto).toList();
+    baseResponse.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+    baseResponse.setCode(HttpStatus.OK.value());
+    baseResponse.setData(bookDtos);
+    return baseResponse;
+  }
+
+  @Override
+  public BaseResponse<List<ProductDto>> newArrivedBook() {
+    BaseResponse<List<ProductDto>> response = new BaseResponse<>();
+    LocalDateTime dateTime = LocalDateTime.now().minusDays(5);
+    List<ProductEntity> bookEntities = productRepository.newBook(dateTime);
+    List<ProductDto> bookDtos = bookEntities.stream().map(productMapper::toDto).toList();
+    response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+    response.setCode(HttpStatus.OK.value());
+    response.setData(bookDtos);
+    return response;
+  }
+
+  @Override
+  public List<ProductDto> searchByName(String name) {
+    List<ProductIndex> results = elasticsearchRepository.findByNameContainingIgnoreCase(name);
+    return results.stream()
+        .map(productMapper::toDto2)
+        .toList();
   }
 }

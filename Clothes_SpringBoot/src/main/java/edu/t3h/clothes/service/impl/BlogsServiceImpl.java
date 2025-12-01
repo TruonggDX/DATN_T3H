@@ -4,11 +4,13 @@ import edu.t3h.clothes.entity.AccountEntity;
 import edu.t3h.clothes.entity.BlogsEntity;
 import edu.t3h.clothes.entity.CategoryEntity;
 import edu.t3h.clothes.entity.ImagesEntity;
+import edu.t3h.clothes.entity.ProductEntity;
 import edu.t3h.clothes.exception.HandleUploadFileException;
 import edu.t3h.clothes.mapper.BlogsMapper;
 import edu.t3h.clothes.mapper.ImageMapper;
 import edu.t3h.clothes.model.dto.BlogsDto;
 import edu.t3h.clothes.model.dto.ImageDto;
+import edu.t3h.clothes.model.dto.ProductDto;
 import edu.t3h.clothes.model.dto.auth.AuthDto;
 import edu.t3h.clothes.model.response.BaseResponse;
 import edu.t3h.clothes.model.response.ResponsePage;
@@ -19,9 +21,11 @@ import edu.t3h.clothes.repository.ImageRepository;
 import edu.t3h.clothes.security.service.JwtService;
 import edu.t3h.clothes.service.IBlogsService;
 import edu.t3h.clothes.service.IUploadService;
+import edu.t3h.clothes.utils.Constant;
 import edu.t3h.clothes.utils.Constant.HTTP_MESSAGE;
 import edu.t3h.clothes.utils.GenarateCode;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +49,10 @@ public class BlogsServiceImpl implements IBlogsService {
   private final ImageMapper imageMapper;
 
   @Override
-  public ResponsePage<List<BlogsDto>> getAllBlogs(Pageable pageable) {
+  public ResponsePage<List<BlogsDto>> getAllBlogs(String code, String title, String nameCate,
+      Pageable pageable) {
     ResponsePage<List<BlogsDto>> responsePage = new ResponsePage<>();
-    Page<BlogsEntity> page = blogsRepository.findAllByDeletedFalse(pageable);
+    Page<BlogsEntity> page = blogsRepository.findAllByDeletedFalse(code, title, nameCate, pageable);
     List<BlogsDto> blogsDtos = page.getContent().stream().map(blogsEntity -> {
       BlogsDto blogsDto = blogsMapper.toDto(blogsEntity);
       ImagesEntity images = imageRepository.findByBlogId(blogsDto.getId());
@@ -207,6 +212,24 @@ public class BlogsServiceImpl implements IBlogsService {
     response.setCode(HttpStatus.OK.value());
     response.setMessage(HTTP_MESSAGE.SUCCESS);
     response.setData(blogsDto);
+    return response;
+  }
+
+  @Override
+  public BaseResponse<List<BlogsDto>> newArrivedBlogs() {
+    BaseResponse<List<BlogsDto>> response = new BaseResponse<>();
+    LocalDateTime dateTime = LocalDateTime.now().minusDays(5);
+    List<BlogsEntity> bookEntities = blogsRepository.findNewBlogs(dateTime);
+    List<BlogsDto> blogsDtos = bookEntities.stream().map(blogsEntity -> {
+      BlogsDto blogsDto = blogsMapper.toDto(blogsEntity);
+      ImagesEntity images = imageRepository.findByBlogId(blogsDto.getId());
+      if (images != null) {
+        blogsDto.setImageUrl(images.getUrl());
+      }
+      return blogsDto;
+    }).toList();    response.setMessage(Constant.HTTP_MESSAGE.SUCCESS);
+    response.setCode(HttpStatus.OK.value());
+    response.setData(blogsDtos);
     return response;
   }
 }
