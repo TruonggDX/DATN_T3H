@@ -1,5 +1,6 @@
 package edu.t3h.clothes.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,6 +16,7 @@ public class BlogsEntity extends AbstractEntity {
   private String code;
   private String title;
   private String sortDescription;
+  @Column(columnDefinition = "TEXT")
   private String description;
   @ManyToOne
   @JoinColumn(name = "account_id")

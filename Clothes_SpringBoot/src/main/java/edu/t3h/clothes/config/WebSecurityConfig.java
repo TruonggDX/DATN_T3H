@@ -52,6 +52,7 @@ public class WebSecurityConfig {
             .requestMatchers("/api/oder-details/**").permitAll()
             .requestMatchers("/api/attribute/**").permitAll()
             .requestMatchers("/api/attribute-value/**").permitAll()
+            .requestMatchers("/api/payment/**").permitAll()
             .anyRequest().authenticated()
         );
 
