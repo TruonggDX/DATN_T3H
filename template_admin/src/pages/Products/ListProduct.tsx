@@ -15,7 +15,7 @@ import {useNavigate} from "react-router";
 export default function ListProduct() {
     const [products, setProducts] = useState<Product[]>([])
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(5);
+    const [size, setSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
     const [code, setCode] = useState("");
     const [name, setName] = useState("");
