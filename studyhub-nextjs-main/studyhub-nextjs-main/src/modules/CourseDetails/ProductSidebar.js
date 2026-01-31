@@ -105,7 +105,7 @@ export default function ProductSidebar({product, variants = []}) {
 
     };
     return (
-        <div className="sticky-top" style={{top: "20px"}}>
+        <div className="sticky top-20 z-20 lg:top-24">
             <h1 style={{
                 fontSize: '20px',
                 fontWeight: 500,

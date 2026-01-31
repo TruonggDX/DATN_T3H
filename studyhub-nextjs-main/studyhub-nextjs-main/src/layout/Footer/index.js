@@ -62,7 +62,7 @@ export default function Footer(props) {
                                     <h6 className="title">Bản tin</h6>
                                 </div>
                                 <div className="body">
-                                    <p className="disc">Đăng ký nhận bản tin của chúng tôi để cập nhật khóa học mới của
+                                    <p className="disc">Đăng ký nhận bản tin của chúng tôi để cập nhật sản phẩm mới của
                                         chúng tôi</p>
                                     <form action="#">
                                         <div className="input-area-fill">

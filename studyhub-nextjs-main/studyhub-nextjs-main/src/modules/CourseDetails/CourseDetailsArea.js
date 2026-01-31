@@ -12,7 +12,6 @@ export default function CourseDetailsArea({ product, variants }) {
 					<div className="col-lg-4">
 						<ProductImageCarousel images={product?.imageDtos || []}/>
 					</div>
-
 					<div className="col-lg-6" style={{marginLeft: '100px'}}>
 						<ProductSidebar product={product} variants={variants}/>
 					</div>
