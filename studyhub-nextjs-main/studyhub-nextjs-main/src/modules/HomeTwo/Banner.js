@@ -76,7 +76,7 @@ export default function Banner() {
 						</div>
 						<div className="col-lg-6 order-xl-2 order-lg-2 order-md-1 order-sm-1 order-1">
 							<div className="banner-right-img">
-								<Image style={{marginBottom:'60px'}} src="/images/banner/shoes.png" alt="banner" width="663" height="758" />
+								<Image style={{marginBottom:'60px'}} src="/images/banner/techhome.png" alt="banner" width="663" height="758" />
 							</div>
 						</div>
 					</div>
