@@ -11,6 +11,7 @@ public class VariantDto {
   private String code;
   private BigDecimal price;
   private Integer quantity;
+  private Double discount;
   private Long productId;
   private Set<Long> attributeValuesId;
 }

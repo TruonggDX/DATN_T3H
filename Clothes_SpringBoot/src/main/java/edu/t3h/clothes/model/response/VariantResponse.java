@@ -11,5 +11,6 @@ public class VariantResponse {
   private String code;
   private BigDecimal price;
   private Integer quantity;
+  private Double discount;
   private List<AttributeValuesResponse> attributeValues;
 }
