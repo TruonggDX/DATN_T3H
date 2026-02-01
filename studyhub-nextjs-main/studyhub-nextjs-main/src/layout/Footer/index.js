@@ -78,11 +78,8 @@ export default function Footer(props) {
                     </div>
                 </div>
             </div>
-            {/*<script> window.chtlConfig = {chatbotId: "1795957373"} </script>*/}
-            <script async data-id="1795957373" id="chtl-script" type="text/javascript"
+            <script async data-id="1644488214" id="chtl-script" type="text/javascript"
                     src="https://chatling.ai/js/embed.js"></script>
-            {/*<script async data-id="2473613459" id="chatling-embed-script" type="text/javascript"*/}
-            {/*        src="https://chatling.ai/js/embed.js"></script>*/}
 
         </footer>
     )
