@@ -126,6 +126,7 @@ export default function UpdateProduct() {
                 code: variant.code,
                 price: variant.price,
                 quantity: variant.quantity,
+                discount: variant.discount,
                 productId: variant.productId,
                 attributeValuesId: variant.attributeValuesId || [],
             });
@@ -141,6 +142,7 @@ export default function UpdateProduct() {
         code: "",
         price: 0,
         quantity: 0,
+        discount:0,
         attributeValuesId: [] as number[],
     });
     const [addingVariant, setAddingVariant] = useState(false);
@@ -363,64 +365,128 @@ export default function UpdateProduct() {
                                 </div>
                             ) : (
                                 variants.map(variant => (
-                                    <div key={variant.id}
-                                         className="grid grid-cols-1 md:grid-cols-12 gap-4 p-6 border rounded-xl bg-white shadow-sm">
-                                        <div className="md:col-span-2">
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Mã biến
-                                                thể</label>
-                                            <input type="text" value={variant.code} readOnly
-                                                   className="w-full px-4 py-2.5 border rounded-lg bg-gray-100"/>
+                                    <div
+                                        key={variant.id}
+                                        className="flex flex-col lg:flex-row gap-6 p-6 border rounded-xl bg-white shadow-sm"
+                                    >
+                                        {/* LEFT SIDE */}
+                                        <div className="flex-1 space-y-4">
+                                            {/* Row 1 */}
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                        Mã biến thể
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        value={variant.code}
+                                                        readOnly
+                                                        className="w-full px-4 py-2.5 border rounded-lg bg-gray-100"
+                                                    />
+                                                </div>
+
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                        Giá
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        value={variant.price}
+                                                        onChange={e =>
+                                                            setVariants(prev =>
+                                                                prev.map(v =>
+                                                                    v.id === variant.id
+                                                                        ? {...v, price: Number(e.target.value) || 0}
+                                                                        : v
+                                                                )
+                                                            )
+                                                        }
+                                                        className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                                        min="0"
+                                                    />
+                                                </div>
+
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                        Số lượng
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        value={variant.quantity}
+                                                        onChange={e =>
+                                                            setVariants(prev =>
+                                                                prev.map(v =>
+                                                                    v.id === variant.id
+                                                                        ? {...v, quantity: Number(e.target.value) || 0}
+                                                                        : v
+                                                                )
+                                                            )
+                                                        }
+                                                        className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                                        min="0"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/* Row 2 */}
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                        Giảm giá
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        value={variant.discount}
+                                                        onChange={e =>
+                                                            setVariants(prev =>
+                                                                prev.map(v =>
+                                                                    v.id === variant.id
+                                                                        ? {...v, discount: Number(e.target.value) || 0}
+                                                                        : v
+                                                                )
+                                                            )
+                                                        }
+                                                        className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                                        min="0"
+                                                    />
+                                                </div>
+
+                                                <div className="md:col-span-2">
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                        Thuộc tính
+                                                    </label>
+                                                    <Select
+                                                        isMulti
+                                                        options={attributeValues.map(av => ({
+                                                            value: av.id,
+                                                            label: av.value,
+                                                        }))}
+                                                        value={attributeValues
+                                                            .filter(av => variant.attributeValuesId?.includes(av.id))
+                                                            .map(av => ({value: av.id, label: av.value}))}
+                                                        onChange={selected => {
+                                                            const ids = selected
+                                                                ? (selected as any).map((s: any) => s.value)
+                                                                : [];
+                                                            setVariants(prev =>
+                                                                prev.map(v =>
+                                                                    v.id === variant.id
+                                                                        ? {...v, attributeValuesId: ids}
+                                                                        : v
+                                                                )
+                                                            );
+                                                        }}
+                                                        placeholder="Chọn màu, size..."
+                                                        className="react-select-container"
+                                                        classNamePrefix="react-select"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="md:col-span-2">
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Giá</label>
-                                            <input
-                                                type="number"
-                                                value={variant.price}
-                                                onChange={e => setVariants(prev => prev.map(v => v.id === variant.id ? {
-                                                    ...v,
-                                                    price: Number(e.target.value) || 0
-                                                } : v))}
-                                                className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                                min="0"
-                                            />
-                                        </div>
-                                        <div className="md:col-span-2">
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Số
-                                                lượng</label>
-                                            <input
-                                                type="number"
-                                                value={variant.quantity}
-                                                onChange={e => setVariants(prev => prev.map(v => v.id === variant.id ? {
-                                                    ...v,
-                                                    quantity: Number(e.target.value) || 0
-                                                } : v))}
-                                                className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                                min="0"
-                                            />
-                                        </div>
-                                        <div className="md:col-span-4">
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Thuộc
-                                                tính</label>
-                                            <Select
-                                                isMulti
-                                                options={attributeValues.map(av => ({value: av.id, label: av.value}))}
-                                                value={attributeValues
-                                                    .filter(av => variant.attributeValuesId?.includes(av.id))
-                                                    .map(av => ({value: av.id, label: av.value}))}
-                                                onChange={selected => {
-                                                    const ids = selected ? (selected as any).map((s: any) => s.value) : [];
-                                                    setVariants(prev => prev.map(v => v.id === variant.id ? {
-                                                        ...v,
-                                                        attributeValuesId: ids
-                                                    } : v));
-                                                }}
-                                                placeholder="Chọn màu, size..."
-                                                className="react-select-container"
-                                                classNamePrefix="react-select"
-                                            />
-                                        </div>
-                                        <div className="md:col-span-2 flex items-end gap-3">
-                                            {/* Nút Lưu */}
+
+                                        {/* RIGHT SIDE - BUTTONS */}
+                                        <div
+                                            className="flex lg:flex-col gap-3 justify-end lg:justify-center min-w-[120px]">
                                             <button
                                                 type="button"
                                                 onClick={() => handleSaveVariant(variant)}
@@ -430,7 +496,6 @@ export default function UpdateProduct() {
                                                 Lưu
                                             </button>
 
-                                            {/* Nút Xóa */}
                                             <button
                                                 type="button"
                                                 onClick={() => handleDeleteVariant(variant.id)}
@@ -440,11 +505,11 @@ export default function UpdateProduct() {
                                                 Xóa
                                             </button>
                                         </div>
-
                                     </div>
                                 ))
                             )}
                         </div>
+
                     </div>
 
                     {/* Nút hành động */}
@@ -469,7 +534,8 @@ export default function UpdateProduct() {
             {/* Modal Thêm biến thể mới */}
             {isAddVariantModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl mx-4 p-6 animate-in fade-in zoom-in duration-200">
+                    <div
+                        className="bg-white rounded-xl shadow-2xl w-full max-w-2xl mx-4 p-6 animate-in fade-in zoom-in duration-200">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-semibold text-gray-900">Thêm biến thể mới</h3>
                             <button
@@ -477,7 +543,8 @@ export default function UpdateProduct() {
                                 className="text-gray-400 hover:text-gray-600 transition"
                             >
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                          d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
                             </button>
                         </div>
@@ -485,11 +552,15 @@ export default function UpdateProduct() {
                         <div className="space-y-5">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Giá <span className="text-red-500">*</span></label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Giá <span
+                                        className="text-red-500">*</span></label>
                                     <input
                                         type="number"
                                         value={newVariant.price || ""}
-                                        onChange={e => setNewVariant(prev => ({ ...prev, price: Number(e.target.value) || 0 }))}
+                                        onChange={e => setNewVariant(prev => ({
+                                            ...prev,
+                                            price: Number(e.target.value) || 0
+                                        }))}
                                         min="0"
                                         placeholder="0"
                                         className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
@@ -500,27 +571,44 @@ export default function UpdateProduct() {
                                     <input
                                         type="number"
                                         value={newVariant.quantity || ""}
-                                        onChange={e => setNewVariant(prev => ({ ...prev, quantity: Number(e.target.value) || 0 }))}
+                                        onChange={e => setNewVariant(prev => ({
+                                            ...prev,
+                                            quantity: Number(e.target.value) || 0
+                                        }))}
                                         min="0"
                                         placeholder="0"
                                         className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                                     />
                                 </div>
-                            </div>
 
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Giảm giá %</label>
+                                <input
+                                    type="number"
+                                    value={newVariant.discount || ""}
+                                    onChange={e => setNewVariant(prev => ({
+                                        ...prev,
+                                        discount: Number(e.target.value) || 0
+                                    }))}
+                                    min="0"
+                                    placeholder="0"
+                                    className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                />
+                            </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Thuộc tính (màu sắc, dung lượng...) <span className="text-red-500">*</span>
                                 </label>
                                 <Select
                                     isMulti
-                                    options={attributeValues.map(av => ({ value: av.id, label: av.value }))}
+                                    options={attributeValues.map(av => ({value: av.id, label: av.value}))}
                                     value={attributeValues
                                         .filter(av => newVariant.attributeValuesId.includes(av.id))
-                                        .map(av => ({ value: av.id, label: av.value }))}
+                                        .map(av => ({value: av.id, label: av.value}))}
                                     onChange={selected => {
                                         const ids = selected ? (selected as any[]).map(s => s.value) : [];
-                                        setNewVariant(prev => ({ ...prev, attributeValuesId: ids }));
+                                        setNewVariant(prev => ({...prev, attributeValuesId: ids}));
                                     }}
                                     placeholder="Chọn màu sắc, dung lượng, kích thước..."
                                     className="react-select-container"

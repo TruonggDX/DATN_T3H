@@ -9,6 +9,7 @@ import orderService from "@/service/orderService";
 export default function ProductSidebar({product, variants = []}) {
     const [selectedVariant, setSelectedVariant] = useState(null);
     const [quantity, setQuantity] = useState(1);
+
     useEffect(() => {
         if (variants.length > 0 && !selectedVariant) {
             const firstInStock = variants.find(v => v.quantity > 0) || variants[0];
@@ -32,12 +33,20 @@ export default function ProductSidebar({product, variants = []}) {
         }
     };
 
-    const currentPrice = selectedVariant?.price || product?.price || 0;
+    const calcDiscountPrice = (price, discount) => {
+        if (!discount || discount <= 0) return price;
+        return Math.round(price - (price * discount) / 100);
+    };
+
+    const basePrice = selectedVariant?.price || product?.price || 0;
+    const discount = selectedVariant?.discount || 0;
+    const finalPrice = calcDiscountPrice(basePrice, discount);
     const currentStock = selectedVariant?.quantity || 0;
 
     const [reviews, setReviews] = useState([]);
     const [totalElements, setTotalElements] = useState(0);
-    const [total, setTotal] = useState(0)
+    const [total, setTotal] = useState(0);
+
     useEffect(() => {
         if (!product?.id) return;
         reviewService
@@ -51,12 +60,13 @@ export default function ProductSidebar({product, variants = []}) {
                 console.error("Lỗi load review:", err);
             });
         orderService.getTotalSoldByProductId(product.id).then((res) => {
-            setTotal(res.data)
-        })
+            setTotal(res.data);
+        });
     }, [product?.id]);
+
     const calculateRatingStats = () => {
         if (reviews.length === 0) {
-            return {average: 0, countByStar: {5: 0, 4: 0, 3: 0, 2: 0, 1: 0}};
+            return {average: 0};
         }
         let totalRating = 0;
         reviews.forEach((r) => {
@@ -66,6 +76,7 @@ export default function ProductSidebar({product, variants = []}) {
         const average = (totalRating / reviews.length).toFixed(1);
         return {average};
     };
+
     const {average} = calculateRatingStats();
     const {addCart} = useCart();
     const router = useRouter();
@@ -102,8 +113,8 @@ export default function ProductSidebar({product, variants = []}) {
                 }
             });
         }
-
     };
+
     return (
         <div className="sticky top-20 z-20 lg:top-24">
             <h1 style={{
@@ -132,8 +143,8 @@ export default function ProductSidebar({product, variants = []}) {
                 <div className="d-flex align-items-center gap-2 text-muted">
                     <span className="text-dark fw-medium">Thương hiệu:</span>
                     <span className="text-primary fw-bold">
-            {product?.brandName || "No Brand"}
-        </span>
+                        {product?.brandName || "No Brand"}
+                    </span>
                 </div>
 
                 <div className="text-muted">|</div>
@@ -141,16 +152,25 @@ export default function ProductSidebar({product, variants = []}) {
                 <div className="d-flex align-items-center gap-2 text-muted">
                     <span className="text-dark fw-medium">Danh mục:</span>
                     <span className="text-danger fw-bold">
-            {product?.categoryName || "Chưa phân loại"}
-        </span>
+                        {product?.categoryName || "Chưa phân loại"}
+                    </span>
                 </div>
             </div>
 
+            {/* Giá (CHỈ HIỂN THỊ GIẢM GIÁ Ở ĐÂY) */}
             <div className="bg-light p-4 rounded mb-4">
-                {currentPrice > 0 ? (
-                    <div className="d-flex align-items-center gap-3">
+                {basePrice > 0 ? (
+                    <div className="d-flex flex-column gap-1">
+                        {discount > 0 && (
+                            <div className="d-flex align-items-center gap-2">
+                                <span className="text-muted text-decoration-line-through fs-5">
+                                    {formatCurrency(basePrice)}
+                                </span>
+                                <span className="badge bg-danger">-{discount}%</span>
+                            </div>
+                        )}
                         <span className="text-danger fs-1 fw-bold">
-                            {formatCurrency(currentPrice)}
+                            {formatCurrency(finalPrice)}
                         </span>
                     </div>
                 ) : (
@@ -160,12 +180,13 @@ export default function ProductSidebar({product, variants = []}) {
                 )}
             </div>
 
-
+            {/* Phân loại (KHÔNG CÒN GIÁ Ở ĐÂY) */}
             <div className="mb-5">
                 <div className="d-flex align-items-start gap-4">
                     <span className="text-muted fw-bold" style={{width: "90px", paddingTop: "10px"}}>
                         Phân loại
                     </span>
+
                     <div className="flex-fill">
                         {variants.length === 0 ? (
                             <div className="text-muted">Chưa có phân loại hàng</div>
@@ -182,18 +203,19 @@ export default function ProductSidebar({product, variants = []}) {
                                                 onClick={() => !outOfStock && handleSelect(v)}
                                                 disabled={outOfStock}
                                                 className={`
-                                                w-100 p-3 rounded-2 border text-start position-relative transition-all duration-300
-                                                ${isSelected
+                                                    w-100 p-3 rounded-2 border text-start position-relative transition-all duration-300
+                                                    ${isSelected
                                                     ? "border-primary border-3 shadow-sm"
                                                     : "border"
                                                 }
-                                                ${outOfStock
+                                                    ${outOfStock
                                                     ? "opacity-60 bg-light text-muted cursor-not-allowed"
                                                     : "hover:shadow hover:border-primary"
                                                 }
-                                               `}
+                                                `}
                                             >
                                                 <div className="fw-bold small">{displayName}</div>
+
                                                 {outOfStock && (
                                                     <div
                                                         className="position-absolute top-0 end-0 bg-secondary text-white px-2 py-1 rounded-bl-sm text-xs">
@@ -210,6 +232,7 @@ export default function ProductSidebar({product, variants = []}) {
                 </div>
             </div>
 
+            {/* Số lượng */}
             <div className="d-flex align-items-center gap-4 mb-5">
                 <span className="text-muted fw-bold" style={{width: "90px"}}>Số lượng</span>
                 <div className="d-flex align-items-center border rounded-pill overflow-hidden">
@@ -217,34 +240,34 @@ export default function ProductSidebar({product, variants = []}) {
                         className="btn px-4 py-2"
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
                         disabled={!selectedVariant || quantity <= 1}
-                    >−
-                    </button>
+                    >−</button>
                     <input
                         type="text"
                         value={quantity}
                         className="text-center border-0 fw-bold"
                         style={{width: "60px"}}
+                        readOnly
                     />
                     <button
                         className="btn px-4 py-2"
                         onClick={() => setQuantity(quantity + 1)}
                         disabled={!selectedVariant || quantity >= currentStock}
-                    >+
-                    </button>
+                    >+</button>
                 </div>
                 <small className="text-success fw-bold">
                     {selectedVariant ? `${currentStock} sản phẩm có sẵn` : "-"}
                 </small>
             </div>
 
-
-            <div className="d-flex gap-3 mt-4" style={{width:'200px'}}>
+            {/* Button */}
+            <div className="d-flex gap-3 mt-4" style={{width: '200px'}}>
                 <button
                     onClick={handleSave}
                     className="flex-fill btn btn-outline-danger btn-lg rounded-pill py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2"
                     disabled={!selectedVariant || currentStock === 0}
                 >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         strokeWidth="2">
                         <circle cx="9" cy="21" r="1"/>
                         <circle cx="20" cy="21" r="1"/>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
